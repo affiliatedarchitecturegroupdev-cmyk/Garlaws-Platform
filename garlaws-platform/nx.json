@@ -1,0 +1,57 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "cache": true
+    },
+    "test": {
+      "cache": true
+    },
+    "lint": {
+      "cache": true
+    }
+  },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*"],
+    "production": ["!{projectRoot}/**/*.spec.ts", "!{projectRoot}/**/test-setup.ts"]
+  },
+  "plugins": [
+    "@nx/angular",
+    "@nx/nest"
+  ],
+  "generators": {
+    "@nx/angular:application": {
+      "style": "css",
+      "routing": true,
+      "e2eTestRunner": "playwright"
+    },
+    "@nx/angular:library": {
+      "style": "css"
+    },
+    "@nx/angular:component": {
+      "style": "css"
+    },
+    "@nx/nest:application": {
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "playwright"
+    },
+    "@nx/nest:library": {
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nx/js:library": {
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    }
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
+      }
+    }
+  }
+}
