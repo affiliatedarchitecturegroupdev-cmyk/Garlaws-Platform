@@ -25,7 +25,7 @@ export default function ForgotPasswordPage() {
           <div className="text-6xl mb-6">📧</div>
           <h1 className="text-3xl font-bold text-[#c5a059] mb-4">Check Your Email</h1>
           <p className="text-[#45a29e] mb-6">
-            We've sent password reset instructions to <span className="text-white">{email}</span>
+            We&apos;ve sent password reset instructions to <span className="text-white">{email}</span>
           </p>
           <button onClick={() => router.push("/auth/login")} className="text-[#c5a059] underline">
             Back to Sign In

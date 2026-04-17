@@ -12,7 +12,7 @@ export default function CartPage() {
         <div className="text-center">
           <div className="text-8xl mb-6">🛒</div>
           <h1 className="text-3xl font-bold text-[#c5a059] mb-4">Your Cart is Empty</h1>
-          <p className="text-[#45a29e] mb-8">Looks like you haven't added anything yet.</p>
+          <p className="text-[#45a29e] mb-8">Looks like you haven&apos;t added anything yet.</p>
           <Link href="/shop" className="bg-[#c5a059] text-[#0b0c10] px-8 py-3 rounded-lg font-bold hover:bg-[#b8954f]">
             Browse Shop
           </Link>
