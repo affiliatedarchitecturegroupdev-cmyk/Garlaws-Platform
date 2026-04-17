@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth-context";
+import { loginUser } from "@/lib/server-actions/auth";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({ email: "", password: "", remember: false });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -20,9 +23,25 @@ export default function LoginPage() {
       return;
     }
 
-    setTimeout(() => {
-      router.push("/dashboard");
-    }, 1000);
+    try {
+      const formDataObj = new FormData();
+      formDataObj.append("email", formData.email);
+      formDataObj.append("password", formData.password);
+
+      const result = await loginUser(formDataObj);
+
+      if (result.error) {
+        setError(result.error);
+      } else {
+        // Use the auth context to store the user data
+        await login(formData.email, formData.password);
+        router.push("/services");
+      }
+    } catch (err) {
+      setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

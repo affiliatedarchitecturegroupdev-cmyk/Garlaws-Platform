@@ -2,9 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth-context";
+import { registerUser } from "@/lib/server-actions/auth";
 
 export default function SignUpPage() {
   const router = useRouter();
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -35,9 +38,35 @@ export default function SignUpPage() {
       return;
     }
 
-    setTimeout(() => {
-      router.push("/dashboard");
-    }, 1500);
+    try {
+      const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+
+      const formDataObj = new FormData();
+      formDataObj.append("email", formData.email);
+      formDataObj.append("name", fullName);
+      formDataObj.append("password", formData.password);
+      formDataObj.append("phone", formData.phone);
+      formDataObj.append("role", formData.accountType === "property-owner" ? "property_owner" : "customer");
+
+      const result = await registerUser(formDataObj);
+
+      if (result.error) {
+        setError(result.error);
+      } else {
+        // Use the auth context to store the user data
+        await register({
+          email: formData.email,
+          name: fullName,
+          password: formData.password,
+          phone: formData.phone
+        });
+        router.push("/services");
+      }
+    } catch (err) {
+      setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
