@@ -21,6 +21,8 @@ export function DashboardLayout({ children, activeTab }: DashboardLayoutProps) {
     { name: "Bookings", href: "/dashboard/bookings", icon: "📅" },
     { name: "Properties", href: "/dashboard/properties", icon: "🏠", roles: ["property_owner"] },
     { name: "Services", href: "/dashboard/services", icon: "🛠️", roles: ["service_provider"] },
+    { name: "Earnings", href: "/dashboard/earnings", icon: "💰", roles: ["service_provider"] },
+    { name: "Schedule", href: "/dashboard/schedule", icon: "📅", roles: ["service_provider"] },
     { name: "Notifications", href: "/dashboard/notifications", icon: "🔔" },
     { name: "Settings", href: "/dashboard/settings", icon: "⚙️" },
   ];
