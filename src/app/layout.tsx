@@ -13,8 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js Template",
-  description: "A minimal Next.js starter template",
+  title: "Garlaws - Property Lifecycle Maintenance",
+  description: "Garlaws - Property Lifecycle Maintenance Orchestration Ecosystem for South Africa",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
