@@ -37,12 +37,12 @@ export default function Home() {
           
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="px-8 py-4 bg-garlaws-gold text-garlaws-black font-semibold rounded-lg hover:opacity-90 transition-all animate-pulse-gold">
-              Get Started
-            </button>
-            <button className="px-8 py-4 border border-garlaws-slate text-garlaws-slate rounded-lg hover:bg-garlaws-slate/10 transition-all">
+            <a href="/shop" className="px-8 py-4 bg-garlaws-gold text-garlaws-black font-semibold rounded-lg hover:opacity-90 transition-all animate-pulse-gold text-center">
+              Browse Shop
+            </a>
+            <a href="/services" className="px-8 py-4 border border-garlaws-slate text-garlaws-slate rounded-lg hover:bg-garlaws-slate/10 transition-all text-center">
               Our Services
-            </button>
+            </a>
           </div>
         </div>
         
@@ -63,15 +63,15 @@ export default function Home() {
           
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { title: 'Property Health Hub', desc: 'Digital twin management for luxury estates and commercial properties', icon: '🏢' },
-              { title: 'E-Commerce Showroom', desc: 'Premium pottery, indigenous flora, and technical equipment', icon: '🛒' },
-              { title: 'On-Demand Services', desc: 'Uber-style dispatch with real-time telematics tracking', icon: '🚛' }
+              { title: 'Property Health Hub', desc: 'Digital twin management for luxury estates and commercial properties', icon: '🏢', link: '/dashboard' },
+              { title: 'E-Commerce Showroom', desc: 'Premium pottery, indigenous flora, and technical equipment', icon: '🛒', link: '/shop' },
+              { title: 'On-Demand Services', desc: 'Uber-style dispatch with real-time telematics tracking', icon: '🚛', link: '/services' }
             ].map((feature, i) => (
-              <div key={i} className="p-8 bg-garlaws-navy/50 rounded-xl border border-garlaws-slate/20 card-hover gradient-border">
+              <a key={i} href={feature.link} className="p-8 bg-garlaws-navy/50 rounded-xl border border-garlaws-slate/20 card-hover gradient-border block">
                 <div className="text-4xl mb-4">{feature.icon}</div>
                 <h3 className="text-xl font-semibold text-garlaws-gold mb-3">{feature.title}</h3>
                 <p className="text-garlaws-slate/80">{feature.desc}</p>
-              </div>
+              </a>
             ))}
           </div>
         </div>
