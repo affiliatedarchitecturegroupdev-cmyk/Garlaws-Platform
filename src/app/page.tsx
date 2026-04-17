@@ -107,6 +107,27 @@ export default function Home() {
               ))}
             </div>
           </div>
+
+          {/* Advanced Section */}
+          <div className="mt-12">
+            <h3 className="text-2xl font-bold text-center mb-8 text-garlaws-gold">🚀 Advanced Features</h3>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                { title: 'Property Tokenization', desc: 'Blockchain fractional ownership', icon: '⛓️', link: '/advanced/blockchain' },
+                { title: 'Digital Twin', desc: '3D property visualization', icon: '🏢', link: '/advanced/digital-twin' },
+                { title: 'Edge Computing', desc: 'IoT mesh networking', icon: '🌐', link: '/advanced/edge' },
+                { title: 'Landscape Design', desc: 'AI generative design', icon: '🎨', link: '/advanced/landscape' },
+                { title: 'Sensor Monitoring', desc: 'Soil & security sensors', icon: '📡', link: '/advanced/sensors' },
+                { title: 'Backup & DR', desc: 'Disaster recovery', icon: '🛡️', link: '/advanced/backup' }
+              ].map((feature, i) => (
+                <a key={i} href={feature.link} className="p-8 bg-garlaws-navy/50 rounded-xl border border-garlaws-slate/20 card-hover gradient-border block">
+                  <div className="text-4xl mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-semibold text-garlaws-gold mb-3">{feature.title}</h3>
+                  <p className="text-garlaws-slate/80">{feature.desc}</p>
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
       
