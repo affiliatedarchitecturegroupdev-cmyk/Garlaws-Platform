@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { getConversationMessages, sendMessage } from "@/lib/server-actions/chat";
+import { useWebSocket } from "@/lib/use-websocket";
 
 interface Message {
   message: {
@@ -32,6 +33,39 @@ export function ChatWindow({ conversationId, title, className = "" }: ChatWindow
   const [initialized, setInitialized] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Handle incoming WebSocket messages
+  const handleWebSocketMessage = (message: any) => {
+    if (message.type === 'new_message' && message.payload.conversationId === conversationId) {
+      // Add new message from WebSocket
+      const newMessage: Message = {
+        message: {
+          id: message.payload.messageId,
+          content: message.payload.content,
+          messageType: message.payload.messageType,
+          createdAt: message.payload.createdAt,
+        },
+        sender: {
+          id: message.payload.senderId,
+          name: message.payload.senderName,
+          role: message.payload.senderRole,
+        },
+      };
+      setMessages(prev => {
+        // Avoid duplicates
+        if (prev.some(m => m.message.id === newMessage.message.id)) {
+          return prev;
+        }
+        return [...prev, newMessage];
+      });
+    }
+  };
+
+  // WebSocket connection for real-time messaging
+  const { isConnected, sendMessage: sendWSMessage } = useWebSocket(
+    `ws://localhost:8080?token=${typeof window !== 'undefined' ? localStorage.getItem('authToken') : ''}`,
+    handleWebSocketMessage
+  );
+
   const loadMessages = async () => {
     setLoading(true);
     try {
@@ -61,6 +95,16 @@ export function ChatWindow({ conversationId, title, className = "" }: ChatWindow
     }
   }, [messages]);
 
+  // Join conversation when WebSocket connects
+  useEffect(() => {
+    if (isConnected && conversationId) {
+      sendWSMessage({
+        type: 'join_conversation',
+        payload: { conversationId }
+      });
+    }
+  }, [isConnected, conversationId, sendWSMessage]);
+
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!messageText.trim() || sending) return;
@@ -71,8 +115,7 @@ export function ChatWindow({ conversationId, title, className = "" }: ChatWindow
 
     const result = await sendMessage(conversationId, formData);
     if (result.success) {
-      // Add the new message to the list
-      // In a real app, you'd get this from the server response
+      // Add the new message to the list optimistically
       const newMessage: Message = {
         message: {
           id: Date.now(),
@@ -88,6 +131,16 @@ export function ChatWindow({ conversationId, title, className = "" }: ChatWindow
       };
       setMessages(prev => [...prev, newMessage]);
       setMessageText("");
+
+      // Send via WebSocket for real-time updates to other participants
+      sendWSMessage({
+        type: 'send_message',
+        payload: {
+          conversationId,
+          content: messageText.trim(),
+          messageType: "text"
+        }
+      });
     }
     setSending(false);
   };

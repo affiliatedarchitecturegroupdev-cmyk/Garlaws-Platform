@@ -109,3 +109,41 @@ export const messages = sqliteTable("messages", {
   readAt: integer("read_at", { mode: "timestamp" }),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
+
+export const reviews = sqliteTable("reviews", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  bookingId: integer("booking_id").notNull().references(() => bookings.id),
+  reviewerId: integer("reviewer_id").notNull().references(() => users.id),
+  revieweeId: integer("reviewee_id").notNull().references(() => users.id),
+  rating: integer("rating").notNull(), // 1-5 stars
+  title: text("title"),
+  comment: text("comment"),
+  categories: text("categories"), // JSON array of review categories
+  isPublic: integer("is_public", { mode: "boolean" }).default(true),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const support_tickets = sqliteTable("support_tickets", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").notNull().references(() => users.id),
+  bookingId: integer("booking_id").references(() => bookings.id),
+  subject: text("subject").notNull(),
+  description: text("description").notNull(),
+  category: text("category").$type<"technical" | "billing" | "service" | "general">().default("general"),
+  priority: text("priority").$type<"low" | "medium" | "high" | "urgent">().default("medium"),
+  status: text("status").$type<"open" | "in_progress" | "resolved" | "closed">().default("open"),
+  assignedTo: integer("assigned_to").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const ticket_messages = sqliteTable("ticket_messages", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  ticketId: integer("ticket_id").notNull().references(() => support_tickets.id),
+  senderId: integer("sender_id").notNull().references(() => users.id),
+  message: text("message").notNull(),
+  isInternal: integer("is_internal", { mode: "boolean" }).default(false),
+  attachments: text("attachments"), // JSON array of file URLs
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});

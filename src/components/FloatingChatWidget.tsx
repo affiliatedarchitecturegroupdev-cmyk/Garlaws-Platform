@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { ChatWindow } from "@/components/ChatWindow";
+import { AIChatWindow } from "@/components/AIChatWindow";
 import { getConversations } from "@/lib/server-actions/chat";
 
 export function FloatingChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAIOpen, setIsAIOpen] = useState(false);
   const [conversations, setConversations] = useState<any[]>([]);
   const [selectedConversationId, setSelectedConversationId] = useState<number | null>(null);
   const [initialized, setInitialized] = useState(false);
@@ -43,6 +45,15 @@ export function FloatingChatWidget() {
 
   return (
     <>
+      {/* AI Assistant Button */}
+      <button
+        onClick={() => setIsAIOpen(!isAIOpen)}
+        className="fixed bottom-6 right-20 w-14 h-14 bg-[#45a29e] rounded-full shadow-lg hover:bg-[#3a8c7a] transition-colors flex items-center justify-center z-50"
+        aria-label="AI Assistant"
+      >
+        <span className="text-white text-lg font-bold">AI</span>
+      </button>
+
       {/* Chat Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -128,6 +139,12 @@ export function FloatingChatWidget() {
           </div>
         </>
       )}
+
+      {/* AI Chat Window */}
+      <AIChatWindow
+        isOpen={isAIOpen}
+        onClose={() => setIsAIOpen(false)}
+      />
     </>
   );
 }

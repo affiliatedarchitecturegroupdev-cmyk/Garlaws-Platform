@@ -40,4 +40,47 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  self.clients.claim();
+});
+
+// Push Notifications
+self.addEventListener('notificationclick', (event) => {
+  console.log('Notification click received.', event);
+
+  event.notification.close();
+
+  // Handle notification click
+  const data = event.notification.data;
+  if (data) {
+    if (data.type === 'message' && data.conversationId) {
+      event.waitUntil(
+        clients.openWindow(`/dashboard/chat?conversation=${data.conversationId}`)
+      );
+    } else if (data.type === 'booking' && data.bookingId) {
+      event.waitUntil(
+        clients.openWindow(`/dashboard/bookings`)
+      );
+    } else if (data.type === 'support_ticket' && data.ticketId) {
+      event.waitUntil(
+        clients.openWindow(`/dashboard/support`)
+      );
+    } else if (data.type === 'video_call' && data.roomId) {
+      event.waitUntil(
+        clients.openWindow(`/dashboard/bookings`) // Navigate to bookings where video call can be joined
+      );
+    } else {
+      event.waitUntil(
+        clients.openWindow('/')
+      );
+    }
+  }
+});
+
+self.addEventListener('push', (event) => {
+  console.log('Push message received.', event);
+
+  if (event.data) {
+    const data = event.data.json();
+    // Handle push message if needed for background notifications
+  }
 });

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { VideoCall } from "@/components/VideoCall";
 
 interface Booking {
   id: number;
@@ -18,6 +19,12 @@ export default function BookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>("all");
+  const [selectedBookings, setSelectedBookings] = useState<Set<number>>(new Set());
+  const [searchTerm, setSearchTerm] = useState("");
+  const [dateRange, setDateRange] = useState({ start: "", end: "" });
+  const [sortBy, setSortBy] = useState<"date" | "amount" | "status">("date");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [videoCallState, setVideoCallState] = useState<{ isOpen: boolean; roomId: string; bookingId: number } | null>(null);
 
   useEffect(() => {
     fetchBookings();
@@ -123,23 +130,90 @@ export default function BookingsPage() {
           </p>
         </div>
 
-        {/* Filters */}
-        <div className="mb-6">
+        {/* Advanced Filters */}
+        <div className="mb-6 bg-[#1f2833] rounded-xl border border-[#45a29e]/20 p-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            {/* Search */}
+            <div>
+              <label className="block text-[#45a29e] text-sm font-medium mb-2">
+                Search
+              </label>
+              <input
+                type="text"
+                placeholder="Search by service or customer..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-[#0b0c10] border border-[#45a29e]/30 rounded-lg px-3 py-2 text-white placeholder-[#45a29e]/50 focus:border-[#c5a059] focus:outline-none"
+              />
+            </div>
+
+            {/* Date Range */}
+            <div>
+              <label className="block text-[#45a29e] text-sm font-medium mb-2">
+                Start Date
+              </label>
+              <input
+                type="date"
+                value={dateRange.start}
+                onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
+                className="w-full bg-[#0b0c10] border border-[#45a29e]/30 rounded-lg px-3 py-2 text-white focus:border-[#c5a059] focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[#45a29e] text-sm font-medium mb-2">
+                End Date
+              </label>
+              <input
+                type="date"
+                value={dateRange.end}
+                onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
+                className="w-full bg-[#0b0c10] border border-[#45a29e]/30 rounded-lg px-3 py-2 text-white focus:border-[#c5a059] focus:outline-none"
+              />
+            </div>
+
+            {/* Sort */}
+            <div>
+              <label className="block text-[#45a29e] text-sm font-medium mb-2">
+                Sort By
+              </label>
+              <select
+                value={`${sortBy}_${sortOrder}`}
+                onChange={(e) => {
+                  const [field, order] = e.target.value.split('_');
+                  setSortBy(field as any);
+                  setSortOrder(order as any);
+                }}
+                className="w-full bg-[#0b0c10] border border-[#45a29e]/30 rounded-lg px-3 py-2 text-white focus:border-[#c5a059] focus:outline-none"
+              >
+                <option value="date_desc">Date (Newest)</option>
+                <option value="date_asc">Date (Oldest)</option>
+                <option value="amount_desc">Amount (High)</option>
+                <option value="amount_asc">Amount (Low)</option>
+                <option value="status_desc">Status (A-Z)</option>
+                <option value="status_asc">Status (Z-A)</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Status Filters */}
           <div className="flex flex-wrap gap-2">
+            <span className="text-white font-medium mr-2">Status:</span>
             {[
-              { value: "all", label: "All Bookings", count: bookings.length },
+              { value: "all", label: "All", count: bookings.length },
               { value: "pending", label: "Pending", count: bookings.filter(b => b.status === "pending").length },
               { value: "confirmed", label: "Confirmed", count: bookings.filter(b => b.status === "confirmed").length },
               { value: "in_progress", label: "In Progress", count: bookings.filter(b => b.status === "in_progress").length },
               { value: "completed", label: "Completed", count: bookings.filter(b => b.status === "completed").length },
+              { value: "cancelled", label: "Cancelled", count: bookings.filter(b => b.status === "cancelled").length },
             ].map((option) => (
               <button
                 key={option.value}
                 onClick={() => setFilter(option.value)}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
                   filter === option.value
                     ? "bg-[#c5a059] text-[#0b0c10]"
-                    : "bg-[#1f2833] border border-[#45a29e]/20 text-[#45a29e] hover:border-[#45a29e]/40"
+                    : "bg-[#2d3b2d] border border-[#45a29e]/20 text-[#45a29e] hover:border-[#45a29e]/40"
                 }`}
               >
                 {option.label} ({option.count})
@@ -206,8 +280,25 @@ export default function BookingsPage() {
                       )}
 
                       {booking.status === "confirmed" && (
-                        <button className="px-4 py-2 bg-[#c5a059] text-[#0b0c10] rounded-lg hover:bg-[#b8954f] transition-colors text-sm font-medium">
-                          Track Service
+                        <>
+                          <button
+                            onClick={() => setVideoCallState({ isOpen: true, roomId: `booking-${booking.id}`, bookingId: booking.id })}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                          >
+                            Video Call
+                          </button>
+                          <button className="px-4 py-2 bg-[#c5a059] text-[#0b0c10] rounded-lg hover:bg-[#b8954f] transition-colors text-sm font-medium">
+                            Track Service
+                          </button>
+                        </>
+                      )}
+
+                      {booking.status === "in_progress" && (
+                        <button
+                          onClick={() => setVideoCallState({ isOpen: true, roomId: `booking-${booking.id}`, bookingId: booking.id })}
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                        >
+                          Join Call
                         </button>
                       )}
 
@@ -257,6 +348,16 @@ export default function BookingsPage() {
             <div className="text-[#45a29e] text-sm">Total Spent</div>
           </div>
         </div>
+
+        {/* Video Call Modal */}
+        {videoCallState && (
+          <VideoCall
+            isOpen={videoCallState.isOpen}
+            onClose={() => setVideoCallState(null)}
+            roomId={videoCallState.roomId}
+            isInitiator={true} // Service provider initiates
+          />
+        )}
       </div>
     </DashboardLayout>
   );
