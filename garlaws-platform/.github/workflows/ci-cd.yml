@@ -23,18 +23,15 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-          cache-dependency-path: garlaws-platform/package-lock.json
+          cache-dependency-path: package-lock.json
           
       - name: Install dependencies
-        working-directory: ./garlaws-platform
         run: npm ci
         
       - name: Run ESLint
-        working-directory: ./garlaws-platform
         run: npm run lint || true
         
       - name: Run TypeScript check
-        working-directory: ./garlaws-platform
         run: npm run typecheck || true
 
   test:
