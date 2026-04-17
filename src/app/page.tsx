@@ -61,12 +61,26 @@ export default function Home() {
             <span className="gold-gradient">World-Class Solutions</span>
           </h2>
           
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             {[
-              { title: 'Property Health Hub', desc: 'Digital twin management for luxury estates', icon: '🏢', link: '/dashboard' },
-              { title: 'E-Commerce Showroom', desc: 'Premium products and equipment', icon: '🛒', link: '/shop' },
-              { title: 'On-Demand Services', desc: 'Uber-style dispatch booking', icon: '🚛', link: '/services' },
-              { title: 'Payments', desc: 'Secure checkout & billing', icon: '💳', link: '/payment' }
+              { title: 'E-Commerce', desc: 'Shop plants, pottery & equipment', icon: '🛒', link: '/shop' },
+              { title: 'On-Demand', desc: 'Book immediate services', icon: '🚛', link: '/services' },
+              { title: 'Payments', desc: 'Billing & transactions', icon: '💳', link: '/payment' }
+            ].map((feature, i) => (
+              <a key={i} href={feature.link} className="p-8 bg-garlaws-navy/50 rounded-xl border border-garlaws-slate/20 card-hover gradient-border block">
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-semibold text-garlaws-gold mb-3">{feature.title}</h3>
+                <p className="text-garlaws-slate/80">{feature.desc}</p>
+              </a>
+            ))}
+          </div>
+
+          {/* Second Row */}
+          <div className="grid md:grid-cols-3 gap-8 mt-8">
+            {[
+              { title: 'Refer & Earn', desc: 'Invite friends, earn credits', icon: '🎁', link: '/refer' },
+              { title: 'Logistics', desc: 'Track your orders', icon: '📦', link: '/logistics' },
+              { title: 'Integrations', desc: 'API & third-party tools', icon: '🔗', link: '/integrations' }
             ].map((feature, i) => (
               <a key={i} href={feature.link} className="p-8 bg-garlaws-navy/50 rounded-xl border border-garlaws-slate/20 card-hover gradient-border block">
                 <div className="text-4xl mb-4">{feature.icon}</div>
