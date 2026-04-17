@@ -66,3 +66,16 @@ export const payments = sqliteTable("payments", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
+
+export const notifications = sqliteTable("notifications", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").notNull().references(() => users.id),
+  type: text("type").$type<"booking" | "payment" | "system" | "marketing">().notNull(),
+  title: text("title").notNull(),
+  message: text("message").notNull(),
+  data: text("data"), // JSON string for additional data
+  read: integer("read", { mode: "boolean" }).default(false),
+  priority: text("priority").$type<"low" | "medium" | "high" | "urgent">().default("medium"),
+  expiresAt: integer("expires_at", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { NotificationDropdown } from "@/components/NotificationDropdown";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -20,6 +21,7 @@ export function DashboardLayout({ children, activeTab }: DashboardLayoutProps) {
     { name: "Bookings", href: "/dashboard/bookings", icon: "📅" },
     { name: "Properties", href: "/dashboard/properties", icon: "🏠", roles: ["property_owner"] },
     { name: "Services", href: "/dashboard/services", icon: "🛠️", roles: ["service_provider"] },
+    { name: "Notifications", href: "/dashboard/notifications", icon: "🔔" },
     { name: "Settings", href: "/dashboard/settings", icon: "⚙️" },
   ];
 
@@ -106,10 +108,11 @@ export function DashboardLayout({ children, activeTab }: DashboardLayoutProps) {
                 </svg>
               </button>
 
-              <div className="flex items-center">
+              <div className="flex items-center space-x-4">
+                <NotificationDropdown />
                 <Link
                   href="/services"
-                  className="px-4 py-2 bg-[#c5a059] text-[#0b0c10] rounded-lg hover:opacity-90 transition-opacity font-medium"
+                  className="px-4 py-2 bg-[#c5a059] text-[#0b0c10] rounded-lg hover:opacity-90 transition-colors font-medium"
                 >
                   Book Services
                 </Link>
