@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ServiceWorkerRegistration } from "./components/ServiceWorkerRegistration";
 import { CartProvider } from "@/lib/cart-context";
@@ -8,16 +7,6 @@ import { FloatingChatWidget } from "@/components/FloatingChatWidget";
 import { PushNotificationInitializer } from "@/components/PushNotificationInitializer";
 import { GlobalErrorBoundary } from "@/components/GlobalErrorBoundary";
 import { WebVitalsTracker } from "@/components/WebVitalsTracker";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "Garlaws - Property Lifecycle Maintenance",
@@ -42,19 +31,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className="antialiased"
       >
-        <GlobalErrorBoundary>
-          <ToastProvider>
-            <CartProvider>
-            <ServiceWorkerRegistration />
-            <PushNotificationInitializer />
-            <WebVitalsTracker />
-            {children}
-              <FloatingChatWidget />
-            </CartProvider>
-          </ToastProvider>
-        </GlobalErrorBoundary>
+        <div id="root">
+          {children}
+        </div>
       </body>
     </html>
   );
