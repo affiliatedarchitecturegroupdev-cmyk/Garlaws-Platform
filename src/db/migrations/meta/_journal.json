@@ -8,6 +8,13 @@
       "when": 1776447487017,
       "tag": "0000_crazy_shiva",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1776448048987,
+      "tag": "0001_fancy_hellfire_club",
+      "breakpoints": true
     }
   ]
 }

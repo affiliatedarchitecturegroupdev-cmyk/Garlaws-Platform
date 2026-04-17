@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { users } from "@/db/schema";
+import { AuthUtils } from "@/lib/auth";
 import { eq } from "drizzle-orm";
 
 interface RouteParams {
@@ -29,7 +30,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    return NextResponse.json(user[0]);
+    // Exclude password from response
+    const { password, ...userWithoutPassword } = user[0];
+    return NextResponse.json(userWithoutPassword);
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch user" },
@@ -50,16 +53,23 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     }
 
     const body = await request.json();
-    const { email, name, phone, role } = body;
+    const { email, name, phone, password, role } = body;
+
+    const updateData: any = {
+      email,
+      name,
+      phone,
+      role,
+      updatedAt: new Date(),
+    };
+
+    // Hash password if provided
+    if (password) {
+      updateData.password = await AuthUtils.hashPassword(password);
+    }
 
     const updatedUser = await db.update(users)
-      .set({
-        email,
-        name,
-        phone,
-        role,
-        updatedAt: new Date(),
-      })
+      .set(updateData)
       .where(eq(users.id, userId))
       .returning();
 
@@ -70,7 +80,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    return NextResponse.json(updatedUser[0]);
+    // Exclude password from response
+    const { password: _, ...userWithoutPassword } = updatedUser[0];
+    return NextResponse.json(userWithoutPassword);
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to update user" },

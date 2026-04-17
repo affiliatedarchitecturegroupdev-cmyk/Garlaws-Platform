@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { users } from "@/db/schema";
+import { AuthUtils } from "@/lib/auth";
 import { eq } from "drizzle-orm";
 
 export async function GET() {
   try {
     const allUsers = await db.select().from(users);
-    return NextResponse.json(allUsers);
+    // Exclude password from response
+    const usersWithoutPasswords = allUsers.map(({ password, ...user }) => user);
+    return NextResponse.json(usersWithoutPasswords);
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch users" },
@@ -18,19 +21,23 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, name, phone, role } = body;
+    const { email, name, phone, password, role } = body;
 
-    if (!email || !name) {
+    if (!email || !name || !password) {
       return NextResponse.json(
-        { error: "Email and name are required" },
+        { error: "Email, name, and password are required" },
         { status: 400 }
       );
     }
+
+    // Hash the password
+    const hashedPassword = await AuthUtils.hashPassword(password);
 
     const newUser = await db.insert(users).values({
       email,
       name,
       phone,
+      password: hashedPassword,
       role: role || "customer",
     }).returning();
 
