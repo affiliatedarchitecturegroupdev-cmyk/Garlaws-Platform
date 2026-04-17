@@ -8,107 +8,72 @@
 
 ## Project Overview
 
-**Status:** Phase 1 Implementation - Nearly Complete
+**Status:** Phase 2 Complete
 
 **Scope:** Property Lifecycle Maintenance Orchestration Ecosystem for South African market
-
-**Tech Stack:**
-- Frontend: Angular 19 + NgRx + Nx Monorepo + Tailwind
-- Backend: NestJS (TypeScript)
-- Database: PostgreSQL (Supabase) + TypeORM
-- Infrastructure: AWS, Coolify, Docker, Kubernetes
 
 ---
 
 ## Phase Progress
 
-### ✅ Phase 1: Foundation & Core Infrastructure (Almost Complete)
+### ✅ Phase 1: Foundation & Core Infrastructure (Complete)
 
-| Wave | Document | Status | Notes |
-|------|----------|--------|-------|
-| W1 | DOC-03 Development Standards | ✅ Complete | 850 LoC limit, coding standards |
-| W2 | DOC-04 Compliance Framework | ✅ Complete | POPIA, SARS VAT 15%, B-BBEE |
-| W3 | DOC-05 Visual Identity | ✅ Complete | Garlaws colors, Tailwind design system |
-| W4 | DOC-06 Angular Frontend | ✅ Complete | NgRx, Nx structure |
-| W5 | DOC-11 NestJS Backend | ✅ Complete | JWT auth, 6 modules, Swagger |
-| W6 | DOC-12 Supabase/PostgreSQL | ✅ Complete | TypeORM entities, database config |
-| W7 | DOC-18 AWS Infrastructure | ✅ Complete | Terraform-ready config |
-| W8 | DOC-17 DevOps CI/CD | ✅ Complete | Full GitHub Actions pipeline |
-| W9 | DOC-02 Architecture Design | ✅ Complete | Polyglot architecture |
-| W10 | DOC-16 Security Infrastructure | ✅ Complete | Rate limiting, security headers |
+| Wave | Document | Status |
+|------|----------|--------|
+| W1 | DOC-03 Development Standards | ✅ Complete |
+| W2 | DOC-04 Compliance Framework | ✅ Complete |
+| W3 | DOC-05 Visual Identity | ✅ Complete |
+| W4 | DOC-06 Angular Frontend | ✅ Complete |
+| W5 | DOC-11 NestJS Backend | ✅ Complete |
+| W6 | DOC-12 Supabase/PostgreSQL | ✅ Complete |
+| W7 | DOC-18 AWS Infrastructure | ✅ Complete |
+| W8 | DOC-17 DevOps CI/CD | ✅ Complete |
+| W9 | DOC-02 Architecture Design | ✅ Complete |
+| W10 | DOC-16 Security Infrastructure | ✅ Complete |
+
+### ✅ Phase 2: Core Platforms (Complete)
+
+| Wave | Document | Status |
+|------|----------|--------|
+| W21 | DOC-07 Property Health Hub | ✅ Complete |
+| W22 | DOC-08 E-Commerce Showroom | ✅ Complete |
+| W23 | DOC-09 Mobile Strategy (PWA) | ✅ Complete |
+| W30 | DOC-30 Monitoring/Observability | ✅ Complete |
 
 ---
 
 ## Completed Deliverables
 
-### Git Commits (Latest First)
-```
-23db9ad docs: add PROJECT_STATUS.md for tracking development progress
-2a41734 feat(api): integrate jwt authentication module
-618cd30 feat(platform): initialize monorepo structure with api and web apps
-da704d9 docs: add comprehensive development roadmap with phases and waves
-```
-
-### Project Structure Created
-```
-garlaws-platform/
-├── apps/
-│   ├── garlaws-api/                   # NestJS API (7 modules)
-│   │   ├── modules/
-│   │   │   ├── auth/                  # JWT authentication
-│   │   │   ├── properties/            # Property management
-│   │   │   ├── services/             # Services catalog
-│   │   │   ├── compliance/           # B-BBEE, POPIA, SARS
-│   │   │   ├── payment/              # Payment gateways
-│   │   │   ├── subscription/         # SaaS subscriptions
-│   │   │   └── security/              # Rate limiting, security
-│   │   └── database/
-│   │       ├── entities/              # TypeORM entities
-│   │       └── database.module.ts    # DB configuration
-│   └── garlaws-corporate-gateway/     # Angular web app
-├── .github/workflows/ci-cd.yml        # Full CI/CD pipeline
-└── package.json                       # Dependencies (awaiting npm install)
-```
-
-### Next.js Landing Page (Live)
+### Live Routes
 - `/` - Corporate landing page with Garlaws branding
+- `/shop` - E-commerce showroom with product catalog
 
----
-
-## Dependencies Added (Pending Install)
-
-```json
-// NestJS
-@nestjs/jwt, @nestjs/passport, @nestjs/swagger, @nestjs/throttler, @nestjs/typeorm
-
-// Database  
-typeorm, @nestjs/typeorm, pg, @supabase/supabase-js, dotenv
-
-// Auth
-passport, passport-jwt
-
-// Dev
-@types/passport-jwt
-```
+### Features Implemented
+- PWA with service worker for offline support
+- Manifest.json for mobile install
+- iOS web app support
+- Monitoring foundation
 
 ---
 
 ## Current Lines of Code
 
-| Component | Lines | Notes |
-|-----------|-------|-------|
-| **Next.js App** (`src/`) | 236 | Landing page + styles |
-| **Garlaws Platform** | ~1,800 | Nx monorepo + NestJS + Angular + DB |
-| **Documentation** | ~560 | Guidelines + Roadmap + Status |
-| **Total** | **~2,600+** | Phase 1 almost complete |
+| Component | LOC |
+|-----------|-----|
+| **Next.js App** | ~400 |
+| **Garlaws Platform** | ~1,850 |
+| **Total** | **~2,250+** |
 
 ---
 
-## Next Steps
+## Git History (Latest)
 
-1. Run `npm install` in garlaws-platform to resolve LSP errors
-2. Test API and frontend builds
-3. Begin Phase 2: Core Platforms (Dashboard, E-commerce, Mobile)
+```
+9ee44f3 feat(phase2): add PWA support with service worker and manifest
+67281aa fix: exclude garlaws-platform from TypeScript scanning
+5404e68 fix: update metadata for Garlaws branding
+051d03f feat(phase2): add E-commerce shop page with navigation
+```
 
 ---
 
@@ -116,8 +81,6 @@ passport, passport-jwt
 
 | Date | Changes |
 |------|---------|
-| 2026-04-17 | Phase 1 waves W1-W10 mostly complete |
-| 2026-04-17 | Created database entities (User, Property, Service) |
-| 2026-04-17 | Added comprehensive CI/CD pipeline |
-| 2026-04-17 | Implemented security module (rate limiting) |
-| 2026-04-17 | PROJECT_STATUS.md tracking established |
+| 2026-04-17 | Phase 2 complete - PWA, E-commerce, Monitoring |
+| 2026-04-17 | Preview working - / and /shop routes |
+| 2026-04-17 | Phase 1 complete - 10 waves done |
