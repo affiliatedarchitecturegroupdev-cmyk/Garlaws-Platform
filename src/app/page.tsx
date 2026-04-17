@@ -128,6 +128,31 @@ export default function Home() {
               ))}
             </div>
           </div>
+
+          {/* Enterprise Section */}
+          <div className="mt-12">
+            <h3 className="text-2xl font-bold text-center mb-8 text-garlaws-gold">🏢 Enterprise</h3>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                { title: 'B-BBEE Compliance', desc: 'Level 1 tracking & ESG', icon: '📊', link: '/enterprise/compliance' },
+                { title: 'Workforce', desc: 'Labour compliance', icon: '👥', link: '/enterprise/workforce' },
+                { title: 'Academy', desc: 'Training & certification', icon: '🎓', link: '/enterprise/academy' },
+                { title: 'Subscriptions', desc: 'SaaS pricing plans', icon: '💰', link: '/enterprise/subscription' },
+                { title: 'Finance', desc: 'SARS tax & reconciliations', icon: '📈', link: '/enterprise/finance' },
+                { title: 'Investors', desc: 'ESG dashboard', icon: '📑', link: '/enterprise/investors' },
+                { title: 'Environmental', desc: 'Sustainability tracking', icon: '🌱', link: '/enterprise/environmental' },
+                { title: 'Ethics', desc: 'AI governance', icon: '⚖️', link: '/enterprise/ethics' },
+                { title: 'Quality', desc: 'ISO auditing', icon: '✅', link: '/enterprise/quality' },
+                { title: 'Training', desc: 'Knowledge base', icon: '📚', link: '/enterprise/training' }
+              ].map((feature, i) => (
+                <a key={i} href={feature.link} className="p-8 bg-garlaws-navy/50 rounded-xl border border-garlaws-slate/20 card-hover gradient-border block">
+                  <div className="text-4xl mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-semibold text-garlaws-gold mb-3">{feature.title}</h3>
+                  <p className="text-garlaws-slate/80">{feature.desc}</p>
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
       
