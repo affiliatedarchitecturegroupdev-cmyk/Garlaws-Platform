@@ -1,96 +1,116 @@
-'use client';
+"use client";
+
+import { useState } from "react";
 
 const properties = [
-  { id: 'DT-001', name: 'Ballito Hills Estate', type: 'Residential', models: 3, sensors: 24, lastUpdate: '2 hours ago' },
-  { id: 'DT-002', name: 'Umhlanga Business Park', type: 'Commercial', models: 5, sensors: 156, lastUpdate: '30 min ago' },
-];
-
-const metrics = [
-  { label: 'Energy Usage', value: '2,450 kWh', trend: '-12%', icon: '⚡' },
-  { label: 'Water Consumption', value: '18,200 L', trend: '-8%', icon: '💧' },
-  { label: 'Temperature', value: '23.4°C', trend: 'Normal', icon: '🌡️' },
-  { label: 'Air Quality', value: 'Good', trend: 'AQI 45', icon: '🌬️' },
+  { id: 1, name: "Sunset Villa", address: "45 Ocean Drive, Cape Town", sqft: 4500, floors: 3, lastUpdate: "2 mins ago" },
+  { id: 2, name: "Harbour Complex", address: "12 Marina Walk, Durban", sqft: 12000, floors: 5, lastUpdate: "5 mins ago" },
+  { id: 3, name: "Business Hub", address: "88 Sandton Central", sqft: 25000, floors: 12, lastUpdate: "1 min ago" },
 ];
 
 export default function DigitalTwinPage() {
-  return (
-    <main className="min-h-screen bg-garlaws-light text-garlaws-black">
-      <header className="bg-garlaws-black py-8">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <h1 className="text-4xl font-bold text-garlaws-gold mb-2">Digital Twin & 3D Mapping</h1>
-          <p className="text-garlaws-slate">Real-time virtual property models with IoT integration</p>
-        </div>
-      </header>
+  const [selectedProp, setSelectedProp] = useState<number | null>(1);
 
-      {/* 3D Viewer Placeholder */}
-      <section className="py-12 px-6">
+  return (
+    <div className="min-h-screen bg-[#0b0c10] text-white">
+      <div className="bg-gradient-to-r from-[#1f2833] to-[#2d3b2d] py-16 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="bg-garlaws-navy rounded-xl p-12 text-center text-white mb-8">
-            <div className="text-8xl mb-4">🏗️</div>
-            <h2 className="text-2xl font-bold mb-2">Interactive 3D Viewer</h2>
-            <p className="text-garlaws-slate">Loading Digital Twin Model...</p>
-            <div className="mt-6 flex justify-center gap-2">
-              <span className="px-3 py-1 bg-garlaws-gold/20 text-garlaws-gold rounded text-sm">Rotate</span>
-              <span className="px-3 py-1 bg-garlaws-gold/20 text-garlaws-gold rounded text-sm">Zoom</span>
-              <span className="px-3 py-1 bg-garlaws-gold/20 text-garlaws-gold rounded text-sm">Layers</span>
+          <h1 className="text-4xl font-bold text-[#c5a059] mb-4">Digital Twin Platform</h1>
+          <p className="text-xl text-[#45a29e]">3D property visualization with real-time sensor integration</p>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        <div className="grid md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-[#1f2833] p-4 rounded-lg border border-[#45a29e]/30">
+            <div className="text-2xl font-bold text-[#c5a059]">3</div>
+            <div className="text-sm text-[#45a29e]">Active Twins</div>
+          </div>
+          <div className="bg-[#1f2833] p-4 rounded-lg border border-[#45a29e]/30">
+            <div className="text-2xl font-bold text-[#c5a059]">12.4K</div>
+            <div className="text-sm text-[#45a29e]">3D Points</div>
+          </div>
+          <div className="bg-[#1f2833] p-4 rounded-lg border border-[#45a29e]/30">
+            <div className="text-2xl font-bold text-[#c5a059]">24/7</div>
+            <div className="text-sm text-[#45a29e]">Live Sync</div>
+          </div>
+          <div className="bg-[#1f2833] p-4 rounded-lg border border-[#45a29e]/30">
+            <div className="text-2xl font-bold text-[#c5a059]">98.2%</div>
+            <div className="text-sm text-[#45a29e]">Accuracy</div>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          <div className="md:col-span-2 bg-[#1f2833] rounded-lg border border-[#45a29e]/30 overflow-hidden">
+            <div className="bg-[#2d3b2d] p-4 border-b border-[#45a29e]/30">
+              <h3 className="font-bold text-[#c5a059]">3D View - Interactive</h3>
+            </div>
+            <div className="h-96 flex items-center justify-center bg-gradient-to-br from-[#0b0c10] to-[#1f2833]">
+              <div className="text-center">
+                <div className="text-6xl mb-4">🏢</div>
+                <p className="text-[#45a29e]">Digital Twin Renderer</p>
+                <p className="text-sm text-gray-500 mt-2">Click property to explore</p>
+              </div>
             </div>
           </div>
 
-          {/* Property Selection */}
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <h3 className="font-bold text-[#c5a059]">Properties</h3>
             {properties.map((prop) => (
-              <div key={prop.id} className="bg-white p-6 rounded-xl shadow-md">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="font-semibold text-lg">{prop.name}</h3>
-                    <p className="text-garlaws-slate text-sm">{prop.type}</p>
-                  </div>
-                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded text-sm">Active</span>
-                </div>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <p className="text-garlaws-slate">3D Models</p>
-                    <p className="font-bold">{prop.models}</p>
-                  </div>
-                  <div>
-                    <p className="text-garlaws-slate">IoT Sensors</p>
-                    <p className="font-bold">{prop.sensors}</p>
-                  </div>
-                  <div>
-                    <p className="text-garlaws-slate">Last Update</p>
-                    <p className="font-bold">{prop.lastUpdate}</p>
-                  </div>
-                  <div>
-                    <p className="text-garlaws-slate">Sync Status</p>
-                    <p className="font-bold text-green-600">Real-time</p>
-                  </div>
+              <div
+                key={prop.id}
+                onClick={() => setSelectedProp(prop.id)}
+                className={`p-4 rounded-lg cursor-pointer transition-all ${
+                  selectedProp === prop.id ? "bg-[#2d3b2d] border border-[#c5a059]" : "bg-[#1f2833] border border-[#45a29e]/30"
+                }`}
+              >
+                <div className="font-bold text-white">{prop.name}</div>
+                <div className="text-sm text-[#45a29e]">{prop.address}</div>
+                <div className="flex gap-4 mt-2 text-xs text-gray-400">
+                  <span>{prop.sqft.toLocaleString()} sqft</span>
+                  <span>{prop.floors} floors</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* Real-time Metrics */}
-      <section className="py-8 px-6 bg-white mb-12">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6">Real-time Property Metrics</h2>
-          <div className="grid md:grid-cols-4 gap-4">
-            {metrics.map((metric, i) => (
-              <div key={i} className="bg-garlaws-light p-6 rounded-xl">
-                <div className="text-3xl mb-2">{metric.icon}</div>
-                <p className="text-garlaws-slate text-sm">{metric.label}</p>
-                <p className="text-2xl font-bold mt-1">{metric.value}</p>
-                <p className="text-xs text-garlaws-olive mt-1">{metric.trend}</p>
-              </div>
-            ))}
+        <div className="mt-8 grid md:grid-cols-3 gap-4">
+          <div className="bg-[#1f2833] p-4 rounded-lg border border-[#45a29e]/30">
+            <h4 className="font-bold text-[#c5a059] mb-2">Real-time Metrics</h4>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between"><span className="text-gray-400">Temperature</span><span className="text-green-400">22.4°C</span></div>
+              <div className="flex justify-between"><span className="text-gray-400">Humidity</span><span className="text-green-400">45%</span></div>
+              <div className="flex justify-between"><span className="text-gray-400">Energy</span><span className="text-green-400">12.4 kWh</span></div>
+            </div>
+          </div>
+          <div className="bg-[#1f2833] p-4 rounded-lg border border-[#45a29e]/30">
+            <h4 className="font-bold text-[#c5a059] mb-2">Maintenance Alerts</h4>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between"><span className="text-gray-400">HVAC</span><span className="text-yellow-400">Service due</span></div>
+              <div className="flex justify-between"><span className="text-gray-400">Elevator</span><span className="text-green-400">OK</span></div>
+              <div className="flex justify-between"><span className="text-gray-400">Fire Sys</span><span className="text-green-400">OK</span></div>
+            </div>
+          </div>
+          <div className="bg-[#1f2833] p-4 rounded-lg border border-[#45a29e]/30">
+            <h4 className="font-bold text-[#c5a059] mb-2">Simulation</h4>
+            <div className="space-y-2 text-sm">
+              <div className="text-gray-400">Energy Load: 78%</div>
+              <div className="text-gray-400">Occupancy: 62%</div>
+              <div className="text-gray-400">Solar: +4.2 kW</div>
+            </div>
           </div>
         </div>
-      </section>
 
-      <div className="text-center pb-8">
-        <a href="/" className="text-garlaws-slate hover:text-garlaws-gold">← Back to Home</a>
+        <div className="mt-8 flex gap-4">
+          <button className="bg-[#c5a059] text-[#0b0c10] px-6 py-3 rounded-lg font-bold hover:bg-[#b8954f]">
+            Create New Twin
+          </button>
+          <button className="border border-[#45a29e] text-[#45a29e] px-6 py-3 rounded-lg font-bold hover:bg-[#45a29e]/10">
+            Export Model
+          </button>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }
