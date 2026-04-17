@@ -61,11 +61,12 @@ export default function Home() {
             <span className="gold-gradient">World-Class Solutions</span>
           </h2>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-4 gap-8">
             {[
-              { title: 'Property Health Hub', desc: 'Digital twin management for luxury estates and commercial properties', icon: '🏢', link: '/dashboard' },
-              { title: 'E-Commerce Showroom', desc: 'Premium pottery, indigenous flora, and technical equipment', icon: '🛒', link: '/shop' },
-              { title: 'On-Demand Services', desc: 'Uber-style dispatch with real-time telematics tracking', icon: '🚛', link: '/services' }
+              { title: 'Property Health Hub', desc: 'Digital twin management for luxury estates', icon: '🏢', link: '/dashboard' },
+              { title: 'E-Commerce Showroom', desc: 'Premium products and equipment', icon: '🛒', link: '/shop' },
+              { title: 'On-Demand Services', desc: 'Uber-style dispatch booking', icon: '🚛', link: '/services' },
+              { title: 'Payments', desc: 'Secure checkout & billing', icon: '💳', link: '/payment' }
             ].map((feature, i) => (
               <a key={i} href={feature.link} className="p-8 bg-garlaws-navy/50 rounded-xl border border-garlaws-slate/20 card-hover gradient-border block">
                 <div className="text-4xl mb-4">{feature.icon}</div>
