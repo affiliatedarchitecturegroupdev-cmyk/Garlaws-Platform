@@ -89,6 +89,24 @@ export default function Home() {
               </a>
             ))}
           </div>
+
+          {/* AI Section */}
+          <div className="mt-12">
+            <h3 className="text-2xl font-bold text-center mb-8 text-garlaws-gold">🤖 AI & Machine Learning</h3>
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                { title: 'Predictive Maintenance', desc: 'AI equipment health monitoring', icon: '🔮', link: '/ai/predictive' },
+                { title: 'Sentiment Analysis', desc: 'NLP customer feedback analysis', icon: '💭', link: '/ai/sentiment' },
+                { title: 'Drone Inspection', desc: 'Computer vision site analysis', icon: '🚁', link: '/ai/drone' }
+              ].map((feature, i) => (
+                <a key={i} href={feature.link} className="p-8 bg-garlaws-navy/50 rounded-xl border border-garlaws-slate/20 card-hover gradient-border block">
+                  <div className="text-4xl mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-semibold text-garlaws-gold mb-3">{feature.title}</h3>
+                  <p className="text-garlaws-slate/80">{feature.desc}</p>
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
       
