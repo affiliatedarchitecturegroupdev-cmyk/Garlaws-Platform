@@ -265,28 +265,75 @@ class WebSocketManager {
   // Video call room management
   private videoRooms: Map<string, WSClient[]> = new Map();
 
-  private async handleJoinVideoRoom(ws: WSClient, payload: any) {
-    const { roomId } = payload;
+  private async handleJoinVideoRoom(ws: WSClient, event: WSEvent) {
     if (!ws.userId) return;
 
+    const { roomId } = event.payload;
     if (!this.videoRooms.has(roomId)) {
       this.videoRooms.set(roomId, []);
     }
 
-    const room = this.videoRooms.get(roomId)!;
-    room.push(ws);
-
-    console.log(`User ${ws.userId} joined video room ${roomId}`);
-
-    // Notify room participants
-    room.forEach(client => {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({
-          type: 'participant_joined',
-          payload: { roomId, userId: ws.userId }
-        }));
-      }
+    this.videoRooms.get(roomId)!.push(ws);
+    this.broadcastToConversation(roomId, {
+      type: 'conversation_joined',
+      payload: { userId: ws.userId }
     });
+    console.log(`User ${ws.userId} joined video room ${roomId}`);
+  },
+
+  private async handleVideoOffer(ws: WSClient, event: WSEvent) {
+    const { roomId, offer, senderId } = event.payload;
+    if (!this.videoRooms.has(roomId)) return;
+
+    // Store offer in signaling data
+    ws.cursor.set(`video_signaling:${roomId}`, offer);
+    // Broadcast to other participants
+    this.broadcastToConversation(roomId, {
+      type: 'video_receive_offer',
+      payload: { offer }
+    });
+    console.log(`Received video offer for room ${roomId} from ${senderId}`);
+  },
+
+  private async handleVideoAnswer(ws: WSClient, event: WSEvent) {
+    const { roomId, answer } = event.payload;
+    if (!this.videoRooms.has(roomId)) return;
+
+    await ws.cursor.set(`video_signaling:${roomId}`, answer);
+    const sender = ws.cursor.getSync(`video_participants:${roomId}`)?.sender;
+    if (sender) {
+      ws.send(this.createMessage({
+        type: 'video_confirm_invite',
+        payload: { accepted: true }
+      }));'sendMessage' function;
+    }
+  }
+
+  private async handleIceCandidate(ws: WSClient, event: WSEvent) {
+    const { roomId, candidate } = event.payload;
+    if (!this.videoRooms.has(roomId)) return;
+
+    await ws.cursor.set(`${roomId}:ice_candidate`, candidate);
+    this.broadcastToConversation(roomId, {
+      type: 'ice_candidate_received',
+      payload: { iceCandidate: candidate }
+    });
+    console.log(`ICE candidate received for room ${roomId}`);
+  },
+
+  private async handleEndCall(ws: WSClient, event: WSEvent) {
+    const { roomId } = event.payload;
+    if (!this.videoRooms.has(roomId)) return;
+
+    // Notify all participants
+    this.broadcastToConversation(roomId, {
+      type: 'call_ended',
+      payload: { roomId }
+    });
+
+    // Clean up room
+    this.videoRooms.delete(roomId);
+    console.log(`Call ended for room ${roomId}`);
   }
 
   private handleVideoOffer(ws: WSClient, payload: any) {
