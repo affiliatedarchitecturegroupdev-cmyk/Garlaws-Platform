@@ -4,6 +4,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { PropertiesModule } from './modules/properties/properties.module';
 import { ServicesModule } from './modules/services/services.module';
 import { ComplianceModule } from './modules/compliance/compliance.module';
+import { PaymentModule } from './modules/payment/payment.module';
+import { SubscriptionModule } from './modules/subscription/subscription.module';
 
 @Module({
   imports: [
@@ -15,6 +17,10 @@ import { ComplianceModule } from './modules/compliance/compliance.module';
     PropertiesModule,
     ServicesModule,
     ComplianceModule,
+    PaymentModule,
+    SubscriptionModule,
   ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --garlaws-black: #0b0c10;
+  --garlaws-olive: #2d3b2d;
+  --garlaws-gold: #c5a059;
+  --garlaws-navy: #1f2833;
+  --garlaws-slate: #45a29e;
+  --garlaws-light: #f4f4f4;
+  --garlaws-charcoal: #1a1a2e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--garlaws-black);
+  color: var(--garlaws-light);
+}
+
+@layer utilities {
+  .text-garlaws-black { color: var(--garlaws-black); }
+  .text-garlaws-olive { color: var(--garlaws-olive); }
+  .text-garlaws-gold { color: var(--garlaws-gold); }
+  .text-garlaws-navy { color: var(--garlaws-navy); }
+  .text-garlaws-slate { color: var(--garlaws-slate); }
+  .text-garlaws-light { color: var(--garlaws-light); }
+  
+  .bg-garlaws-black { background-color: var(--garlaws-black); }
+  .bg-garlaws-olive { background-color: var(--garlaws-olive); }
+  .bg-garlaws-gold { background-color: var(--garlaws-gold); }
+  .bg-garlaws-navy { background-color: var(--garlaws-navy); }
+  .bg-garlaws-slate { background-color: var(--garlaws-slate); }
+  .bg-garlaws-light { background-color: var(--garlaws-light); }
+  .bg-garlaws-charcoal { background-color: var(--garlaws-charcoal); }
+  
+  .border-garlaws-slate { border-color: var(--garlaws-slate); }
+  .border-garlaws-gold { border-color: var(--garlaws-gold); }
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #c5a059 0%, #e6c77a 50%, #c5a059 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}

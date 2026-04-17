@@ -36,7 +36,6 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules",
-    "garlaws-platform"
+    "node_modules"
   ]
 }
