@@ -79,3 +79,33 @@ export const notifications = sqliteTable("notifications", {
   expiresAt: integer("expires_at", { mode: "timestamp" }),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
+
+export const conversations = sqliteTable("conversations", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  bookingId: integer("booking_id").references(() => bookings.id),
+  type: text("type").$type<"booking" | "general">().default("booking"),
+  title: text("title"),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const conversation_participants = sqliteTable("conversation_participants", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  conversationId: integer("conversation_id").notNull().references(() => conversations.id),
+  userId: integer("user_id").notNull().references(() => users.id),
+  role: text("role").$type<"customer" | "provider" | "admin">().notNull(),
+  joinedAt: integer("joined_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  lastSeenAt: integer("last_seen_at", { mode: "timestamp" }),
+});
+
+export const messages = sqliteTable("messages", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  conversationId: integer("conversation_id").notNull().references(() => conversations.id),
+  senderId: integer("sender_id").notNull().references(() => users.id),
+  content: text("content").notNull(),
+  messageType: text("message_type").$type<"text" | "image" | "file" | "system">().default("text"),
+  metadata: text("metadata"), // JSON string for additional data
+  readAt: integer("read_at", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
