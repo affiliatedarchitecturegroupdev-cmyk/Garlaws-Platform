@@ -4,16 +4,11 @@ import { conversations, conversation_participants, messages, users } from "@/db/
 import { AuthMiddleware, AuthenticatedRequest } from "@/lib/auth-middleware";
 import { eq, and, desc } from "drizzle-orm";
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
-
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return AuthMiddleware.requireAuth(request, async (req: AuthenticatedRequest) => {
     try {
-      const conversationId = parseInt(params.id);
+      const { id } = await params;
+      const conversationId = parseInt(id);
 
       if (isNaN(conversationId)) {
         return NextResponse.json(
@@ -81,10 +76,10 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   });
 }
 
-export async function POST(request: NextRequest, { params }: RouteParams) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   return AuthMiddleware.requireAuth(request, async (req: AuthenticatedRequest) => {
     try {
-      const conversationId = parseInt(params.id);
+      const conversationId = parseInt((await params).id);
       const body = await request.json();
       const { content, messageType, metadata } = body;
 

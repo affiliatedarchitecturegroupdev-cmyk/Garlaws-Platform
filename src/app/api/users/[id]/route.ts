@@ -10,9 +10,9 @@ interface RouteParams {
   };
 }
 
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ [key: string]: string }> }) {
   try {
-    const userId = parseInt(params.id);
+    const userId = parseInt((await params).id);
 
     if (isNaN(userId)) {
       return NextResponse.json(
@@ -41,9 +41,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function PUT(request: NextRequest, { params }: RouteParams) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ [key: string]: string }> }) {
   try {
-    const userId = parseInt(params.id);
+    const userId = parseInt((await params).id);
 
     if (isNaN(userId)) {
       return NextResponse.json(
@@ -91,9 +91,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ [key: string]: string }> }) {
   try {
-    const userId = parseInt(params.id);
+    const userId = parseInt((await params).id);
 
     if (isNaN(userId)) {
       return NextResponse.json(

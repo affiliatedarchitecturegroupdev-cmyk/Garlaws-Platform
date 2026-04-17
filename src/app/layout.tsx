@@ -6,6 +6,8 @@ import { CartProvider } from "@/lib/cart-context";
 import { ToastProvider } from "@/components/ToastNotifications";
 import { FloatingChatWidget } from "@/components/FloatingChatWidget";
 import { PushNotificationInitializer } from "@/components/PushNotificationInitializer";
+import { GlobalErrorBoundary } from "@/components/GlobalErrorBoundary";
+import { WebVitalsTracker } from "@/components/WebVitalsTracker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,14 +44,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ToastProvider>
-          <CartProvider>
+        <GlobalErrorBoundary>
+          <ToastProvider>
+            <CartProvider>
             <ServiceWorkerRegistration />
             <PushNotificationInitializer />
+            <WebVitalsTracker />
             {children}
-            <FloatingChatWidget />
-          </CartProvider>
-        </ToastProvider>
+              <FloatingChatWidget />
+            </CartProvider>
+          </ToastProvider>
+        </GlobalErrorBoundary>
       </body>
     </html>
   );

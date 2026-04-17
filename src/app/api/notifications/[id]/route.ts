@@ -10,10 +10,10 @@ interface RouteParams {
   };
 }
 
-export async function PATCH(request: NextRequest, { params }: RouteParams) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ [key: string]: string }> }) {
   return AuthMiddleware.requireAuth(request, async (req: AuthenticatedRequest) => {
     try {
-      const notificationId = parseInt(params.id);
+      const notificationId = parseInt((await params).id);
       const body = await request.json();
       const { read } = body;
 
@@ -50,10 +50,10 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
   });
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ [key: string]: string }> }) {
   return AuthMiddleware.requireAuth(request, async (req: AuthenticatedRequest) => {
     try {
-      const notificationId = parseInt(params.id);
+      const notificationId = parseInt((await params).id);
 
       if (isNaN(notificationId)) {
         return NextResponse.json(

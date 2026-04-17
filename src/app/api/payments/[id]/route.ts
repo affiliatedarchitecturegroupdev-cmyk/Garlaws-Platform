@@ -9,9 +9,9 @@ interface RouteParams {
   };
 }
 
-export async function GET(request: NextRequest, { params }: RouteParams) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ [key: string]: string }> }) {
   try {
-    const paymentId = parseInt(params.id);
+    const paymentId = parseInt((await params).id);
 
     if (isNaN(paymentId)) {
       return NextResponse.json(
@@ -38,9 +38,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function PUT(request: NextRequest, { params }: RouteParams) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ [key: string]: string }> }) {
   try {
-    const paymentId = parseInt(params.id);
+    const paymentId = parseInt((await params).id);
 
     if (isNaN(paymentId)) {
       return NextResponse.json(
@@ -88,9 +88,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ [key: string]: string }> }) {
   try {
-    const paymentId = parseInt(params.id);
+    const paymentId = parseInt((await params).id);
 
     if (isNaN(paymentId)) {
       return NextResponse.json(

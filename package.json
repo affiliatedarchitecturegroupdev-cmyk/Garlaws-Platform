@@ -5,17 +5,22 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:production": "next build",
+    "build:production": "NODE_ENV=production next build",
     "start": "next start",
-    "start:production": "next start -p 3000",
+    "start:production": "NODE_ENV=production next start -p 3000",
     "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "typecheck": "tsc --noEmit",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "bun run src/db/migrate.ts",
     "deploy:production": "bash scripts/deploy-production.sh",
     "health:check": "curl -f http://localhost:3000/api/health",
     "docker:build": "docker build -f Dockerfile.production -t garlaws/platform:latest .",
-    "docker:run": "docker run -p 3000:3000 garlaws/platform:latest"
+    "docker:run": "docker run -p 3000:3000 garlaws/platform:latest",
+    "analyze:bundle": "ANALYZE=true next build"
   },
   "dependencies": {
     "@kilocode/app-builder-db": "github:Kilo-Org/app-builder-db#main",
@@ -30,12 +35,18 @@
     "pdfjs-dist": "^5.6.205",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "react-error-boundary": "^6.1.1",
     "recharts": "^3.8.1",
+    "web-vitals": "^5.2.0",
     "ws": "^8.20.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.17",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/bcryptjs": "^3.0.0",
+    "@types/jest": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.2",
     "@types/react": "^19.2.7",
@@ -43,6 +54,8 @@
     "drizzle-kit": "^0.31.10",
     "eslint": "^9.39.1",
     "eslint-config-next": "^16.0.0",
+    "jest": "^30.3.0",
+    "jest-environment-jsdom": "^30.3.0",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3"
   }
