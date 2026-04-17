@@ -5,11 +5,17 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:production": "next build",
     "start": "next start",
+    "start:production": "next start -p 3000",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "bun run src/db/migrate.ts"
+    "db:migrate": "bun run src/db/migrate.ts",
+    "deploy:production": "bash scripts/deploy-production.sh",
+    "health:check": "curl -f http://localhost:3000/api/health",
+    "docker:build": "docker build -f Dockerfile.production -t garlaws/platform:latest .",
+    "docker:run": "docker run -p 3000:3000 garlaws/platform:latest"
   },
   "dependencies": {
     "@kilocode/app-builder-db": "github:Kilo-Org/app-builder-db#main",

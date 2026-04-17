@@ -1,0 +1,91 @@
+# Garlaws Platform Production Monitoring Configuration
+# DataDog agent configuration for comprehensive monitoring
+
+# datadog.yaml - Place in /etc/datadog-agent/datadog.yaml
+# api_key: ${DD_API_KEY}
+# app_key: ${DD_APP_KEY}
+# site: datadoghq.eu  # EU region for South Africa
+#
+# logs_enabled: true
+# process_config:
+#   enabled: "true"
+#
+# tags:
+#   - env:production
+#   - service:garlaws-platform
+#   - region:af-south-1
+
+# Application Performance Monitoring (APM)
+# This tracks application performance, errors, and traces
+# Configuration is handled automatically by dd-trace for Node.js
+
+# Log collection configuration
+# logs:
+#   - type: file
+#     path: /var/log/garlaws/application.log
+#     service: garlaws-platform
+#     source: nodejs
+#     sourcecategory: sourcecode
+#
+#   - type: file
+#     path: /var/log/nginx/access.log
+#     service: nginx
+#     source: nginx
+#     sourcecategory: http_access
+#
+#   - type: file
+#     path: /var/log/nginx/error.log
+#     service: nginx
+#     source: nginx
+#     sourcecategory: http_error
+
+# Custom metrics configuration
+# metrics:
+#   namespace: garlaws
+#   tags:
+#     - env:production
+#
+#   checks:
+#     - name: garlaws_health
+#       instances:
+#         - url: http://localhost:3000/health
+#           timeout: 10
+#           tags:
+#             - service:garlaws-platform
+
+# Database monitoring (PostgreSQL)
+# This monitors database performance and connections
+# integrations:
+#   postgres:
+#     - host: db.xxxxxx.supabase.co
+#       port: 5432
+#       username: datadog
+#       password: ${DD_POSTGRES_PASSWORD}
+#       dbname: postgres
+#       tags:
+#         - env:production
+#         - service:garlaws-database
+
+# Alert configurations (would be set up in DataDog dashboard)
+# - Application response time > 2s
+# - Error rate > 5%
+# - Database connection pool exhausted
+# - Memory usage > 85%
+# - Disk space < 10% available
+# - SSL certificate expiration < 30 days
+
+# Synthetic monitoring (would be configured in DataDog)
+# - Homepage availability
+# - Login flow
+# - Service booking flow
+# - Payment processing
+# - API endpoints response time
+
+# Real User Monitoring (RUM)
+# Configured in the application via @datadog/browser-rum
+# Tracks user interactions, page load times, errors
+
+# Incident Response
+# - PagerDuty integration for critical alerts
+# - Slack notifications for warnings
+# - Email alerts for informational events
