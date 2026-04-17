@@ -1,6 +1,23 @@
 export default function Home() {
   return (
     <main className="min-h-screen bg-garlaws-black text-garlaws-light">
+      {/* Navigation Header */}
+      <nav className="absolute top-0 left-0 right-0 z-50 px-6 py-4">
+        <div className="max-w-6xl mx-auto flex justify-between items-center">
+          <div className="text-garlaws-gold font-semibold">
+            Garlaws (Pty) Ltd
+          </div>
+          <div className="flex gap-4">
+            <a href="/auth/login" className="text-garlaws-slate hover:text-garlaws-gold transition-colors">
+              Sign In
+            </a>
+            <a href="/auth/signup" className="px-4 py-2 bg-garlaws-gold text-garlaws-black rounded-lg hover:opacity-90 transition-all font-semibold">
+              Sign Up
+            </a>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Background Pattern */}
