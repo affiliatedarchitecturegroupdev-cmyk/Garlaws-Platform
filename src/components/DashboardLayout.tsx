@@ -28,6 +28,7 @@ export function DashboardLayout({ children, activeTab }: DashboardLayoutProps) {
     { name: "Analytics", href: "/dashboard/analytics", icon: "📊" },
     { name: "Reports", href: "/dashboard/reports", icon: "📄" },
     { name: "Chat", href: "/dashboard/chat", icon: "💬" },
+    { name: "Chat Analytics", href: "/dashboard/chat-analytics", icon: "📊" },
     { name: "Notifications", href: "/dashboard/notifications", icon: "🔔" },
     { name: "Settings", href: "/dashboard/settings", icon: "⚙️" },
   ];

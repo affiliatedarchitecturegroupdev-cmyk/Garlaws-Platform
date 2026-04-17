@@ -5,6 +5,7 @@ import { ServiceWorkerRegistration } from "./components/ServiceWorkerRegistratio
 import { CartProvider } from "@/lib/cart-context";
 import { ToastProvider } from "@/components/ToastNotifications";
 import { FloatingChatWidget } from "@/components/FloatingChatWidget";
+import { PushNotificationInitializer } from "@/components/PushNotificationInitializer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,7 @@ export default function RootLayout({
         <ToastProvider>
           <CartProvider>
             <ServiceWorkerRegistration />
+            <PushNotificationInitializer />
             {children}
             <FloatingChatWidget />
           </CartProvider>

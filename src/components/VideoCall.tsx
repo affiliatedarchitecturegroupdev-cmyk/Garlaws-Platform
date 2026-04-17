@@ -31,51 +31,12 @@ export function VideoCall({ isOpen, onClose, roomId = "default-room", isInitiato
     iceServers: [
       { urls: 'stun:stun.l.google.com:19302' },
       { urls: 'stun:stun1.l.google.com:19302' },
+      // Add TURN servers for production
+      // { urls: 'turn:your-turn-server.com', username: 'user', credential: 'pass' }
     ],
   };
 
-  useEffect(() => {
-    if (isOpen) {
-      initializeCall();
-    } else {
-      endCall();
-    }
-
-    return () => {
-      endCall();
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (localVideoRef.current && localStream) {
-      localVideoRef.current.srcObject = localStream;
-    }
-  }, [localStream]);
-
-  useEffect(() => {
-    if (remoteVideoRef.current && remoteStream) {
-      remoteVideoRef.current.srcObject = remoteStream;
-    }
-  }, [remoteStream]);
-
-  function handleWebSocketMessage(message: any) {
-    switch (message.type) {
-      case 'video_offer':
-        handleVideoOffer(message.payload);
-        break;
-      case 'video_answer':
-        handleVideoAnswer(message.payload);
-        break;
-      case 'ice_candidate':
-        handleIceCandidate(message.payload);
-        break;
-      case 'call_ended':
-        endCall();
-        break;
-    }
-  }
-
-  async function initializeCall() {
+  const initializeCall = async () => {
     try {
       setError(null);
 
@@ -98,7 +59,9 @@ export function VideoCall({ isOpen, onClose, roomId = "default-room", isInitiato
 
       // Handle remote stream
       pc.ontrack = (event) => {
-        setRemoteStream(event.streams[0]);
+        if (event.streams && event.streams[0]) {
+          setRemoteStream(event.streams[0]);
+        }
       };
 
       // Handle ICE candidates
@@ -116,10 +79,32 @@ export function VideoCall({ isOpen, onClose, roomId = "default-room", isInitiato
 
       // Handle connection state changes
       pc.onconnectionstatechange = () => {
-        if (pc.connectionState === 'connected') {
-          setIsConnected(true);
-          setIsInCall(true);
+        console.log('Connection state:', pc.connectionState);
+        switch (pc.connectionState) {
+          case 'connected':
+            setIsConnected(true);
+            setIsInCall(true);
+            break;
+          case 'connecting':
+            setIsConnected(false);
+            setIsInCall(true);
+            break;
+          case 'disconnected':
+          case 'failed':
+            setError('Connection lost. Please try again.');
+            setIsConnected(false);
+            setIsInCall(false);
+            break;
+          case 'closed':
+            setIsConnected(false);
+            setIsInCall(false);
+            break;
         }
+      };
+
+      // Handle ICE connection state
+      pc.oniceconnectionstatechange = () => {
+        console.log('ICE connection state:', pc.iceConnectionState);
       };
 
       // Join room
@@ -153,7 +138,78 @@ export function VideoCall({ isOpen, onClose, roomId = "default-room", isInitiato
       console.error('Failed to initialize call:', error);
       setError('Failed to access camera/microphone. Please check permissions.');
     }
+  };
+
+  const endCall = () => {
+    if (localStream) {
+      localStream.getTracks().forEach(track => track.stop());
+      setLocalStream(null);
+    }
+
+    if (peerConnection) {
+      peerConnection.close();
+      setPeerConnection(null);
+    }
+
+    setRemoteStream(null);
+    setIsConnected(false);
+    setIsInCall(false);
+
+    sendWSMessage({
+      type: 'end_call',
+      payload: { roomId },
+    });
+  };
+
+  useEffect(() => {
+    let mounted = true;
+
+    const handleCallLifecycle = async () => {
+      if (isOpen && mounted) {
+        await initializeCall();
+      } else if (!isOpen && mounted) {
+        endCall();
+      }
+    };
+
+    handleCallLifecycle();
+
+    return () => {
+      mounted = false;
+      endCall();
+    };
+  }, [isOpen, initializeCall, endCall]);
+
+  useEffect(() => {
+    if (localVideoRef.current && localStream) {
+      localVideoRef.current.srcObject = localStream;
+    }
+  }, [localStream]);
+
+  useEffect(() => {
+    if (remoteVideoRef.current && remoteStream) {
+      remoteVideoRef.current.srcObject = remoteStream;
+    }
+  }, [remoteStream]);
+
+  function handleWebSocketMessage(message: any) {
+    switch (message.type) {
+      case 'video_offer':
+        handleVideoOffer(message.payload);
+        break;
+      case 'video_answer':
+        handleVideoAnswer(message.payload);
+        break;
+      case 'ice_candidate':
+        handleIceCandidate(message.payload);
+        break;
+      case 'call_ended':
+        endCall();
+        break;
+    }
   }
+
+
 
   async function handleVideoOffer(payload: any) {
     if (!peerConnection || payload.roomId !== roomId) return;
@@ -214,26 +270,7 @@ export function VideoCall({ isOpen, onClose, roomId = "default-room", isInitiato
     }
   }
 
-  function endCall() {
-    if (localStream) {
-      localStream.getTracks().forEach(track => track.stop());
-      setLocalStream(null);
-    }
 
-    if (peerConnection) {
-      peerConnection.close();
-      setPeerConnection(null);
-    }
-
-    setRemoteStream(null);
-    setIsConnected(false);
-    setIsInCall(false);
-
-    sendWSMessage({
-      type: 'end_call',
-      payload: { roomId },
-    });
-  }
 
   if (!isOpen) return null;
 
