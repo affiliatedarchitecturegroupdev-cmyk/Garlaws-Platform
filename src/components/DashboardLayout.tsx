@@ -23,6 +23,8 @@ export function DashboardLayout({ children, activeTab }: DashboardLayoutProps) {
     { name: "Services", href: "/dashboard/services", icon: "🛠️", roles: ["service_provider"] },
     { name: "Earnings", href: "/dashboard/earnings", icon: "💰", roles: ["service_provider"] },
     { name: "Schedule", href: "/dashboard/schedule", icon: "📅", roles: ["service_provider"] },
+    { name: "Analytics", href: "/dashboard/analytics", icon: "📊" },
+    { name: "Reports", href: "/dashboard/reports", icon: "📄" },
     { name: "Notifications", href: "/dashboard/notifications", icon: "🔔" },
     { name: "Settings", href: "/dashboard/settings", icon: "⚙️" },
   ];

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
+import { AnalyticsSummary } from "@/components/AnalyticsSummary";
 import { useAuth } from "@/lib/auth-context";
 
 interface DashboardStats {
@@ -349,6 +350,11 @@ function CustomerDashboardContent() {
               View all bookings →
             </a>
           </div>
+        </div>
+
+        {/* Analytics Summary */}
+        <div className="mt-8">
+          <AnalyticsSummary />
         </div>
 
         {/* Quick Actions */}
