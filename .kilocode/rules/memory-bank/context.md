@@ -17,13 +17,21 @@
 - ✅ Phase 24: Digital twin technology
 - ✅ Phase 25: Edge computing infrastructure
 - ✅ Phase 26: Generative landscape design AI
+- ✅ Phase 27: IoT soil/safety monitoring
+- ✅ Phase 26: Generative landscape design AI
 
 ---
 
 ## Recently Completed
 
-- [x] Phase 1-26: Complete platform with advanced AI, risk management, blockchain, digital twins, edge computing, and generative landscape design
-- [x] Phase 26: Generative Landscape Design AI
+- [x] Phase 1-27: Complete platform with advanced AI, risk management, blockchain, digital twins, edge computing, generative landscape design, and IoT monitoring
+- [x] Phase 27: IoT Soil/Safety Monitoring
+- [x] IoT sensor management engine with comprehensive sensor lifecycle management
+- [x] Real-time sensor data processing with anomaly detection and predictive analytics
+- [x] REST API endpoints for soil monitoring (moisture, pH, nutrients) and safety monitoring (gas detection, emergency alerts)
+- [x] Interactive IoT monitoring dashboard with real-time sensor status and data visualization
+- [x] Alert system for soil conditions and safety threshold breaches with acknowledgment workflow
+- [x] Sensor data analytics with trend analysis, outlier detection, and predictive modeling
 - [x] AI-powered generative design engine with multi-criteria optimization
 - [x] Interactive landscape design dashboard with drag-drop functionality
 - [x] 2D visualization component with canvas-based rendering and element interaction
@@ -164,6 +172,7 @@ The Garlaws Platform is now a **full-featured Progressive Web App** with:
 
 | Date | Changes |
 |------|---------|
+| 2026-04-18 | Phase 27: IoT soil/safety monitoring - completed |
 | 2026-04-18 | Phase 26: Generative landscape design AI - completed |
 | 2026-04-18 | Phase 26: Generative landscape design AI - started |
 | 2026-04-18 | Phase 25: Edge computing infrastructure complete |

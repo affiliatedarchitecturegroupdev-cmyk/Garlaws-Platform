@@ -1,6 +1,6 @@
-import { DesignElement, DesignTemplate, LandscapeDesign } from '@/lib/types/property';
+import { DesignElement, DesignTemplate, LandscapeDesign, DesignZone } from '@/lib/types/property';
 
-export interface DesignTemplate {
+interface LocalDesignTemplate {
   id: string;
   name: string;
   description: string;
@@ -199,12 +199,14 @@ export class DesignTemplateLibrary {
         {
           name: 'Main Living Area',
           type: 'living',
+          elements: [],
           area: 2000,
           purpose: 'Entertainment and relaxation'
         },
         {
           name: 'Entry Pathway',
           type: 'entrance',
+          elements: [],
           area: 400,
           purpose: 'Welcoming entry experience'
         }
