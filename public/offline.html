@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garlaws - Offline</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #0b0c10 0%, #1f2833 100%);
+      color: #f4f4f4;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      text-align: center;
+      padding: 2rem;
+      max-width: 500px;
+    }
+
+    .icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #c5a059 0%, #e6c77a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    p {
+      margin-bottom: 2rem;
+      color: #45a29e;
+      line-height: 1.6;
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: #c5a059;
+      color: #0b0c10;
+    }
+
+    .btn-primary:hover {
+      background: #b8954f;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #45a29e;
+      border: 1px solid #45a29e;
+    }
+
+    .btn-secondary:hover {
+      background: #45a29e;
+      color: #0b0c10;
+    }
+
+    .features {
+      margin-top: 3rem;
+      text-align: left;
+    }
+
+    .features h2 {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      color: #c5a059;
+    }
+
+    .features ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .features li {
+      margin-bottom: 0.5rem;
+      padding-left: 1.5rem;
+      position: relative;
+      color: #45a29e;
+    }
+
+    .features li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #c5a059;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">📱</div>
+    <h1>Garlaws Platform</h1>
+    <p>
+      You're currently offline. Don't worry! You can still access some features
+      and your data will sync automatically when you're back online.
+    </p>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="window.location.reload()">
+        Try Again
+      </button>
+      <a href="/dashboard" class="btn btn-secondary">
+        View Cached Dashboard
+      </a>
+    </div>
+
+    <div class="features">
+      <h2>Available Offline:</h2>
+      <ul>
+        <li>View previously loaded pages</li>
+        <li>Access cached booking information</li>
+        <li>Read saved chat conversations</li>
+        <li>View service listings</li>
+        <li>Access account settings</li>
+      </ul>
+    </div>
+
+    <p style="margin-top: 2rem; font-size: 0.875rem; color: #666;">
+      © 2026 Garlaws (Pty) Ltd • Offline Mode
+    </p>
+  </div>
+
+  <script>
+    // Check for online status
+    function updateOnlineStatus() {
+      const status = navigator.onLine ? 'online' : 'offline';
+      console.log('Network status:', status);
+
+      if (navigator.onLine) {
+        // Attempt to sync data when back online
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.ready.then((registration) => {
+            if ('sync' in registration) {
+              registration.sync.register('background-sync-data');
+            }
+          });
+        }
+      }
+    }
+
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    // Initial status check
+    updateOnlineStatus();
+  </script>
+</body>
+</html>
