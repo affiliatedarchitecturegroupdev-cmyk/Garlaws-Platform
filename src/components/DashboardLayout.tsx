@@ -29,6 +29,12 @@ export function DashboardLayout({ children, activeTab }: DashboardLayoutProps) {
     { name: "Reports", href: "/dashboard/reports", icon: "📄" },
     { name: "Chat", href: "/dashboard/chat", icon: "💬" },
     { name: "Chat Analytics", href: "/dashboard/chat-analytics", icon: "📊" },
+    { name: "Enhanced AI Chat", href: "/dashboard/enhanced-ai-chat", icon: "🤖" },
+    { name: "Predictive Maintenance", href: "/dashboard/predictive-maintenance", icon: "🤖", roles: ["service_provider"] },
+    { name: "Computer Vision", href: "/dashboard/computer-vision", icon: "🔍", roles: ["service_provider"] },
+    { name: "Anomaly Detection", href: "/dashboard/anomaly-detection", icon: "⚠️", roles: ["service_provider"] },
+    { name: "Sentiment Analysis", href: "/dashboard/sentiment-analysis", icon: "🧠" },
+    { name: "AI Recommendations", href: "/dashboard/recommendation-engine", icon: "🎯" },
     { name: "Notifications", href: "/dashboard/notifications", icon: "🔔" },
     { name: "Settings", href: "/dashboard/settings", icon: "⚙️" },
   ];
