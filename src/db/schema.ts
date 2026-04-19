@@ -923,3 +923,196 @@ export const access_tokens = sqliteTable("access_tokens", {
   userAgent: text("user_agent"),
   isActive: integer("is_active", { mode: "boolean" }).default(true),
 });
+
+// Advanced Project Management & Collaboration Platform Tables
+
+export const teams = sqliteTable("teams", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  leaderId: integer("leader_id").references(() => users.id),
+  parentTeamId: integer("parent_team_id").references(() => teams.id),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const team_members = sqliteTable("team_members", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  teamId: integer("team_id").notNull().references(() => teams.id),
+  userId: integer("user_id").notNull().references(() => users.id),
+  role: text("role").$type<"member" | "lead" | "manager">().default("member"),
+  joinedAt: integer("joined_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+});
+
+export const projects = sqliteTable("projects", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  code: text("code").notNull().unique(),
+  status: text("status").$type<"planning" | "active" | "on_hold" | "completed" | "cancelled">().default("planning"),
+  priority: text("priority").$type<"low" | "medium" | "high" | "critical">().default("medium"),
+  startDate: integer("start_date", { mode: "timestamp" }),
+  endDate: integer("end_date", { mode: "timestamp" }),
+  budget: real("budget"),
+  currency: text("currency").default("ZAR"),
+  progress: real("progress").default(0), // 0-100
+  ownerId: integer("owner_id").notNull().references(() => users.id),
+  teamId: integer("team_id").references(() => teams.id),
+  parentProjectId: integer("parent_project_id").references(() => projects.id),
+  templateId: integer("template_id").references(() => project_templates.id),
+  customFields: text("custom_fields"), // JSON
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const project_members = sqliteTable("project_members", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  projectId: integer("project_id").notNull().references(() => projects.id),
+  userId: integer("user_id").notNull().references(() => users.id),
+  role: text("role").$type<"viewer" | "contributor" | "manager" | "owner">().default("contributor"),
+  joinedAt: integer("joined_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+});
+
+export const tasks = sqliteTable("tasks", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  projectId: integer("project_id").notNull().references(() => projects.id),
+  parentTaskId: integer("parent_task_id").references(() => tasks.id),
+  title: text("title").notNull(),
+  description: text("description"),
+  status: text("status").$type<"todo" | "in_progress" | "review" | "done" | "cancelled">().default("todo"),
+  priority: text("priority").$type<"low" | "medium" | "high" | "urgent">().default("medium"),
+  type: text("type").$type<"task" | "bug" | "feature" | "epic" | "story">().default("task"),
+  assigneeId: integer("assignee_id").references(() => users.id),
+  reporterId: integer("reporter_id").references(() => users.id),
+  startDate: integer("start_date", { mode: "timestamp" }),
+  dueDate: integer("due_date", { mode: "timestamp" }),
+  estimatedHours: real("estimated_hours"),
+  actualHours: real("actual_hours").default(0),
+  progress: real("progress").default(0), // 0-100
+  tags: text("tags"), // JSON array
+  customFields: text("custom_fields"), // JSON
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const task_dependencies = sqliteTable("task_dependencies", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  taskId: integer("task_id").notNull().references(() => tasks.id),
+  dependsOnTaskId: integer("depends_on_task_id").notNull().references(() => tasks.id),
+  dependencyType: text("dependency_type").$type<"finish_to_start" | "start_to_start" | "finish_to_finish" | "start_to_finish">().default("finish_to_start"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const task_comments = sqliteTable("task_comments", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  taskId: integer("task_id").notNull().references(() => tasks.id),
+  userId: integer("user_id").notNull().references(() => users.id),
+  content: text("content").notNull(),
+  parentCommentId: integer("parent_comment_id").references(() => task_comments.id),
+  isInternal: integer("is_internal", { mode: "boolean" }).default(false),
+  attachments: text("attachments"), // JSON array of file URLs
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const project_milestones = sqliteTable("project_milestones", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  projectId: integer("project_id").notNull().references(() => projects.id),
+  title: text("title").notNull(),
+  description: text("description"),
+  dueDate: integer("due_date", { mode: "timestamp" }).notNull(),
+  status: text("status").$type<"pending" | "completed" | "overdue">().default("pending"),
+  progress: real("progress").default(0), // 0-100
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const time_entries = sqliteTable("time_entries", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").notNull().references(() => users.id),
+  taskId: integer("task_id").references(() => tasks.id),
+  projectId: integer("project_id").references(() => projects.id),
+  date: integer("date", { mode: "timestamp" }).notNull(),
+  hours: real("hours").notNull(),
+  description: text("description"),
+  billable: integer("billable", { mode: "boolean" }).default(true),
+  billableRate: real("billable_rate"),
+  approved: integer("approved", { mode: "boolean" }).default(false),
+  approvedBy: integer("approved_by").references(() => users.id),
+  approvedAt: integer("approved_at", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const documents = sqliteTable("documents", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  fileName: text("file_name").notNull(),
+  fileSize: integer("file_size").notNull(),
+  mimeType: text("mime_type").notNull(),
+  fileUrl: text("file_url").notNull(),
+  thumbnailUrl: text("thumbnail_url"),
+  projectId: integer("project_id").references(() => projects.id),
+  taskId: integer("task_id").references(() => tasks.id),
+  folderId: integer("folder_id").references(() => document_folders.id),
+  uploadedBy: integer("uploaded_by").notNull().references(() => users.id),
+  version: integer("version").default(1),
+  isLatest: integer("is_latest", { mode: "boolean" }).default(true),
+  permissions: text("permissions"), // JSON permission settings
+  tags: text("tags"), // JSON array
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const document_versions = sqliteTable("document_versions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  documentId: integer("document_id").notNull().references(() => documents.id),
+  version: integer("version").notNull(),
+  fileName: text("file_name").notNull(),
+  fileSize: integer("file_size").notNull(),
+  mimeType: text("mime_type").notNull(),
+  fileUrl: text("file_url").notNull(),
+  changes: text("changes"), // Description of changes
+  uploadedBy: integer("uploaded_by").notNull().references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const document_folders = sqliteTable("document_folders", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  parentFolderId: integer("parent_folder_id").references(() => document_folders.id),
+  projectId: integer("project_id").references(() => projects.id),
+  createdBy: integer("created_by").notNull().references(() => users.id),
+  permissions: text("permissions"), // JSON permission settings
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const project_templates = sqliteTable("project_templates", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  category: text("category").$type<"software" | "construction" | "marketing" | "general">().notNull(),
+  tenantId: text("tenant_id"),
+  isPublic: integer("is_public", { mode: "boolean" }).default(false),
+  templateData: text("template_data"), // JSON template structure
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const project_analytics = sqliteTable("project_analytics", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  projectId: integer("project_id").notNull().references(() => projects.id),
+  date: integer("date", { mode: "timestamp" }).notNull(),
+  metric: text("metric").notNull(), // e.g., 'tasks_completed', 'hours_logged', 'budget_used'
+  value: real("value").notNull(),
+  category: text("category").$type<"productivity" | "quality" | "budget" | "timeline">(),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
