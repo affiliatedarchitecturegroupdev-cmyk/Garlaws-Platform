@@ -730,6 +730,237 @@ export const model_explainability = sqliteTable("model_explainability", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
+// Advanced Quality Assurance & Testing Platform Tables
+
+export const test_suites = sqliteTable("test_suites", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  projectId: integer("project_id").references(() => projects.id),
+  testType: text("test_type").$type<"unit" | "integration" | "e2e" | "api" | "performance" | "security" | "accessibility">().notNull(),
+  framework: text("framework").$type<"jest" | "cypress" | "playwright" | "selenium" | "postman" | "k6" | "owasp_zap">(),
+  status: text("status").$type<"active" | "inactive" | "deprecated">().default("active"),
+  schedule: text("schedule"), // cron expression
+  environment: text("environment").$type<"development" | "staging" | "production">().default("development"),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const test_cases = sqliteTable("test_cases", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  testSuiteId: integer("test_suite_id").notNull().references(() => test_suites.id),
+  title: text("title").notNull(),
+  description: text("description"),
+  priority: text("priority").$type<"low" | "medium" | "high" | "critical">().default("medium"),
+  status: text("status").$type<"draft" | "ready" | "review" | "approved" | "deprecated">().default("draft"),
+  testSteps: text("test_steps"), // JSON array of test steps
+  expectedResult: text("expected_result"),
+  preconditions: text("preconditions"),
+  tags: text("tags"), // JSON array
+  automationStatus: text("automation_status").$type<"manual" | "automated" | "semi_automated">().default("manual"),
+  automationScript: text("automation_script"), // Code or script content
+  estimatedDuration: integer("estimated_duration"), // in seconds
+  createdBy: integer("created_by").references(() => users.id),
+  assignedTo: integer("assigned_to").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const test_runs = sqliteTable("test_runs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  testSuiteId: integer("test_suite_id").references(() => test_suites.id),
+  name: text("name").notNull(),
+  description: text("description"),
+  status: text("status").$type<"scheduled" | "running" | "completed" | "failed" | "cancelled">().default("scheduled"),
+  environment: text("environment").$type<"development" | "staging" | "production">().default("development"),
+  triggeredBy: text("triggered_by"), // "manual", "schedule", "ci_cd", "webhook"
+  triggeredByUser: integer("triggered_by_user").references(() => users.id),
+  startTime: integer("start_time", { mode: "timestamp" }),
+  endTime: integer("end_time", { mode: "timestamp" }),
+  duration: integer("duration"), // in seconds
+  totalTests: integer("total_tests").default(0),
+  passedTests: integer("passed_tests").default(0),
+  failedTests: integer("failed_tests").default(0),
+  skippedTests: integer("skipped_tests").default(0),
+  config: text("config"), // JSON run configuration
+  results: text("results"), // JSON detailed results
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const test_results = sqliteTable("test_results", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  testRunId: integer("test_run_id").notNull().references(() => test_runs.id),
+  testCaseId: integer("test_case_id").references(() => test_cases.id),
+  testName: text("test_name").notNull(),
+  status: text("status").$type<"passed" | "failed" | "skipped" | "error" | "blocked">().notNull(),
+  duration: integer("duration"), // in milliseconds
+  errorMessage: text("error_message"),
+  stackTrace: text("stack_trace"),
+  screenshots: text("screenshots"), // JSON array of file URLs
+  logs: text("logs"), // JSON test logs
+  metadata: text("metadata"), // JSON additional data
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const bugs = sqliteTable("bugs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  tenantId: text("tenant_id").notNull(),
+  projectId: integer("project_id").references(() => projects.id),
+  testRunId: integer("test_run_id").references(() => test_runs.id),
+  severity: text("severity").$type<"low" | "medium" | "high" | "critical">().default("medium"),
+  priority: text("priority").$type<"low" | "medium" | "high" | "urgent">().default("medium"),
+  status: text("status").$type<"open" | "in_progress" | "resolved" | "closed" | "rejected">().default("open"),
+  type: text("type").$type<"bug" | "feature_request" | "improvement" | "security_issue">().default("bug"),
+  reportedBy: integer("reported_by").references(() => users.id),
+  assignedTo: integer("assigned_to").references(() => users.id),
+  tags: text("tags"), // JSON array
+  attachments: text("attachments"), // JSON array of file URLs
+  reproductionSteps: text("reproduction_steps"),
+  expectedBehavior: text("expected_behavior"),
+  actualBehavior: text("actual_behavior"),
+  environment: text("environment"), // JSON environment details
+  browser: text("browser"),
+  os: text("os"),
+  resolution: text("resolution"),
+  resolvedAt: integer("resolved_at", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const code_quality_reports = sqliteTable("code_quality_reports", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  projectId: integer("project_id").references(() => projects.id),
+  commitHash: text("commit_hash"),
+  branch: text("branch").default("main"),
+  tool: text("tool").$type<"eslint" | "prettier" | "sonarcloud" | "codeclimate" | "eslint" | "typescript">().notNull(),
+  status: text("status").$type<"passed" | "failed" | "warning">().default("passed"),
+  score: real("score"), // 0-100 quality score
+  issues: text("issues"), // JSON array of issues
+  metrics: text("metrics"), // JSON quality metrics
+  generatedAt: integer("generated_at", { mode: "timestamp" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const performance_tests = sqliteTable("performance_tests", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  testType: text("test_type").$type<"load" | "stress" | "spike" | "volume" | "endurance">().default("load"),
+  targetUrl: text("target_url").notNull(),
+  config: text("config"), // JSON test configuration (vus, duration, thresholds)
+  script: text("script"), // K6 or similar script content
+  status: text("status").$type<"draft" | "scheduled" | "running" | "completed" | "failed">().default("draft"),
+  schedule: text("schedule"), // cron expression
+  lastRunId: integer("last_run_id").references(() => performance_test_runs.id),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const performance_test_runs = sqliteTable("performance_test_runs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  performanceTestId: integer("performance_test_id").notNull().references(() => performance_tests.id),
+  status: text("status").$type<"running" | "completed" | "failed">().default("running"),
+  startTime: integer("start_time", { mode: "timestamp" }).notNull(),
+  endTime: integer("end_time", { mode: "timestamp" }),
+  duration: integer("duration"), // in seconds
+  results: text("results"), // JSON performance metrics
+  thresholds: text("thresholds"), // JSON pass/fail thresholds
+  passed: integer("passed", { mode: "boolean" }),
+  errorMessage: text("error_message"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const security_scans = sqliteTable("security_scans", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  scanType: text("scan_type").$type<"sast" | "dast" | "sca" | "container" | "infrastructure">().notNull(),
+  target: text("target"), // URL, repo, container image, etc.
+  tool: text("tool").$type<"owasp_zap" | "sonarqube" | "snyk" | "trivy" | "nessus">().notNull(),
+  config: text("config"), // JSON scan configuration
+  status: text("status").$type<"scheduled" | "running" | "completed" | "failed">().default("scheduled"),
+  schedule: text("schedule"), // cron expression
+  lastRunId: integer("last_run_id").references(() => security_scan_runs.id),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const security_scan_runs = sqliteTable("security_scan_runs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  securityScanId: integer("security_scan_id").notNull().references(() => security_scans.id),
+  status: text("status").$type<"running" | "completed" | "failed">().default("running"),
+  startTime: integer("start_time", { mode: "timestamp" }).notNull(),
+  endTime: integer("end_time", { mode: "timestamp" }),
+  duration: integer("duration"), // in seconds
+  vulnerabilities: text("vulnerabilities"), // JSON vulnerability findings
+  severityCounts: text("severity_counts"), // JSON {critical: 0, high: 2, medium: 5, low: 10}
+  complianceScore: real("compliance_score"), // 0-100
+  reportUrl: text("report_url"),
+  passed: integer("passed", { mode: "boolean" }),
+  errorMessage: text("error_message"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const ci_cd_pipelines = sqliteTable("ci_cd_pipelines", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  projectId: integer("project_id").references(() => projects.id),
+  repository: text("repository"), // Git repository URL
+  branch: text("branch").default("main"),
+  config: text("config"), // JSON pipeline configuration
+  status: text("status").$type<"active" | "inactive" | "deprecated">().default("active"),
+  lastBuildId: integer("last_build_id").references(() => pipeline_builds.id),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const pipeline_builds = sqliteTable("pipeline_builds", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  pipelineId: integer("pipeline_id").notNull().references(() => ci_cd_pipelines.id),
+  buildNumber: integer("build_number").notNull(),
+  commitHash: text("commit_hash"),
+  branch: text("branch"),
+  triggeredBy: text("triggered_by"), // "push", "pull_request", "manual", "schedule"
+  triggeredByUser: integer("triggered_by_user").references(() => users.id),
+  status: text("status").$type<"pending" | "running" | "success" | "failure" | "cancelled">().default("pending"),
+  startTime: integer("start_time", { mode: "timestamp" }),
+  endTime: integer("end_time", { mode: "timestamp" }),
+  duration: integer("duration"), // in seconds
+  stages: text("stages"), // JSON pipeline stages and their status
+  artifacts: text("artifacts"), // JSON build artifacts
+  testResults: text("test_results"), // JSON test execution results
+  codeQualityReport: text("code_quality_report"), // JSON linting/static analysis results
+  securityScanReport: text("security_scan_report"), // JSON security scan results
+  deploymentUrl: text("deployment_url"),
+  errorMessage: text("error_message"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const quality_metrics = sqliteTable("quality_metrics", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  tenantId: text("tenant_id").notNull(),
+  projectId: integer("project_id").references(() => projects.id),
+  metricType: text("metric_type").$type<"test_coverage" | "code_quality" | "performance" | "security" | "reliability" | "maintainability">().notNull(),
+  metricName: text("metric_name").notNull(),
+  value: real("value").notNull(),
+  target: real("target"),
+  unit: text("unit"),
+  date: integer("date", { mode: "timestamp" }).notNull(),
+  metadata: text("metadata"), // JSON additional context
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
 export const alerts = sqliteTable("alerts", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   tenantId: text("tenant_id").notNull(),
