@@ -286,3 +286,148 @@ export const financial_audit_logs = sqliteTable("financial_audit_logs", {
   userAgent: text("user_agent"),
   timestamp: integer("timestamp", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
+
+// Supply Chain & Logistics Management Tables
+
+export const suppliers = sqliteTable("suppliers", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  contactPerson: text("contact_person"),
+  email: text("email").notNull(),
+  phone: text("phone"),
+  address: text("address"),
+  city: text("city"),
+  province: text("province"),
+  postalCode: text("postal_code"),
+  country: text("country").default("South Africa"),
+  taxId: text("tax_id"),
+  paymentTerms: text("payment_terms").$type<"net_15" | "net_30" | "net_60" | "cod">().default("net_30"),
+  rating: real("rating"), // 1-5 stars
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  categories: text("categories"), // JSON array of supplier categories
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const warehouses = sqliteTable("warehouses", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  code: text("code").notNull().unique(),
+  address: text("address").notNull(),
+  city: text("city").notNull(),
+  province: text("province").notNull(),
+  postalCode: text("postal_code"),
+  country: text("country").default("South Africa"),
+  capacity: integer("capacity"), // in square meters
+  type: text("type").$type<"central" | "regional" | "local" | "mobile">().default("local"),
+  managerId: integer("manager_id").references(() => users.id),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  coordinates: text("coordinates"), // JSON {lat, lng}
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const inventory_items = sqliteTable("inventory_items", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  sku: text("sku").notNull().unique(),
+  name: text("name").notNull(),
+  description: text("description"),
+  category: text("category").$type<"materials" | "equipment" | "consumables" | "spare_parts">().notNull(),
+  subcategory: text("subcategory"),
+  unit: text("unit").$type<"piece" | "kg" | "liter" | "meter" | "box" | "roll">().default("piece"),
+  unitCost: real("unit_cost").notNull(),
+  sellingPrice: real("selling_price"),
+  reorderPoint: integer("reorder_point").default(10),
+  maxStock: integer("max_stock"),
+  currentStock: integer("current_stock").default(0),
+  reservedStock: integer("reserved_stock").default(0),
+  availableStock: integer("available_stock").default(0),
+  supplierId: integer("supplier_id").references(() => suppliers.id),
+  warehouseId: integer("warehouse_id").references(() => warehouses.id),
+  location: text("location"), // Shelf/bin location
+  barcode: text("barcode"),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  tags: text("tags"), // JSON array of tags
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const procurement_orders = sqliteTable("procurement_orders", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  orderNumber: text("order_number").notNull().unique(),
+  supplierId: integer("supplier_id").notNull().references(() => suppliers.id),
+  warehouseId: integer("warehouse_id").notNull().references(() => warehouses.id),
+  status: text("status").$type<"draft" | "pending_approval" | "approved" | "ordered" | "partially_received" | "received" | "cancelled">().default("draft"),
+  orderDate: integer("order_date", { mode: "timestamp" }).notNull(),
+  expectedDeliveryDate: integer("expected_delivery_date", { mode: "timestamp" }),
+  actualDeliveryDate: integer("actual_delivery_date", { mode: "timestamp" }),
+  totalAmount: real("total_amount").notNull(),
+  currency: text("currency").default("ZAR"),
+  paymentStatus: text("payment_status").$type<"unpaid" | "partial" | "paid">().default("unpaid"),
+  notes: text("notes"),
+  approvedBy: integer("approved_by").references(() => users.id),
+  approvedAt: integer("approved_at", { mode: "timestamp" }),
+  createdBy: integer("created_by").notNull().references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const purchase_order_items = sqliteTable("purchase_order_items", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  procurementOrderId: integer("procurement_order_id").notNull().references(() => procurement_orders.id),
+  inventoryItemId: integer("inventory_item_id").references(() => inventory_items.id),
+  description: text("description").notNull(),
+  quantity: integer("quantity").notNull(),
+  unitPrice: real("unit_price").notNull(),
+  totalPrice: real("total_price").notNull(),
+  receivedQuantity: integer("received_quantity").default(0),
+  status: text("status").$type<"pending" | "partially_received" | "received">().default("pending"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const shipments = sqliteTable("shipments", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  shipmentNumber: text("shipment_number").notNull().unique(),
+  procurementOrderId: integer("procurement_order_id").references(() => procurement_orders.id),
+  carrier: text("carrier").notNull(),
+  trackingNumber: text("tracking_number"),
+  status: text("status").$type<"preparing" | "shipped" | "in_transit" | "delivered" | "delayed" | "lost">().default("preparing"),
+  originWarehouseId: integer("origin_warehouse_id").references(() => warehouses.id),
+  destinationWarehouseId: integer("destination_warehouse_id").references(() => warehouses.id),
+  estimatedDeliveryDate: integer("estimated_delivery_date", { mode: "timestamp" }),
+  actualDeliveryDate: integer("actual_delivery_date", { mode: "timestamp" }),
+  weight: real("weight"), // in kg
+  dimensions: text("dimensions"), // JSON {length, width, height}
+  cost: real("cost"),
+  currency: text("currency").default("ZAR"),
+  notes: text("notes"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const inventory_movements = sqliteTable("inventory_movements", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  inventoryItemId: integer("inventory_item_id").notNull().references(() => inventory_items.id),
+  movementType: text("movement_type").$type<"inbound" | "outbound" | "transfer" | "adjustment" | "return">().notNull(),
+  quantity: integer("quantity").notNull(),
+  fromWarehouseId: integer("from_warehouse_id").references(() => warehouses.id),
+  toWarehouseId: integer("to_warehouse_id").references(() => warehouses.id),
+  referenceId: integer("reference_id"), // Could be order ID, shipment ID, etc.
+  referenceType: text("reference_type").$type<"procurement_order" | "sales_order" | "shipment" | "manual">(),
+  reason: text("reason"),
+  performedBy: integer("performed_by").notNull().references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const supplier_performance = sqliteTable("supplier_performance", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  supplierId: integer("supplier_id").notNull().references(() => suppliers.id),
+  period: text("period").notNull(), // YYYY-MM or YYYY-Q1
+  onTimeDelivery: real("on_time_delivery"), // percentage
+  qualityRating: real("quality_rating"), // 1-5
+  responsiveness: real("responsiveness"), // 1-5
+  totalOrders: integer("total_orders"),
+  totalValue: real("total_value"),
+  currency: text("currency").default("ZAR"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
