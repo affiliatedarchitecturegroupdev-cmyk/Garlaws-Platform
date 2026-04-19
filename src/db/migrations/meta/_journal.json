@@ -43,6 +43,20 @@
       "when": 1776637102303,
       "tag": "0005_good_multiple_man",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1776637568428,
+      "tag": "0006_tired_colleen_wing",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1776637635585,
+      "tag": "0007_conscious_tyrannus",
+      "breakpoints": true
     }
   ]
 }
