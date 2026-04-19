@@ -762,3 +762,164 @@ export const customer_feedback = sqliteTable("customer_feedback", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
+
+// Advanced Security & Compliance Framework Tables
+
+export const user_roles = sqliteTable("user_roles", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id"),
+  isSystemRole: integer("is_system_role", { mode: "boolean" }).default(false),
+  permissions: text("permissions"), // JSON array of permission IDs
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const permissions = sqliteTable("permissions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  resource: text("resource").notNull(), // e.g., 'users', 'bookings', 'reports'
+  action: text("action").notNull(), // e.g., 'create', 'read', 'update', 'delete'
+  description: text("description"),
+  category: text("category").$type<"user_management" | "data_access" | "system_admin" | "reporting" | "financial">().notNull(),
+  isSystemPermission: integer("is_system_permission", { mode: "boolean" }).default(false),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const role_permissions = sqliteTable("role_permissions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  roleId: integer("role_id").notNull().references(() => user_roles.id),
+  permissionId: integer("permission_id").notNull().references(() => permissions.id),
+  grantedBy: integer("granted_by").references(() => users.id),
+  grantedAt: integer("granted_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const user_role_assignments = sqliteTable("user_role_assignments", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").notNull().references(() => users.id),
+  roleId: integer("role_id").notNull().references(() => user_roles.id),
+  tenantId: text("tenant_id"),
+  assignedBy: integer("assigned_by").references(() => users.id),
+  assignedAt: integer("assigned_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  expiresAt: integer("expires_at", { mode: "timestamp" }),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+});
+
+export const security_events = sqliteTable("security_events", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  tenantId: text("tenant_id"),
+  eventType: text("event_type").$type<"login" | "logout" | "failed_login" | "password_change" | "permission_change" | "data_access" | "suspicious_activity">().notNull(),
+  severity: text("severity").$type<"low" | "medium" | "high" | "critical">().default("medium"),
+  userId: integer("user_id").references(() => users.id),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  location: text("location"), // JSON {country, city, coordinates}
+  deviceInfo: text("device_info"), // JSON device information
+  resource: text("resource"), // Affected resource
+  action: text("action"), // Action performed
+  oldValues: text("old_values"), // JSON
+  newValues: text("new_values"), // JSON
+  success: integer("success", { mode: "boolean" }).default(true),
+  errorMessage: text("error_message"),
+  sessionId: text("session_id"),
+  correlationId: text("correlation_id"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const security_policies = sqliteTable("security_policies", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  category: text("category").$type<"password" | "access" | "data" | "network" | "compliance">().notNull(),
+  policyType: text("policy_type").$type<"preventive" | "detective" | "corrective">().notNull(),
+  rules: text("rules"), // JSON policy rules
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  enforcementLevel: text("enforcement_level").$type<"strict" | "moderate" | "permissive">().default("moderate"),
+  tenantId: text("tenant_id"),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const compliance_records = sqliteTable("compliance_records", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  tenantId: text("tenant_id").notNull(),
+  regulation: text("regulation").$type<"POPIA" | "B-BBEE" | "NHBRC" | "CIDB" | "GDPR" | "SOX" | "HIPAA">().notNull(),
+  requirement: text("requirement").notNull(),
+  status: text("status").$type<"compliant" | "non_compliant" | "pending_review" | "exempted">().default("pending_review"),
+  evidence: text("evidence"), // JSON evidence documentation
+  reviewDate: integer("review_date", { mode: "timestamp" }),
+  nextReviewDate: integer("next_review_date", { mode: "timestamp" }),
+  reviewerId: integer("reviewer_id").references(() => users.id),
+  notes: text("notes"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const security_incidents = sqliteTable("security_incidents", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  tenantId: text("tenant_id"),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  incidentType: text("incident_type").$type<"breach" | "unauthorized_access" | "data_leak" | "malware" | "ddos" | "phishing" | "other">().notNull(),
+  severity: text("severity").$type<"low" | "medium" | "high" | "critical">().default("medium"),
+  status: text("status").$type<"detected" | "investigating" | "contained" | "resolved" | "closed">().default("detected"),
+  detectedAt: integer("detected_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  resolvedAt: integer("resolved_at", { mode: "timestamp" }),
+  assignedTo: integer("assigned_to").references(() => users.id),
+  impact: text("impact"), // JSON impact assessment
+  rootCause: text("root_cause"),
+  resolution: text("resolution"),
+  preventiveActions: text("preventive_actions"), // JSON
+  affectedUsers: integer("affected_users").default(0),
+  affectedRecords: integer("affected_records").default(0),
+  financialImpact: real("financial_impact"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const threat_intelligence = sqliteTable("threat_intelligence", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  threatId: text("threat_id").notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  threatType: text("threat_type").$type<"malware" | "phishing" | "ddos" | "vulnerability" | "insider_threat">().notNull(),
+  severity: text("severity").$type<"low" | "medium" | "high" | "critical">().default("medium"),
+  source: text("source"), // Threat intelligence source
+  indicators: text("indicators"), // JSON threat indicators
+  mitigation: text("mitigation"), // JSON mitigation steps
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  firstSeen: integer("first_seen", { mode: "timestamp" }),
+  lastSeen: integer("last_seen", { mode: "timestamp" }),
+  confidence: real("confidence"), // 0-1
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const data_encryption_keys = sqliteTable("data_encryption_keys", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  keyId: text("key_id").notNull(),
+  version: integer("version").notNull(),
+  algorithm: text("algorithm").$type<"AES-256" | "RSA" | "ECC">().default("AES-256"),
+  keyData: text("key_data"), // Encrypted key material
+  status: text("status").$type<"active" | "rotated" | "compromised" | "expired">().default("active"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  expiresAt: integer("expires_at", { mode: "timestamp" }),
+  rotatedAt: integer("rotated_at", { mode: "timestamp" }),
+  createdBy: integer("created_by").references(() => users.id),
+});
+
+export const access_tokens = sqliteTable("access_tokens", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  userId: integer("user_id").notNull().references(() => users.id),
+  token: text("token").notNull(),
+  refreshToken: text("refresh_token"),
+  tokenType: text("token_type").$type<"bearer" | "api_key" | "session">().default("bearer"),
+  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+  issuedAt: integer("issued_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  revokedAt: integer("revoked_at", { mode: "timestamp" }),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+});
