@@ -9,17 +9,31 @@ import { GlobalErrorBoundary } from "@/components/GlobalErrorBoundary";
 import { WebVitalsTracker } from "@/components/WebVitalsTracker";
 
 export const metadata: Metadata = {
-  title: "Garlaws - Property Lifecycle Maintenance",
-  description: "Garlaws - Property Lifecycle Maintenance Orchestration Ecosystem for South Africa",
+  title: "Garlaws - Enterprise Property Lifecycle Platform",
+  description: "Complete enterprise-grade property lifecycle management orchestration ecosystem. Financial reconciliation, supply chain, CRM, AI automation, and more.",
+  keywords: "property management, enterprise software, financial reconciliation, supply chain, CRM, AI automation, South Africa",
+  authors: [{ name: "Garlaws Platform" }],
   icons: {
     icon: "/favicon.ico",
   },
   manifest: "/manifest.json",
-  themeColor: "#c5a059",
+  themeColor: "#2563eb",
+  viewport: "width=device-width, initial-scale=1",
   appleWebApp: {
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "default",
     title: "Garlaws",
+  },
+  openGraph: {
+    title: "Garlaws - Enterprise Property Lifecycle Platform",
+    description: "Complete enterprise-grade property lifecycle management orchestration ecosystem",
+    type: "website",
+    locale: "en_ZA",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Garlaws - Enterprise Property Lifecycle Platform",
+    description: "Complete enterprise-grade property lifecycle management orchestration ecosystem",
   },
 };
 
