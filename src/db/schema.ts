@@ -995,6 +995,165 @@ export const code_reviews = sqliteTable("code_reviews", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
+// Enterprise Integration & API Management Platform Tables
+
+export const api_keys = sqliteTable("api_keys", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  keyHash: text("key_hash").notNull(),
+  keyPrefix: text("key_prefix").notNull(),
+  tenantId: text("tenant_id").notNull(),
+  userId: integer("user_id").references(() => users.id),
+  permissions: text("permissions"), // JSON array of allowed scopes
+  rateLimit: integer("rate_limit"), // requests per hour
+  expiresAt: integer("expires_at", { mode: "timestamp" }),
+  lastUsed: integer("last_used", { mode: "timestamp" }),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const external_integrations = sqliteTable("external_integrations", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  provider: text("provider").notNull(), // e.g., 'quickbooks', 'xero', 'salesforce'
+  type: text("type").$type<"oauth" | "api_key" | "basic_auth" | "custom">().default("oauth"),
+  config: text("config"), // JSON provider configuration
+  credentials: text("credentials"), // Encrypted credentials
+  tenantId: text("tenant_id").notNull(),
+  createdBy: integer("created_by").references(() => users.id),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  status: text("status").$type<"connected" | "disconnected" | "error" | "pending">().default("pending"),
+  lastSync: integer("last_sync", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const webhooks = sqliteTable("webhooks", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  url: text("url").notNull(),
+  tenantId: text("tenant_id").notNull(),
+  secret: text("secret"), // webhook signing secret
+  events: text("events"), // JSON array of event types
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  headers: text("headers"), // JSON custom headers
+  retryPolicy: text("retry_policy"), // JSON retry configuration
+  lastTriggered: integer("last_triggered", { mode: "timestamp" }),
+  failureCount: integer("failure_count").default(0),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const webhook_deliveries = sqliteTable("webhook_deliveries", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  webhookId: integer("webhook_id").notNull().references(() => webhooks.id),
+  event: text("event").notNull(),
+  payload: text("payload").notNull(),
+  responseCode: integer("response_code"),
+  responseBody: text("response_body"),
+  success: integer("success", { mode: "boolean" }).default(false),
+  attempt: integer("attempt").default(1),
+  deliveredAt: integer("delivered_at", { mode: "timestamp" }),
+  errorMessage: text("error_message"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const sync_schedules = sqliteTable("sync_schedules", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  integrationId: integer("integration_id").notNull().references(() => external_integrations.id),
+  syncType: text("sync_type").$type<"full" | "incremental" | "realtime">().default("incremental"),
+  schedule: text("schedule").notNull(), // cron expression
+  config: text("config"), // JSON sync configuration
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  lastSync: integer("last_sync", { mode: "timestamp" }),
+  nextSync: integer("next_sync", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const sync_logs = sqliteTable("sync_logs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  scheduleId: integer("schedule_id").references(() => sync_schedules.id),
+  integrationId: integer("integration_id").references(() => external_integrations.id),
+  status: text("status").$type<"running" | "completed" | "failed" | "partial">().default("running"),
+  recordsProcessed: integer("records_processed").default(0),
+  recordsCreated: integer("records_created").default(0),
+  recordsUpdated: integer("records_updated").default(0),
+  recordsFailed: integer("records_failed").default(0),
+  startTime: integer("start_time", { mode: "timestamp" }).notNull(),
+  endTime: integer("end_time", { mode: "timestamp" }),
+  errorMessage: text("error_message"),
+  details: text("details"), // JSON sync details
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const data_transformations = sqliteTable("data_transformations", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  sourceSchema: text("source_schema"), // JSON source data structure
+  targetSchema: text("target_schema"), // JSON target data structure
+  mappingRules: text("mapping_rules"), // JSON field mapping
+  transformationLogic: text("transformation_logic"), // JavaScript/expression
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const api_analytics = sqliteTable("api_analytics", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  apiKeyId: integer("api_key_id").references(() => api_keys.id),
+  endpoint: text("endpoint").notNull(),
+  method: text("method").notNull(),
+  statusCode: integer("status_code"),
+  responseTime: integer("response_time"), // in milliseconds
+  requestSize: integer("request_size"),
+  responseSize: integer("response_size"),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  timestamp: integer("timestamp", { mode: "timestamp" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const rate_limits = sqliteTable("rate_limits", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  identifier: text("identifier").notNull(), // API key, IP, or user ID
+  type: text("type").$type<"api_key" | "ip" | "user">().notNull(),
+  limit: integer("limit").notNull(), // max requests
+  window: integer("window").notNull(), // time window in seconds
+  current: integer("current").default(0),
+  resetAt: integer("reset_at", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const sso_providers = sqliteTable("sso_providers", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  provider: text("provider").$type<"azure_ad" | "okta" | "auth0" | "google" | "github">().notNull(),
+  tenantId: text("tenant_id").notNull(),
+  config: text("config"), // JSON provider configuration
+  credentials: text("credentials"), // Encrypted OAuth credentials
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  syncUserProfile: integer("sync_user_profile", { mode: "boolean" }).default(true),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const sso_connections = sqliteTable("sso_connections", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  providerId: integer("provider_id").notNull().references(() => sso_providers.id),
+  userId: integer("user_id").notNull().references(() => users.id),
+  externalId: text("external_id").notNull(),
+  email: text("email").notNull(),
+  metadata: text("metadata"), // JSON additional profile data
+  lastLogin: integer("last_login", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
 export const access_tokens = sqliteTable("access_tokens", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   userId: integer("user_id").notNull().references(() => users.id),
