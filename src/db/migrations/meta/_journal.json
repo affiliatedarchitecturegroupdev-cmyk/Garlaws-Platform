@@ -71,6 +71,13 @@
       "when": 1776638220213,
       "tag": "0009_pink_deathstrike",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1776638343049,
+      "tag": "0010_sloppy_hellfire_club",
+      "breakpoints": true
     }
   ]
 }

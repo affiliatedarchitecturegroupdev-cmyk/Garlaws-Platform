@@ -910,6 +910,91 @@ export const data_encryption_keys = sqliteTable("data_encryption_keys", {
   createdBy: integer("created_by").references(() => users.id),
 });
 
+// Advanced AI Assistant & Automation Platform Tables
+
+export const ai_workflows = sqliteTable("ai_workflows", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  status: text("status").$type<"active" | "paused" | "completed" | "failed">().default("active"),
+  triggerType: text("trigger_type").$type<"manual" | "scheduled" | "event" | "api">().default("manual"),
+  scheduleConfig: text("schedule_config"), // JSON cron expression or schedule
+  triggerConfig: text("trigger_config"), // JSON trigger configuration
+  priority: text("priority").$type<"low" | "medium" | "high" | "critical">().default("medium"),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const automation_rules = sqliteTable("automation_rules", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  workflowId: integer("workflow_id").notNull().references(() => ai_workflows.id),
+  name: text("name").notNull(),
+  condition: text("condition").notNull(), // JSON condition logic
+  action: text("action").notNull(), // JSON action to execute
+  actionConfig: text("action_config"), // JSON action configuration
+  order: integer("order").default(0),
+  isEnabled: integer("is_enabled", { mode: "boolean" }).default(true),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const ml_models = sqliteTable("ml_models", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  modelType: text("model_type").$type<"regression" | "classification" | "clustering" | "nlp" | "deep_learning">().notNull(),
+  algorithm: text("algorithm"),
+  parameters: text("parameters"), // JSON model parameters
+  trainingData: text("training_data"), // JSON training configuration
+  modelUrl: text("model_url"), // URL to stored model file
+  accuracy: real("accuracy"), // 0-1
+  status: text("status").$type<"training" | "ready" | "deployed" | "failed">().default("training"),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const model_predictions = sqliteTable("model_predictions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  modelId: integer("model_id").notNull().references(() => ml_models.id),
+  inputData: text("input_data"), // JSON input
+  prediction: text("prediction"), // JSON prediction result
+  confidence: real("confidence"), // confidence score
+  timestamp: integer("timestamp", { mode: "timestamp" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const nlp_interactions = sqliteTable("nlp_interactions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  tenantId: text("tenant_id").notNull(),
+  userId: integer("user_id").references(() => users.id),
+  sessionId: text("session_id"),
+  inputText: text("input_text").notNull(),
+  responseText: text("response_text"),
+  intent: text("intent"),
+  entities: text("entities"), // JSON extracted entities
+  sentiment: text("sentiment").$type<"positive" | "neutral" | "negative">(),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const code_reviews = sqliteTable("code_reviews", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  projectId: integer("project_id").references(() => projects.id),
+  taskId: integer("task_id").references(() => tasks.id),
+  submittedBy: integer("submitted_by").notNull().references(() => users.id),
+  reviewedBy: integer("reviewed_by").references(() => users.id),
+  codeContent: text("code_content").notNull(),
+  reviewStatus: text("review_status").$type<"pending" | "approved" | "rejected" | "changes_requested">().default("pending"),
+  issuesFound: text("issues_found"), // JSON list of issues
+  suggestions: text("suggestions"), // JSON suggestions
+  score: real("score"), // 0-100 quality score
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
 export const access_tokens = sqliteTable("access_tokens", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   userId: integer("user_id").notNull().references(() => users.id),
