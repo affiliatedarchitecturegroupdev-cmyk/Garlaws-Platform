@@ -552,6 +552,184 @@ export const predictive_models = sqliteTable("predictive_models", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
+// Advanced Data Science & Machine Learning Ops Tables
+
+
+
+export const datasets = sqliteTable("datasets", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  version: text("version").notNull(),
+  datasetType: text("dataset_type").$type<"training" | "validation" | "test" | "production">().default("training"),
+  format: text("format").$type<"csv" | "parquet" | "json" | "image" | "text">().default("csv"),
+  storageLocation: text("storage_location").notNull(),
+  size: integer("size"), // in bytes
+  rowCount: integer("row_count"),
+  columnCount: integer("column_count"),
+  schema: text("schema"), // JSON schema definition
+  statistics: text("statistics"), // JSON descriptive statistics
+  tags: text("tags"), // JSON array
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const dataset_versions = sqliteTable("dataset_versions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  datasetId: integer("dataset_id").notNull().references(() => datasets.id),
+  version: text("version").notNull(),
+  parentVersionId: integer("parent_version_id").references(() => dataset_versions.id),
+  changes: text("changes"), // JSON change description
+  storageLocation: text("storage_location").notNull(),
+  size: integer("size"),
+  rowCount: integer("row_count"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const experiments = sqliteTable("experiments", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  modelId: integer("model_id").references(() => ml_models.id),
+  datasetId: integer("dataset_id").references(() => datasets.id),
+  status: text("status").$type<"running" | "completed" | "failed" | "stopped">().default("running"),
+  hyperparameters: text("hyperparameters"), // JSON
+  configuration: text("configuration"), // JSON experiment config
+  startTime: integer("start_time", { mode: "timestamp" }).notNull(),
+  endTime: integer("end_time", { mode: "timestamp" }),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const experiment_runs = sqliteTable("experiment_runs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  experimentId: integer("experiment_id").notNull().references(() => experiments.id),
+  runNumber: integer("run_number").notNull(),
+  status: text("status").$type<"running" | "completed" | "failed" | "stopped">().default("running"),
+  parameters: text("parameters"), // JSON
+  metrics: text("metrics"), // JSON metrics
+  artifacts: text("artifacts"), // JSON artifact paths
+  startTime: integer("start_time", { mode: "timestamp" }).notNull(),
+  endTime: integer("end_time", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const ml_pipelines = sqliteTable("ml_pipelines", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  version: text("version").notNull(),
+  pipelineType: text("pipeline_type").$type<"training" | "inference" | "preprocessing" | "evaluation">().default("training"),
+  definition: text("definition"), // JSON pipeline DAG definition
+  schedule: text("schedule"), // cron expression
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  lastRunId: integer("last_run_id").references(() => pipeline_runs.id),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const pipeline_runs = sqliteTable("pipeline_runs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  pipelineId: integer("pipeline_id").notNull().references(() => ml_pipelines.id),
+  runNumber: integer("run_number").notNull(),
+  status: text("status").$type<"running" | "completed" | "failed" | "stopped" | "skipped">().default("running"),
+  triggeredBy: text("triggered_by"), // manual, schedule, webhook
+  startTime: integer("start_time", { mode: "timestamp" }).notNull(),
+  endTime: integer("end_time", { mode: "timestamp" }),
+  steps: text("steps"), // JSON step execution details
+  artifacts: text("artifacts"), // JSON produced artifacts
+  errorMessage: text("error_message"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const model_deployments = sqliteTable("model_deployments", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  modelId: integer("model_id").notNull().references(() => ml_models.id),
+  environment: text("environment").$type<"development" | "staging" | "production">().default("development"),
+  deploymentType: text("deployment_type").$type<"rest" | "grpc" | "batch" | "streaming">().default("rest"),
+  endpointUrl: text("endpoint_url"),
+  endpointConfig: text("endpoint_config"), // JSON scaling, routing config
+  status: text("status").$type<"deploying" | "active" | "inactive" | "failed">().default("deploying"),
+  replicas: integer("replicas").default(1),
+  cpuRequest: real("cpu_request"),
+  memoryRequest: integer("memory_request"), // in MB
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const model_metrics = sqliteTable("model_metrics", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  modelId: integer("model_id").notNull().references(() => ml_models.id),
+  deploymentId: integer("deployment_id").references(() => model_deployments.id),
+  metricName: text("metric_name").notNull(),
+  metricValue: real("metric_value").notNull(),
+  timestamp: integer("timestamp", { mode: "timestamp" }).notNull(),
+  labels: text("labels"), // JSON label dimensions
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const ab_tests = sqliteTable("ab_tests", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  modelAId: integer("model_a_id").references(() => ml_models.id),
+  modelBId: integer("model_b_id").references(() => ml_models.id),
+  trafficSplit: real("traffic_split"), // percentage for model A
+  status: text("status").$type<"draft" | "running" | "completed" | "stopped">().default("draft"),
+  startDate: integer("start_date", { mode: "timestamp" }),
+  endDate: integer("end_date", { mode: "timestamp" }),
+  hypothesis: text("hypothesis"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const ab_test_results = sqliteTable("ab_test_results", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  testId: integer("test_id").notNull().references(() => ab_tests.id),
+  metricName: text("metric_name").notNull(),
+  modelAValue: real("model_a_value"),
+  modelBValue: real("model_b_value"),
+  pValue: real("p_value"),
+  isStatisticallySignificant: integer("is_statistically_significant", { mode: "boolean" }),
+  confidenceInterval: text("confidence_interval"), // JSON
+  timestamp: integer("timestamp", { mode: "timestamp" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const feature_store = sqliteTable("feature_store", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  tenantId: text("tenant_id").notNull(),
+  featureType: text("feature_type").$type<"numerical" | "categorical" | "text" | "image">().default("numerical"),
+  dataType: text("data_type").notNull(),
+  defaultValue: text("default_value"),
+  validationRules: text("validation_rules"), // JSON
+  statistics: text("statistics"), // JSON stats
+  version: text("version").notNull(),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const model_explainability = sqliteTable("model_explainability", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  modelId: integer("model_id").notNull().references(() => ml_models.id),
+  explanationType: text("explanation_type").$type<"shap" | "lime" | "permutation" | "partial_dependence">().notNull(),
+  featureImportance: text("feature_importance"), // JSON
+  explanationData: text("explanation_data"), // JSON
+  sampleCount: integer("sample_count"),
+  generatedAt: integer("generated_at", { mode: "timestamp" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
 export const alerts = sqliteTable("alerts", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   tenantId: text("tenant_id").notNull(),

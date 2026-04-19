@@ -85,6 +85,13 @@
       "when": 1776638527155,
       "tag": "0011_orange_cassandra_nova",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1776638792517,
+      "tag": "0012_redundant_the_captain",
+      "breakpoints": true
     }
   ]
 }
