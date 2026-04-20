@@ -3,6 +3,7 @@ import { financialReconciliationEngine, FinancialTransaction, Invoice, BankAccou
 
 // In-memory storage for demo purposes
 const transactions: FinancialTransaction[] = [];
+const budgets: any[] = [];
 
 export async function GET(request: NextRequest) {
   try {
@@ -77,6 +78,19 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
           success: true,
           data: rate
+        });
+
+      case 'budgets':
+        if (!tenantId) {
+          return NextResponse.json(
+            { error: 'tenantId parameter required' },
+            { status: 400 }
+          );
+        }
+        const tenantBudgets = budgets.filter(b => b.tenantId === tenantId);
+        return NextResponse.json({
+          success: true,
+          data: tenantBudgets
         });
 
       default:
@@ -244,6 +258,39 @@ export async function POST(request: NextRequest) {
           }
         });
 
+      case 'create-budget':
+        if (!body.tenantId || !body.name || !body.period || body.year === undefined) {
+          return NextResponse.json(
+            { error: 'tenantId, name, period, and year are required' },
+            { status: 400 }
+          );
+        }
+
+        const newBudget = {
+          id: `budget_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          tenantId: body.tenantId,
+          name: body.name,
+          period: body.period,
+          year: body.year,
+          categories: body.categories || [],
+          totalBudget: 0,
+          totalActual: 0,
+          totalVariance: 0,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+
+        // Calculate totals
+        newBudget.totalBudget = newBudget.categories.reduce((sum: number, cat: any) => sum + (cat.budgetedAmount || 0), 0);
+        newBudget.totalActual = newBudget.categories.reduce((sum: number, cat: any) => sum + (cat.actualAmount || 0), 0);
+        newBudget.totalVariance = newBudget.totalBudget - newBudget.totalActual;
+
+        budgets.push(newBudget);
+        return NextResponse.json({
+          success: true,
+          data: newBudget
+        }, { status: 201 });
+
       default:
         return NextResponse.json(
           { error: 'Invalid action parameter. Use: create_transaction, create_invoice, create_bank_account, sync_bank_transactions, reconcile_transaction, generate_report, update_exchange_rate, convert_currency, or calculate_tax' },
@@ -299,6 +346,45 @@ export async function PUT(request: NextRequest) {
         return NextResponse.json({
           success: markedPaid,
           message: markedPaid ? 'Invoice marked as paid' : 'Failed to mark invoice as paid'
+        });
+
+      case 'update-budget-category':
+        if (!body.tenantId || !body.budgetId || !body.categoryId || body.budgetedAmount === undefined) {
+          return NextResponse.json(
+            { error: 'tenantId, budgetId, categoryId, and budgetedAmount are required' },
+            { status: 400 }
+          );
+        }
+
+        const budget = budgets.find(b => b.id === body.budgetId && b.tenantId === body.tenantId);
+        if (!budget) {
+          return NextResponse.json(
+            { error: 'Budget not found' },
+            { status: 404 }
+          );
+        }
+
+        const category = budget.categories.find((c: any) => c.id === body.categoryId);
+        if (!category) {
+          return NextResponse.json(
+            { error: 'Category not found' },
+            { status: 404 }
+          );
+        }
+
+        category.budgetedAmount = body.budgetedAmount;
+        category.variance = category.budgetedAmount - category.actualAmount;
+        category.variancePercent = category.budgetedAmount !== 0 ? (category.variance / category.budgetedAmount) * 100 : 0;
+
+        // Recalculate budget totals
+        budget.totalBudget = budget.categories.reduce((sum: number, cat: any) => sum + (cat.budgetedAmount || 0), 0);
+        budget.totalActual = budget.categories.reduce((sum: number, cat: any) => sum + (cat.actualAmount || 0), 0);
+        budget.totalVariance = budget.totalBudget - budget.totalActual;
+        budget.updatedAt = new Date().toISOString();
+
+        return NextResponse.json({
+          success: true,
+          data: budget
         });
 
       default:

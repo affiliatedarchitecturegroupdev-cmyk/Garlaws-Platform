@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import BudgetManager from '@/features/financial/advanced-budgeting/BudgetManager';
 
 interface FinancialAnalytics {
   overview: {
@@ -29,6 +30,7 @@ export default function FinancialDashboard() {
   const [analytics, setAnalytics] = useState<FinancialAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeframe, setTimeframe] = useState<'month' | 'quarter' | 'year'>('month');
+  const [activeTab, setActiveTab] = useState<'overview' | 'budgeting'>('overview');
 
   useEffect(() => {
     fetchAnalytics();
@@ -83,20 +85,50 @@ export default function FinancialDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Financial Reconciliation Dashboard</h1>
-          <select
-            value={timeframe}
-            onChange={(e) => setTimeframe(e.target.value as any)}
-            className="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="month">Last Month</option>
-            <option value="quarter">Last Quarter</option>
-            <option value="year">Last Year</option>
-          </select>
+          <h1 className="text-3xl font-bold text-gray-900">Financial Management</h1>
+          {activeTab === 'overview' && (
+            <select
+              value={timeframe}
+              onChange={(e) => setTimeframe(e.target.value as any)}
+              className="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="month">Last Month</option>
+              <option value="quarter">Last Quarter</option>
+              <option value="year">Last Year</option>
+            </select>
+          )}
         </div>
 
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Tabs */}
+        <div className="border-b border-gray-200 mb-8">
+          <nav className="-mb-px flex space-x-8">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'overview'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Reconciliation Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('budgeting')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'budgeting'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Budget Management
+            </button>
+          </nav>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'overview' ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
@@ -256,6 +288,10 @@ export default function FinancialDashboard() {
             </button>
           </div>
         </div>
+          </>
+        ) : (
+          <BudgetManager />
+        )}
       </div>
     </div>
   );
