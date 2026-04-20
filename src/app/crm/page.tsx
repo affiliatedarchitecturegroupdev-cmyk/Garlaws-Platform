@@ -1,6 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import LifecycleManager from '@/features/crm/lifecycle/LifecycleManager';
+import CampaignManager from '@/features/crm/campaigns/CampaignManager';
+import EmailIntegration from '@/features/crm/email/EmailIntegration';
+import SegmentationEngine from '@/features/crm/segmentation/SegmentationEngine';
 
 interface CRMAnalytics {
   totalCustomers: number;
@@ -18,6 +22,7 @@ export default function CRMDashboard() {
   const [customers, setCustomers] = useState<any[]>([]);
   const [leads, setLeads] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'overview' | 'lifecycle' | 'campaigns' | 'email' | 'segmentation'>('overview');
 
   useEffect(() => {
     fetchAnalytics();
@@ -85,19 +90,79 @@ export default function CRMDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">CRM & Marketing Dashboard</h1>
-          <div className="flex space-x-4">
-            <button
-              onClick={() => { fetchAnalytics(); fetchCustomers(); fetchLeads(); }}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
-            >
-              Refresh
-            </button>
-          </div>
+          <h1 className="text-3xl font-bold text-gray-900">Advanced CRM & Marketing Platform</h1>
+          {activeTab === 'overview' && (
+            <div className="flex space-x-4">
+              <button
+                onClick={() => { fetchAnalytics(); fetchCustomers(); fetchLeads(); }}
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+              >
+                Refresh
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Tabs */}
+        <div className="border-b border-gray-200 mb-8">
+          <nav className="-mb-px flex space-x-8 overflow-x-auto">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'overview'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Dashboard Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('lifecycle')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'lifecycle'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Customer Lifecycle
+            </button>
+            <button
+              onClick={() => setActiveTab('campaigns')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'campaigns'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Marketing Campaigns
+            </button>
+            <button
+              onClick={() => setActiveTab('email')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'email'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Email Marketing
+            </button>
+            <button
+              onClick={() => setActiveTab('segmentation')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'segmentation'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Customer Segmentation
+            </button>
+          </nav>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'overview' ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
@@ -282,6 +347,16 @@ export default function CRMDashboard() {
             </button>
           </div>
         </div>
+          </>
+        ) : activeTab === 'lifecycle' ? (
+          <LifecycleManager />
+        ) : activeTab === 'campaigns' ? (
+          <CampaignManager />
+        ) : activeTab === 'email' ? (
+          <EmailIntegration />
+        ) : activeTab === 'segmentation' ? (
+          <SegmentationEngine />
+        ) : null}
       </div>
     </div>
   );
