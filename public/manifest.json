@@ -1,11 +1,11 @@
 {
-  "name": "Garlaws - Property Maintenance",
+  "name": "Garlaws - Enterprise Property Platform",
   "short_name": "Garlaws",
-  "description": "Property Lifecycle Maintenance Orchestration Ecosystem for South Africa",
+  "description": "Complete enterprise-grade property lifecycle management orchestration ecosystem with financial, supply chain, CRM, AI automation, and mobile capabilities",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0b0c10",
-  "theme_color": "#c5a059",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "en-ZA",
@@ -77,25 +77,61 @@
       ]
     },
     {
-      "name": "My Bookings",
-      "short_name": "Bookings",
-      "description": "View and manage your bookings",
-      "url": "/dashboard/bookings",
+      "name": "Financial Dashboard",
+      "short_name": "Finance",
+      "description": "Access financial reconciliation and reporting",
+      "url": "/financial",
       "icons": [
         {
-          "src": "/icons/shortcut-bookings.png",
+          "src": "/icons/shortcut-finance.png",
           "sizes": "96x96"
         }
       ]
     },
     {
-      "name": "Chat Support",
-      "short_name": "Chat",
-      "description": "Get help from our support team",
-      "url": "/dashboard/chat",
+      "name": "Supply Chain",
+      "short_name": "Logistics",
+      "description": "Manage inventory and procurement",
+      "url": "/supply-chain",
       "icons": [
         {
-          "src": "/icons/shortcut-chat.png",
+          "src": "/icons/shortcut-supply.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "CRM Dashboard",
+      "short_name": "CRM",
+      "description": "Customer relationship management",
+      "url": "/crm",
+      "icons": [
+        {
+          "src": "/icons/shortcut-crm.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Project Management",
+      "short_name": "Projects",
+      "description": "Task management and collaboration",
+      "url": "/projects",
+      "icons": [
+        {
+          "src": "/icons/shortcut-projects.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "AI & Analytics",
+      "short_name": "AI",
+      "description": "Machine learning and business intelligence",
+      "url": "/bi",
+      "icons": [
+        {
+          "src": "/icons/shortcut-ai.png",
           "sizes": "96x96"
         }
       ]
