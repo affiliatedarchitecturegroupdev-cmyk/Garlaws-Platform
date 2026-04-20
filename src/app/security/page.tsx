@@ -1,6 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import MFAProvider from '@/features/security/mfa/MFAProvider';
+import AuditLogger from '@/features/security/audit/AuditLogger';
+import ThreatDetection from '@/features/security/threat-detection/ThreatDetection';
+import ComplianceMonitoring from '@/features/security/compliance/ComplianceMonitoring';
 
 interface SecurityAnalytics {
   totalUsers: number;
@@ -20,6 +24,7 @@ export default function SecurityDashboard() {
   const [recentEvents, setRecentEvents] = useState<any[]>([]);
   const [incidents, setIncidents] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'overview' | 'mfa' | 'audit' | 'threats' | 'compliance'>('overview');
 
   useEffect(() => {
     fetchAnalytics();
@@ -87,29 +92,89 @@ export default function SecurityDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Security & Compliance Dashboard</h1>
-          <div className="flex space-x-4">
-            <button
-              onClick={() => { fetchAnalytics(); fetchRecentEvents(); fetchIncidents(); }}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
-            >
-              Refresh
-            </button>
-            <button
-              onClick={() => fetch('/api/security', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'run_security_scan' })
-              })}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-            >
-              Run Security Scan
-            </button>
-          </div>
+          <h1 className="text-3xl font-bold text-gray-900">Advanced Security & Compliance Platform</h1>
+          {activeTab === 'overview' && (
+            <div className="flex space-x-4">
+              <button
+                onClick={() => { fetchAnalytics(); fetchRecentEvents(); fetchIncidents(); }}
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+              >
+                Refresh
+              </button>
+              <button
+                onClick={() => fetch('/api/security', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ action: 'run_security_scan' })
+                })}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Run Security Scan
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Key Security Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Tabs */}
+        <div className="border-b border-gray-200 mb-8">
+          <nav className="-mb-px flex space-x-8 overflow-x-auto">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'overview'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Dashboard Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('mfa')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'mfa'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Multi-Factor Auth
+            </button>
+            <button
+              onClick={() => setActiveTab('audit')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'audit'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Audit Logging
+            </button>
+            <button
+              onClick={() => setActiveTab('threats')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'threats'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Threat Detection
+            </button>
+            <button
+              onClick={() => setActiveTab('compliance')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'compliance'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Compliance Monitoring
+            </button>
+          </nav>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'overview' ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
@@ -305,6 +370,16 @@ export default function SecurityDashboard() {
             </button>
           </div>
         </div>
+          </>
+        ) : activeTab === 'mfa' ? (
+          <MFAProvider />
+        ) : activeTab === 'audit' ? (
+          <AuditLogger />
+        ) : activeTab === 'threats' ? (
+          <ThreatDetection />
+        ) : activeTab === 'compliance' ? (
+          <ComplianceMonitoring />
+        ) : null}
       </div>
     </div>
   );
