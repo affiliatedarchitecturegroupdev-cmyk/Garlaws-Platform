@@ -1,0 +1,181 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "Garlaws Platform Overview",
+    "tags": ["garlaws", "platform", "overview"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Application Health",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "up{job=\"garlaws-app\"}",
+            "legendFormat": "Application Status"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "text": "DOWN",
+                    "color": "red"
+                  },
+                  "1": {
+                    "text": "UP",
+                    "color": "green"
+                  }
+                },
+                "type": "value"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "HTTP Request Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"garlaws-app\"}[5m])",
+            "legendFormat": "Requests/second"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "HTTP Response Time",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"garlaws-app\"}[5m]))",
+            "legendFormat": "95th percentile"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(http_request_duration_seconds_bucket{job=\"garlaws-app\"}[5m]))",
+            "legendFormat": "50th percentile"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Error Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{job=\"garlaws-app\", status=~\"5..\"}[5m]) / rate(http_requests_total{job=\"garlaws-app\"}[5m]) * 100",
+            "legendFormat": "Error rate %"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Database Connections",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "pg_stat_activity_count{datname=\"garlaws\"}",
+            "legendFormat": "Active connections"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Database Query Performance",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(pg_stat_database_xact_commit{datname=\"garlaws\"}[5m])",
+            "legendFormat": "Transactions/second"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Redis Memory Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "redis_memory_used_bytes / redis_memory_max_bytes * 100",
+            "legendFormat": "Memory usage %"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Redis Operations",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(redis_keyspace_hits_total[5m])",
+            "legendFormat": "Cache hits/second"
+          },
+          {
+            "expr": "rate(redis_keyspace_misses_total[5m])",
+            "legendFormat": "Cache misses/second"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "System CPU Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "100 - (avg by(instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+            "legendFormat": "CPU usage %"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "System Memory Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "(1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100",
+            "legendFormat": "Memory usage %"
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Disk Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "(1 - node_filesystem_avail_bytes / node_filesystem_size_bytes) * 100",
+            "legendFormat": "Disk usage %"
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Network Traffic",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(node_network_receive_bytes_total[5m]) / 1024 / 1024",
+            "legendFormat": "Receive MB/s"
+          },
+          {
+            "expr": "rate(node_network_transmit_bytes_total[5m]) / 1024 / 1024",
+            "legendFormat": "Transmit MB/s"
+          }
+        ]
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "30s",
+    "schemaVersion": 27,
+    "version": 0,
+    "links": []
+  }
+}

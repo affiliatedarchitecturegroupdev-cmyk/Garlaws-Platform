@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Output standalone for Docker containerization
+  output: 'standalone',
+
   // Image optimization configuration
   images: {
     formats: ['image/webp', 'image/avif'],

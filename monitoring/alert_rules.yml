@@ -1,0 +1,139 @@
+groups:
+  - name: garlaws_alerts
+    rules:
+      # Application Health Alerts
+      - alert: AppDown
+        expr: up{job="garlaws-app"} == 0
+        for: 5m
+        labels:
+          severity: critical
+          service: application
+        annotations:
+          summary: "Application is down"
+          description: "Garlaws application has been down for more than 5 minutes."
+
+      - alert: AppHighErrorRate
+        expr: rate(http_requests_total{job="garlaws-app", status=~"5.."}[5m]) / rate(http_requests_total{job="garlaws-app"}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          service: application
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value | printf \"%.2f\" }}% (threshold: 5%)"
+
+      # Database Alerts
+      - alert: DatabaseDown
+        expr: up{job="garlaws-db"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: database
+        annotations:
+          summary: "Database is down"
+          description: "PostgreSQL database has been down for more than 2 minutes."
+
+      - alert: DatabaseHighConnections
+        expr: pg_stat_activity_count{datname="garlaws"} > 80
+        for: 5m
+        labels:
+          severity: warning
+          service: database
+        annotations:
+          summary: "High database connections"
+          description: "Database has {{ $value }} active connections (threshold: 80)"
+
+      # Redis Alerts
+      - alert: RedisDown
+        expr: up{job="garlaws-redis"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: cache
+        annotations:
+          summary: "Redis is down"
+          description: "Redis cache has been down for more than 2 minutes."
+
+      - alert: RedisHighMemoryUsage
+        expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          service: cache
+        annotations:
+          summary: "High Redis memory usage"
+          description: "Redis memory usage is {{ $value | printf \"%.1f\" }}% (threshold: 90%)"
+
+      # System Resource Alerts
+      - alert: HighCPUUsage
+        expr: rate(node_cpu_seconds_total{mode="idle"}[5m]) < 0.1
+        for: 10m
+        labels:
+          severity: warning
+          service: infrastructure
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is above 90% for more than 10 minutes"
+
+      - alert: HighMemoryUsage
+        expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          service: infrastructure
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is {{ $value | printf \"%.1f\" }}% (threshold: 90%)"
+
+      - alert: LowDiskSpace
+        expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) < 0.1
+        for: 5m
+        labels:
+          severity: warning
+          service: infrastructure
+        annotations:
+          summary: "Low disk space"
+          description: "Disk space is below 10% on {{ $labels.mountpoint }}"
+
+      # Container Alerts
+      - alert: ContainerRestarting
+        expr: increase(container_last_seen{container_label_com_docker_compose_service="app"}[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+          service: container
+        annotations:
+          summary: "Container restarting"
+          description: "Application container has restarted"
+
+      # Network Alerts
+      - alert: HighNetworkTraffic
+        expr: rate(node_network_receive_bytes_total[5m]) > 100000000
+        for: 10m
+        labels:
+          severity: info
+          service: network
+        annotations:
+          summary: "High network traffic"
+          description: "Network receive rate is {{ $value | printf \"%.1f\" }} MB/s"
+
+      # Business Logic Alerts
+      - alert: SlowAPIResponse
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="garlaws-app"}[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+          service: application
+        annotations:
+          summary: "Slow API responses"
+          description: "95th percentile response time is {{ $value | printf \"%.1f\" }}s (threshold: 5s)"
+
+      - alert: HighQueueBacklog
+        expr: message_queue_length > 1000
+        for: 5m
+        labels:
+          severity: warning
+          service: application
+        annotations:
+          summary: "High queue backlog"
+          description: "Message queue has {{ $value }} pending messages"
