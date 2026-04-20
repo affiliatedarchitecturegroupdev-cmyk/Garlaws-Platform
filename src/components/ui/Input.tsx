@@ -127,29 +127,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               hasValue && 'border-primary',
               className
             )}
-
-          <input
-            id={inputId}
-            ref={ref}
-            type={inputType}
-            className={cn(
-              inputVariants({ inputVariant: currentVariant, inputSize }),
-              leftIcon && 'pl-10',
-              rightIcon && 'pr-10',
-              showPasswordToggle && 'pr-10',
-              startAdornment && 'pl-10',
-              endAdornment && 'pr-10',
-              fullWidth && 'w-full',
-              isFocused && 'ring-2 ring-ring ring-offset-2',
-              hasValue && 'border-primary',
-              className
-            )}
-            aria-invalid={!!error}
-            aria-describedby={error ? errorId : helperText ? helperId : undefined}
-            onChange={handleInputChange}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            {...props}
           />
 
           {leftIcon && (
