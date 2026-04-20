@@ -313,7 +313,29 @@ export default function BIDashboard() {
         </div>
           </>
         ) : activeTab === 'visualization' ? (
-          <DataVisualization />
+          <InteractiveChart
+            title="Business Intelligence Dashboard"
+            data={{
+              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+              datasets: [
+                {
+                  name: 'Revenue',
+                  data: [4000, 3000, 2000, 2780, 1890, 2390],
+                  color: '#8884d8'
+                },
+                {
+                  name: 'Expenses',
+                  data: [2400, 1398, 9800, 3908, 4800, 3800],
+                  color: '#82ca9d'
+                }
+              ]
+            }}
+            chartType="line"
+            height={400}
+            showLegend={true}
+            showGrid={true}
+            interactive={true}
+          />
         ) : activeTab === 'reports' ? (
           <CustomReportBuilder />
         ) : activeTab === 'kpis' ? (

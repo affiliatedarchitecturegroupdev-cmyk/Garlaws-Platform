@@ -1,6 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import BusinessProcessAutomation from '@/features/erp/workflows/BusinessProcessAutomation';
+import CrossSystemSync from '@/features/erp/sync/CrossSystemSync';
+import IndustrySpecificModules from '@/features/erp/industry/IndustrySpecificModules';
+import ERPAutomationEngine from '@/features/erp/automation/ERPAutomationEngine';
 
 interface ERPDashboard {
   totalConnectors: number;
@@ -13,7 +17,10 @@ interface ERPDashboard {
   integrationUptime: number;
 }
 
+type TabType = 'overview' | 'workflows' | 'sync' | 'industry' | 'automation';
+
 export default function ERPDashboard() {
+  const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [dashboard, setDashboard] = useState<ERPDashboard | null>(null);
   const [connectors, setConnectors] = useState<any[]>([]);
   const [workflows, setWorkflows] = useState<any[]>([]);
@@ -126,37 +133,98 @@ export default function ERPDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">ERP Integration Dashboard</h1>
-          <div className="flex space-x-4">
-            <button
-              onClick={fetchData}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
-            >
-              Refresh
-            </button>
-            <button
-              onClick={handleCreateConnector}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-            >
-              Add Connector
-            </button>
-            <button
-              onClick={handleCreateWorkflow}
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-            >
-              New Workflow
-            </button>
-            <button
-              onClick={handleSyncConnector}
-              className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
-            >
-              Sync Data
-            </button>
-          </div>
+          <h1 className="text-3xl font-bold text-gray-900">ERP Deep Integration Platform</h1>
+          {activeTab === 'overview' && (
+            <div className="flex space-x-4">
+              <button
+                onClick={fetchData}
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+              >
+                Refresh
+              </button>
+              <button
+                onClick={handleCreateConnector}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Add Connector
+              </button>
+              <button
+                onClick={handleCreateWorkflow}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              >
+                New Workflow
+              </button>
+              <button
+                onClick={handleSyncConnector}
+                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
+              >
+                Sync Data
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Key ERP Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Tabs */}
+        <div className="border-b border-gray-200 mb-8">
+          <nav className="-mb-px flex space-x-8 overflow-x-auto">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'overview'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('workflows')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'workflows'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Business Process Automation
+            </button>
+            <button
+              onClick={() => setActiveTab('sync')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'sync'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Cross-System Sync
+            </button>
+            <button
+              onClick={() => setActiveTab('industry')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'industry'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Industry Modules
+            </button>
+            <button
+              onClick={() => setActiveTab('automation')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'automation'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Automation Engine
+            </button>
+          </nav>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'overview' && (
+          <>
+            {/* Key ERP Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
@@ -402,6 +470,13 @@ export default function ERPDashboard() {
             </button>
           </div>
         </div>
+          </>
+        )}
+
+        {activeTab === 'workflows' && <BusinessProcessAutomation />}
+        {activeTab === 'sync' && <CrossSystemSync />}
+        {activeTab === 'industry' && <IndustrySpecificModules />}
+        {activeTab === 'automation' && <ERPAutomationEngine />}
       </div>
     </div>
   );

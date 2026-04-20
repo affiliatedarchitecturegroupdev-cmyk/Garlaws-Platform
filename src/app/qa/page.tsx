@@ -1,6 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import AutomatedTestRunner from '@/features/qa/automated-tests/AutomatedTestRunner';
+import PerformanceTestingTools from '@/features/qa/performance/PerformanceTestingTools';
+import CodeQualityAnalysis from '@/features/qa/code-quality/CodeQualityAnalysis';
+import BugTrackingIntegration from '@/features/qa/bug-tracking/BugTrackingIntegration';
 
 interface QAAnalytics {
   totalTestSuites: number;
@@ -15,7 +19,10 @@ interface QAAnalytics {
   bugResolutionRate: number;
 }
 
+type TabType = 'overview' | 'automated-tests' | 'performance' | 'code-quality' | 'bug-tracking';
+
 export default function QADashboard() {
+  const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [analytics, setAnalytics] = useState<QAAnalytics | null>(null);
   const [testSuites, setTestSuites] = useState<any[]>([]);
   const [bugs, setBugs] = useState<any[]>([]);
@@ -128,37 +135,98 @@ export default function QADashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Quality Assurance Dashboard</h1>
-          <div className="flex space-x-4">
-            <button
-              onClick={fetchData}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
-            >
-              Refresh
-            </button>
-            <button
-              onClick={handleCreateTestSuite}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-            >
-              New Test Suite
-            </button>
-            <button
-              onClick={handleRunTestSuite}
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-            >
-              Run Tests
-            </button>
-            <button
-              onClick={handleCreateBug}
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-            >
-              Report Bug
-            </button>
-          </div>
+          <h1 className="text-3xl font-bold text-gray-900">Quality Assurance Platform</h1>
+          {activeTab === 'overview' && (
+            <div className="flex space-x-4">
+              <button
+                onClick={fetchData}
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+              >
+                Refresh
+              </button>
+              <button
+                onClick={handleCreateTestSuite}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              >
+                New Test Suite
+              </button>
+              <button
+                onClick={handleRunTestSuite}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              >
+                Run Tests
+              </button>
+              <button
+                onClick={handleCreateBug}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+              >
+                Report Bug
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Key QA Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Tabs */}
+        <div className="border-b border-gray-200 mb-8">
+          <nav className="-mb-px flex space-x-8 overflow-x-auto">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'overview'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('automated-tests')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'automated-tests'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Automated Tests
+            </button>
+            <button
+              onClick={() => setActiveTab('performance')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'performance'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Performance Testing
+            </button>
+            <button
+              onClick={() => setActiveTab('code-quality')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'code-quality'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Code Quality
+            </button>
+            <button
+              onClick={() => setActiveTab('bug-tracking')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'bug-tracking'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Bug Tracking
+            </button>
+          </nav>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'overview' && (
+          <>
+            {/* Key QA Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
@@ -378,6 +446,13 @@ export default function QADashboard() {
             </button>
           </div>
         </div>
+          </>
+        )}
+
+        {activeTab === 'automated-tests' && <AutomatedTestRunner />}
+        {activeTab === 'performance' && <PerformanceTestingTools />}
+        {activeTab === 'code-quality' && <CodeQualityAnalysis />}
+        {activeTab === 'bug-tracking' && <BugTrackingIntegration />}
       </div>
     </div>
   );
