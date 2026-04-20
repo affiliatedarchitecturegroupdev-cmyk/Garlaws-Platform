@@ -1,6 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import InteractiveChart from '@/features/bi/visualization/InteractiveChart';
+import CustomReportBuilder from '@/features/bi/reports/CustomReportBuilder';
+import KPIDashboard from '@/features/bi/kpi-dashboards/KPIDashboard';
+import AnalyticsEngine from '@/features/bi/analytics-engine/AnalyticsEngine';
 
 interface DashboardWidget {
   id: string;
@@ -13,6 +17,7 @@ export default function BIDashboard() {
   const [widgets, setWidgets] = useState<DashboardWidget[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDashboard, setSelectedDashboard] = useState<string>('default');
+  const [activeTab, setActiveTab] = useState<'overview' | 'visualization' | 'reports' | 'kpis' | 'analytics'>('overview');
 
   useEffect(() => {
     fetchDashboardData();
@@ -137,51 +142,92 @@ export default function BIDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Business Intelligence Dashboard</h1>
-          <div className="flex space-x-4">
-            <select
-              value={selectedDashboard}
-              onChange={(e) => setSelectedDashboard(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="default">Default Dashboard</option>
-              <option value="financial">Financial Overview</option>
-              <option value="operational">Operational Metrics</option>
-              <option value="customer">Customer Analytics</option>
-            </select>
+          <h1 className="text-3xl font-bold text-gray-900">Advanced Business Intelligence</h1>
+          {activeTab === 'overview' && (
+            <div className="flex space-x-4">
+              <select
+                value={selectedDashboard}
+                onChange={(e) => setSelectedDashboard(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="default">Default Dashboard</option>
+                <option value="financial">Financial Overview</option>
+                <option value="operational">Operational Metrics</option>
+                <option value="customer">Customer Analytics</option>
+              </select>
+              <button
+                onClick={fetchDashboardData}
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+              >
+                Refresh
+              </button>
+              <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                Add Widget
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Tabs */}
+        <div className="border-b border-gray-200 mb-8">
+          <nav className="-mb-px flex space-x-8 overflow-x-auto">
             <button
-              onClick={fetchDashboardData}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+              onClick={() => setActiveTab('overview')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'overview'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
             >
-              Refresh
+              Dashboard Overview
             </button>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-              Add Widget
+            <button
+              onClick={() => setActiveTab('visualization')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'visualization'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Data Visualization
             </button>
-          </div>
+            <button
+              onClick={() => setActiveTab('reports')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'reports'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Custom Reports
+            </button>
+            <button
+              onClick={() => setActiveTab('kpis')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'kpis'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              KPI Monitoring
+            </button>
+            <button
+              onClick={() => setActiveTab('analytics')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'analytics'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Analytics Engine
+            </button>
+          </nav>
         </div>
 
-        {/* Key Insights */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">AI Insights</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600 mb-2">↑ 12%</div>
-              <p className="text-sm text-gray-600">Revenue growth trend</p>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600 mb-2">85%</div>
-              <p className="text-sm text-gray-600">Customer satisfaction</p>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600 mb-2">23</div>
-              <p className="text-sm text-gray-600">Active alerts</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Widgets Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {/* Tab Content */}
+        {activeTab === 'overview' ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {widgets.map((widget) => (
             <div key={widget.id}>
               {renderWidget(widget)}
@@ -265,6 +311,16 @@ export default function BIDashboard() {
             </button>
           </div>
         </div>
+          </>
+        ) : activeTab === 'visualization' ? (
+          <DataVisualization />
+        ) : activeTab === 'reports' ? (
+          <CustomReportBuilder />
+        ) : activeTab === 'kpis' ? (
+          <KPIDashboard />
+        ) : activeTab === 'analytics' ? (
+          <AnalyticsEngine />
+        ) : null}
       </div>
     </div>
   );
