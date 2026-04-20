@@ -7,6 +7,71 @@ const integrations: any[] = [];
 const webhooks: any[] = [];
 const syncLogs: any[] = [];
 const apiAnalytics: any[] = [];
+const connectors: any[] = [];
+const syncJobs: any[] = [];
+const integrationWorkflows: any[] = [];
+
+// Initialize sample data
+if (connectors.length === 0) {
+  connectors.push(
+    {
+      id: 'slack',
+      name: 'Slack',
+      status: 'disconnected',
+      config: {}
+    },
+    {
+      id: 'zapier',
+      name: 'Zapier',
+      status: 'connected',
+      config: { webhookUrl: 'https://hooks.zapier.com/...' }
+    }
+  );
+}
+
+if (syncJobs.length === 0) {
+  syncJobs.push(
+    {
+      id: 'sync1',
+      name: 'Customer Data Sync',
+      source: 'Salesforce',
+      target: 'Garlaws Platform',
+      status: 'completed',
+      lastRun: '2026-04-19T10:00:00Z',
+      recordsProcessed: 1250,
+      recordsFailed: 5,
+      schedule: 'daily',
+      entities: ['Users', 'Contacts', 'Accounts'],
+      executions: [
+        {
+          id: 'exec1',
+          startedAt: '2026-04-19T10:00:00Z',
+          completedAt: '2026-04-19T10:15:00Z',
+          status: 'completed',
+          result: { processed: 1250, failed: 5 }
+        }
+      ]
+    }
+  );
+}
+
+if (integrationWorkflows.length === 0) {
+  integrationWorkflows.push(
+    {
+      id: 'wf1',
+      name: 'Order Processing Automation',
+      description: 'Automates order processing from receipt to fulfillment',
+      status: 'active',
+      steps: [
+        { id: 'step1', type: 'trigger', name: 'Order Received', position: { x: 100, y: 100 } },
+        { id: 'step2', type: 'action', name: 'Validate Payment', position: { x: 300, y: 100 } },
+        { id: 'step3', type: 'action', name: 'Update Inventory', position: { x: 500, y: 100 } }
+      ],
+      createdAt: '2026-04-15T09:00:00Z',
+      updatedAt: '2026-04-19T11:00:00Z'
+    }
+  );
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -40,6 +105,47 @@ export async function GET(request: NextRequest) {
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
           .slice(0, limit);
         return NextResponse.json({ success: true, data: logs });
+
+      case 'connectors':
+        return NextResponse.json({
+          success: true,
+          data: connectors.filter(c => !tenantId || c.tenantId === tenantId)
+        });
+
+      case 'sync-jobs':
+        return NextResponse.json({
+          success: true,
+          data: syncJobs.filter(j => !tenantId || j.tenantId === tenantId)
+        });
+
+      case 'sync-stats':
+        const totalJobs = syncJobs.length;
+        const activeJobs = syncJobs.filter(j => j.status === 'running').length;
+        const completedToday = syncJobs.filter(j =>
+          j.lastRun && new Date(j.lastRun).toDateString() === new Date().toDateString()
+        ).length;
+        const failedToday = syncJobs.filter(j =>
+          j.status === 'failed' &&
+          j.lastRun && new Date(j.lastRun).toDateString() === new Date().toDateString()
+        ).length;
+        const totalRecordsSynced = syncJobs.reduce((sum, job) => sum + (job.recordsProcessed || 0), 0);
+
+        return NextResponse.json({
+          success: true,
+          data: {
+            totalJobs,
+            activeJobs,
+            completedToday,
+            failedToday,
+            totalRecordsSynced
+          }
+        });
+
+      case 'integration-workflows':
+        return NextResponse.json({
+          success: true,
+          data: integrationWorkflows.filter(w => !tenantId || w.tenantId === tenantId)
+        });
 
       case 'api_analytics':
         const fromDate = searchParams.get('from');
