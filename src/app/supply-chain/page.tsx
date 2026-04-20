@@ -1,6 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import InventoryManager from '@/features/supply-chain/inventory/InventoryManager';
+import SupplierManager from '@/features/supply-chain/suppliers/SupplierManager';
+import ProcurementWorkflow from '@/features/supply-chain/procurement/ProcurementWorkflow';
+import LogisticsOptimization from '@/features/supply-chain/logistics/LogisticsOptimization';
 
 interface SupplyChainAnalytics {
   totalSuppliers: number;
@@ -15,6 +19,7 @@ export default function SupplyChainDashboard() {
   const [analytics, setAnalytics] = useState<SupplyChainAnalytics | null>(null);
   const [lowStockAlerts, setLowStockAlerts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'overview' | 'inventory' | 'suppliers' | 'procurement' | 'logistics'>('overview');
 
   useEffect(() => {
     fetchAnalytics();
@@ -69,19 +74,79 @@ export default function SupplyChainDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Supply Chain & Logistics Dashboard</h1>
-          <div className="flex space-x-4">
-            <button
-              onClick={() => { fetchAnalytics(); fetchLowStockAlerts(); }}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
-            >
-              Refresh
-            </button>
-          </div>
+          <h1 className="text-3xl font-bold text-gray-900">Advanced Supply Chain Management</h1>
+          {activeTab === 'overview' && (
+            <div className="flex space-x-4">
+              <button
+                onClick={() => { fetchAnalytics(); fetchLowStockAlerts(); }}
+                className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition-colors"
+              >
+                Refresh
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {/* Tabs */}
+        <div className="border-b border-gray-200 mb-8">
+          <nav className="-mb-px flex space-x-8 overflow-x-auto">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'overview'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('inventory')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'inventory'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Inventory
+            </button>
+            <button
+              onClick={() => setActiveTab('suppliers')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'suppliers'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Suppliers
+            </button>
+            <button
+              onClick={() => setActiveTab('procurement')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'procurement'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Procurement
+            </button>
+            <button
+              onClick={() => setActiveTab('logistics')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'logistics'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Logistics
+            </button>
+          </nav>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'overview' ? (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
             <div className="flex items-center justify-between">
               <div>
@@ -239,6 +304,16 @@ export default function SupplyChainDashboard() {
             </button>
           </div>
         </div>
+          </>
+        ) : activeTab === 'inventory' ? (
+          <InventoryManager />
+        ) : activeTab === 'suppliers' ? (
+          <SupplierManager />
+        ) : activeTab === 'procurement' ? (
+          <ProcurementWorkflow />
+        ) : activeTab === 'logistics' ? (
+          <LogisticsOptimization />
+        ) : null}
       </div>
     </div>
   );
