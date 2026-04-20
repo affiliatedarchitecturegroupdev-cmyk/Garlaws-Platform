@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
+import { logger, LogCategory } from "@/lib/logger";
 
 export async function GET() {
+  const startTime = Date.now();
+
   try {
+    logger.info(LogCategory.API, 'Health check requested');
+
     // Basic health check - check if database is accessible
     const dbHealth = await checkDatabaseHealth();
 
@@ -32,6 +37,9 @@ export async function GET() {
       }
     };
 
+    const duration = Date.now() - startTime;
+    logger.logApiCall('/api/health', 'GET', isHealthy ? 200 : 503, duration);
+
     return NextResponse.json(healthData, {
       status: isHealthy ? 200 : 503,
       headers: {
@@ -40,6 +48,10 @@ export async function GET() {
       },
     });
   } catch (error) {
+    const duration = Date.now() - startTime;
+    logger.logApiCall('/api/health', 'GET', 503, duration);
+    logger.error(LogCategory.API, 'Health check failed', error as Error);
+
     return NextResponse.json(
       {
         status: "error",
