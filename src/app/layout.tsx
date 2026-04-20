@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ServiceWorkerRegistration } from "./components/ServiceWorkerRegistration";
-import { CartProvider } from "@/lib/cart-context";
-import { ToastProvider } from "@/components/ToastNotifications";
-import { FloatingChatWidget } from "@/components/FloatingChatWidget";
-import { PushNotificationInitializer } from "@/components/PushNotificationInitializer";
-import { GlobalErrorBoundary } from "@/components/GlobalErrorBoundary";
-import { WebVitalsTracker } from "@/components/WebVitalsTracker";
+import { Providers } from "./components/Providers";
 
 export const metadata: Metadata = {
   title: "Garlaws - Enterprise Property Lifecycle Platform",
@@ -44,12 +38,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className="antialiased"
-      >
-        <div id="root">
+      <body className="antialiased">
+        <Providers>
           {children}
-        </div>
+        </Providers>
       </body>
     </html>
   );
