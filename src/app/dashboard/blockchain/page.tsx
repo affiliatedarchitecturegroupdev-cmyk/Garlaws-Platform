@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { MobileCard, MobileCardHeader, MobileCardContent, MobileCardActions } from '@/components/MobileCard';
 import { Web3Wallet, useWeb3Wallet } from '@/components/Web3Wallet';
@@ -44,9 +45,11 @@ function NFTCard({ nft, onTransfer, onStake, onSellShares }: NFTCardProps) {
         <div className="space-y-4">
           {/* Property Image */}
           <div className="aspect-video bg-[#0b0c10] rounded-lg overflow-hidden">
-            <img
-              src={nft.metadata.image}
+            <Image
+              src={nft.metadata.image || 'https://via.placeholder.com/400x300?text=Property+Image'}
               alt={nft.metadata.name}
+              width={400}
+              height={300}
               className="w-full h-full object-cover"
               onError={(e) => {
                 e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Property+Image';

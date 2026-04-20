@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense, lazy } from "react";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { AnalyticsSummary } from "@/components/AnalyticsSummary";
 import { useAuth } from "@/lib/auth-context";
-import PersonalizedDashboard from "@/components/PersonalizedDashboard";
+
+// Lazy load heavy components
+const PersonalizedDashboard = lazy(() => import("@/components/PersonalizedDashboard"));
 
 interface DashboardStats {
   totalBookings: number;
@@ -65,7 +67,9 @@ export default function DashboardPage() {
 
         {/* Tab Content */}
         {activeTab === 'personalized' ? (
-          <PersonalizedDashboard />
+          <Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div></div>}>
+            <PersonalizedDashboard />
+          </Suspense>
         ) : (
           <CustomerDashboardContent />
         )}

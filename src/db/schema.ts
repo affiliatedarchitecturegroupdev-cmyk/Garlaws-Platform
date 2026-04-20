@@ -268,7 +268,7 @@ export const expense_categories = sqliteTable("expense_categories", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   description: text("description"),
-  parentId: integer("parent_id").references(() => expense_categories.id),
+  parentId: integer("parent_id"),
   isActive: integer("is_active", { mode: "boolean" }).default(true),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),

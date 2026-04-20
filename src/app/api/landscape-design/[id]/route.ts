@@ -6,10 +6,10 @@ const designs: LandscapeDesign[] = [];
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const designId = params.id;
+    const { id: designId } = await params;
 
     const design = designs.find(d => d.id === designId);
 
@@ -36,10 +36,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const designId = params.id;
+    const { id: designId } = await params;
     const body: Partial<LandscapeDesign> = await request.json();
 
     const designIndex = designs.findIndex(d => d.id === designId);
@@ -77,10 +77,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const designId = params.id;
+    const { id: designId } = await params;
 
     const designIndex = designs.findIndex(d => d.id === designId);
 

@@ -586,8 +586,8 @@ async function swapEmployeeShifts(employeeId1: string, employeeId2: string, date
   const employee1Assignments = schedules.get(employeeId1) || [];
   const employee2Assignments = schedules.get(employeeId2) || [];
 
-  const employee1Shift = employee1Assignments.find(a => a.date.toDateString() === date.toDateString());
-  const employee2Shift = employee2Assignments.find(a => a.date.toDateString() === date.toDateString());
+  const employee1Shift = employee1Assignments.find((a: any) => a.date.toDateString() === date.toDateString());
+  const employee2Shift = employee2Assignments.find((a: any) => a.date.toDateString() === date.toDateString());
 
   if (!employee1Shift || !employee2Shift) return false;
 
@@ -612,7 +612,7 @@ async function deleteShift(shiftId: string): Promise<boolean> {
 
 async function removeShiftAssignment(assignmentId: string): Promise<boolean> {
   for (const [employeeId, assignments] of schedules.entries()) {
-    const assignmentIndex = assignments.findIndex(a => a.id === assignmentId);
+    const assignmentIndex = assignments.findIndex((a: any) => a.id === assignmentId);
     if (assignmentIndex !== -1) {
       assignments.splice(assignmentIndex, 1);
       return true;

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./components/Providers";
 
@@ -11,8 +11,6 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
   },
   manifest: "/manifest.json",
-  themeColor: "#2563eb",
-  viewport: "width=device-width, initial-scale=1",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -31,6 +29,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#2563eb',
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,6 +42,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Preload critical routes for better performance */}
+        <link rel="preload" href="/dashboard" as="document" />
+        <link rel="preload" href="/api/health" as="fetch" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+      </head>
       <body className="antialiased">
         <Providers>
           {children}

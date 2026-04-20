@@ -19,6 +19,11 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
           success: true,
           data: dashboards.filter(d => !tenantId || d.tenantId === tenantId)
+        }, {
+          headers: {
+            'Cache-Control': 'public, max-age=300', // Cache for 5 minutes
+            'Content-Encoding': 'gzip',
+          }
         });
 
       case 'widgets':
@@ -30,6 +35,11 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
           success: true,
           data: filteredWidgets
+        }, {
+          headers: {
+            'Cache-Control': 'public, max-age=180', // Cache for 3 minutes
+            'Content-Encoding': 'gzip',
+          }
         });
 
       case 'reports':
