@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./components/Providers";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   title: "Garlaws - Enterprise Property Lifecycle Platform",
@@ -52,9 +53,11 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <ErrorBoundary>
-          <Providers>
-            {children}
-          </Providers>
+          <ThemeProvider defaultTheme="garlaws">
+            <Providers>
+              {children}
+            </Providers>
+          </ThemeProvider>
         </ErrorBoundary>
       </body>
     </html>

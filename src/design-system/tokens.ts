@@ -42,7 +42,63 @@ export const designTokens = {
       900: '#173d3a',
     },
 
-    // Neutral Colors
+    // Enhanced Color Variations with Alpha/Opacity
+    primaryAlpha: {
+      5: 'rgba(45, 125, 45, 0.05)',
+      10: 'rgba(45, 125, 45, 0.1)',
+      15: 'rgba(45, 125, 45, 0.15)',
+      20: 'rgba(45, 125, 45, 0.2)',
+      25: 'rgba(45, 125, 45, 0.25)',
+      30: 'rgba(45, 125, 45, 0.3)',
+      40: 'rgba(45, 125, 45, 0.4)',
+      50: 'rgba(45, 125, 45, 0.5)',
+      60: 'rgba(45, 125, 45, 0.6)',
+      70: 'rgba(45, 125, 45, 0.7)',
+      80: 'rgba(45, 125, 45, 0.8)',
+      90: 'rgba(45, 125, 45, 0.9)',
+    },
+    secondaryAlpha: {
+      5: 'rgba(230, 184, 58, 0.05)',
+      10: 'rgba(230, 184, 58, 0.1)',
+      15: 'rgba(230, 184, 58, 0.15)',
+      20: 'rgba(230, 184, 58, 0.2)',
+      25: 'rgba(230, 184, 58, 0.25)',
+      30: 'rgba(230, 184, 58, 0.3)',
+      40: 'rgba(230, 184, 58, 0.4)',
+      50: 'rgba(230, 184, 58, 0.5)',
+      60: 'rgba(230, 184, 58, 0.6)',
+      70: 'rgba(230, 184, 58, 0.7)',
+      80: 'rgba(230, 184, 58, 0.8)',
+      90: 'rgba(230, 184, 58, 0.9)',
+    },
+    accentAlpha: {
+      5: 'rgba(69, 162, 158, 0.05)',
+      10: 'rgba(69, 162, 158, 0.1)',
+      15: 'rgba(69, 162, 158, 0.15)',
+      20: 'rgba(69, 162, 158, 0.2)',
+      25: 'rgba(69, 162, 158, 0.25)',
+      30: 'rgba(69, 162, 158, 0.3)',
+      40: 'rgba(69, 162, 158, 0.4)',
+      50: 'rgba(69, 162, 158, 0.5)',
+      60: 'rgba(69, 162, 158, 0.6)',
+      70: 'rgba(69, 162, 158, 0.7)',
+      80: 'rgba(69, 162, 158, 0.8)',
+      90: 'rgba(69, 162, 158, 0.9)',
+    },
+
+    // Gradient Definitions
+    gradients: {
+      primary: 'linear-gradient(135deg, #2d7d2d 0%, #45a29e 100%)',
+      secondary: 'linear-gradient(135deg, #e6b83a 0%, #c5a059 100%)',
+      accent: 'linear-gradient(135deg, #45a29e 0%, #2d7d2d 100%)',
+      gold: 'linear-gradient(135deg, #c5a059 0%, #e6c77a 50%, #c5a059 100%)',
+      olive: 'linear-gradient(135deg, #2d7d2d 0%, #256825 50%, #2d7d2d 100%)',
+      slate: 'linear-gradient(135deg, #45a29e 0%, #3a8b87 50%, #45a29e 100%)',
+      surface: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+      glass: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.1) 100%)',
+    },
+
+    // Enhanced Neutral Colors
     neutral: {
       50: '#fafafa',
       100: '#f4f4f5',
@@ -54,6 +110,84 @@ export const designTokens = {
       700: '#3f3f46',
       800: '#27272a',
       900: '#18181b',
+      950: '#0a0a0a',
+    },
+
+    // Enhanced Semantic Colors with Alpha Support
+    success: {
+      50: '#f0fdf4',
+      100: '#dcfce7',
+      200: '#bbf7d0',
+      300: '#86efac',
+      400: '#4ade80',
+      500: '#22c55e',
+      600: '#16a34a',
+      700: '#15803d',
+      800: '#166534',
+      900: '#14532d',
+      950: '#052e16',
+    },
+    successAlpha: {
+      5: 'rgba(34, 197, 94, 0.05)',
+      10: 'rgba(34, 197, 94, 0.1)',
+      20: 'rgba(34, 197, 94, 0.2)',
+    },
+
+    warning: {
+      50: '#fffbeb',
+      100: '#fef3c7',
+      200: '#fde68a',
+      300: '#fcd34d',
+      400: '#fbbf24',
+      500: '#f59e0b',
+      600: '#d97706',
+      700: '#b45309',
+      800: '#92400e',
+      900: '#78350f',
+      950: '#451a03',
+    },
+    warningAlpha: {
+      5: 'rgba(245, 158, 11, 0.05)',
+      10: 'rgba(245, 158, 11, 0.1)',
+      20: 'rgba(245, 158, 11, 0.2)',
+    },
+
+    error: {
+      50: '#fef2f2',
+      100: '#fee2e2',
+      200: '#fecaca',
+      300: '#fca5a5',
+      400: '#f87171',
+      500: '#ef4444',
+      600: '#dc2626',
+      700: '#b91c1c',
+      800: '#991b1b',
+      900: '#7f1d1d',
+      950: '#450a0a',
+    },
+    errorAlpha: {
+      5: 'rgba(239, 68, 68, 0.05)',
+      10: 'rgba(239, 68, 68, 0.1)',
+      20: 'rgba(239, 68, 68, 0.2)',
+    },
+
+    info: {
+      50: '#eff6ff',
+      100: '#dbeafe',
+      200: '#bfdbfe',
+      300: '#93c5fd',
+      400: '#60a5fa',
+      500: '#3b82f6',
+      600: '#2563eb',
+      700: '#1d4ed8',
+      800: '#1e40af',
+      900: '#1e3a8a',
+      950: '#172554',
+    },
+    infoAlpha: {
+      5: 'rgba(59, 130, 246, 0.05)',
+      10: 'rgba(59, 130, 246, 0.1)',
+      20: 'rgba(59, 130, 246, 0.2)',
     },
 
     // Semantic Colors
@@ -107,28 +241,33 @@ export const designTokens = {
     },
   },
 
-  // Typography System
+  // Enhanced Typography System
   typography: {
     fontFamily: {
-      sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
-      mono: ['JetBrains Mono', 'monospace'],
-      display: ['Cal Sans', 'Inter', 'system-ui', 'sans-serif'],
+      sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+      mono: ['JetBrains Mono', 'SF Mono', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace'],
+      display: ['Cal Sans', 'Inter Display', 'Inter', 'system-ui', 'sans-serif'],
+      serif: ['Crimson Text', 'Georgia', 'Cambria', 'Times New Roman', 'Times', 'serif'],
     },
+
+    // Comprehensive Font Size Scale
     fontSize: {
-      xs: ['0.75rem', { lineHeight: '1rem', letterSpacing: '0.05em' }],
-      sm: ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0.025em' }],
-      base: ['1rem', { lineHeight: '1.5rem', letterSpacing: '0em' }],
-      lg: ['1.125rem', { lineHeight: '1.75rem', letterSpacing: '-0.025em' }],
-      xl: ['1.25rem', { lineHeight: '1.75rem', letterSpacing: '-0.025em' }],
-      '2xl': ['1.5rem', { lineHeight: '2rem', letterSpacing: '-0.025em' }],
-      '3xl': ['1.875rem', { lineHeight: '2.25rem', letterSpacing: '-0.025em' }],
+      'xs': ['0.75rem', { lineHeight: '1rem', letterSpacing: '0.05em' }],
+      'sm': ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0.025em' }],
+      'base': ['1rem', { lineHeight: '1.5rem', letterSpacing: '0em' }],
+      'lg': ['1.125rem', { lineHeight: '1.75rem', letterSpacing: '-0.005em' }],
+      'xl': ['1.25rem', { lineHeight: '1.75rem', letterSpacing: '-0.01em' }],
+      '2xl': ['1.5rem', { lineHeight: '2rem', letterSpacing: '-0.015em' }],
+      '3xl': ['1.875rem', { lineHeight: '2.25rem', letterSpacing: '-0.02em' }],
       '4xl': ['2.25rem', { lineHeight: '2.5rem', letterSpacing: '-0.025em' }],
-      '5xl': ['3rem', { lineHeight: '1', letterSpacing: '-0.025em' }],
-      '6xl': ['3.75rem', { lineHeight: '1', letterSpacing: '-0.025em' }],
-      '7xl': ['4.5rem', { lineHeight: '1', letterSpacing: '-0.025em' }],
-      '8xl': ['6rem', { lineHeight: '1', letterSpacing: '-0.025em' }],
-      '9xl': ['8rem', { lineHeight: '1', letterSpacing: '-0.025em' }],
+      '5xl': ['3rem', { lineHeight: '1', letterSpacing: '-0.03em' }],
+      '6xl': ['3.75rem', { lineHeight: '1', letterSpacing: '-0.035em' }],
+      '7xl': ['4.5rem', { lineHeight: '1', letterSpacing: '-0.04em' }],
+      '8xl': ['6rem', { lineHeight: '1', letterSpacing: '-0.045em' }],
+      '9xl': ['8rem', { lineHeight: '1', letterSpacing: '-0.05em' }],
     },
+
+    // Enhanced Font Weight Scale
     fontWeight: {
       thin: '100',
       extralight: '200',
@@ -139,6 +278,37 @@ export const designTokens = {
       bold: '700',
       extrabold: '800',
       black: '900',
+    },
+
+    // Typography Scale with Semantic Names
+    text: {
+      caption: {
+        fontSize: '0.75rem',
+        lineHeight: '1rem',
+        fontWeight: '400',
+        letterSpacing: '0.05em',
+        textTransform: 'uppercase' as const,
+      },
+      body: {
+        xs: { fontSize: '0.75rem', lineHeight: '1rem', fontWeight: '400' },
+        sm: { fontSize: '0.875rem', lineHeight: '1.25rem', fontWeight: '400' },
+        base: { fontSize: '1rem', lineHeight: '1.5rem', fontWeight: '400' },
+        lg: { fontSize: '1.125rem', lineHeight: '1.75rem', fontWeight: '400' },
+      },
+      heading: {
+        h1: { fontSize: '2.25rem', lineHeight: '2.5rem', fontWeight: '700', letterSpacing: '-0.025em' },
+        h2: { fontSize: '1.875rem', lineHeight: '2.25rem', fontWeight: '600', letterSpacing: '-0.02em' },
+        h3: { fontSize: '1.5rem', lineHeight: '2rem', fontWeight: '600', letterSpacing: '-0.015em' },
+        h4: { fontSize: '1.25rem', lineHeight: '1.75rem', fontWeight: '600', letterSpacing: '-0.01em' },
+        h5: { fontSize: '1.125rem', lineHeight: '1.75rem', fontWeight: '600', letterSpacing: '-0.005em' },
+        h6: { fontSize: '1rem', lineHeight: '1.5rem', fontWeight: '600', letterSpacing: '0em' },
+      },
+      display: {
+        d1: { fontSize: '4.5rem', lineHeight: '1', fontWeight: '700', letterSpacing: '-0.04em' },
+        d2: { fontSize: '3.75rem', lineHeight: '1', fontWeight: '700', letterSpacing: '-0.035em' },
+        d3: { fontSize: '3rem', lineHeight: '1', fontWeight: '700', letterSpacing: '-0.03em' },
+        d4: { fontSize: '2.25rem', lineHeight: '2.5rem', fontWeight: '700', letterSpacing: '-0.025em' },
+      },
     },
   },
 
@@ -290,36 +460,144 @@ export const getBorderRadius = (size: keyof typeof designTokens.borderRadius) =>
   return designTokens.borderRadius[size];
 };
 
-// Theme configurations
+// Enhanced Theme configurations
 export const themes = {
   light: {
+    // Base colors
     background: designTokens.colors.neutral[50],
     foreground: designTokens.colors.neutral[900],
+    surface: designTokens.colors.neutral[100],
+    surfaceHover: designTokens.colors.neutral[200],
+
+    // Brand colors
     primary: designTokens.colors.primary[500],
+    primaryHover: designTokens.colors.primary[600],
+    primaryAlpha: designTokens.colors.primaryAlpha[10],
     secondary: designTokens.colors.secondary[500],
+    secondaryHover: designTokens.colors.secondary[600],
     accent: designTokens.colors.accent[500],
+    accentHover: designTokens.colors.accent[600],
+
+    // Semantic colors
+    success: designTokens.colors.success[500],
+    warning: designTokens.colors.warning[500],
+    error: designTokens.colors.error[500],
+    info: designTokens.colors.info[500],
+
+    // Neutral variations
     muted: designTokens.colors.neutral[100],
+    mutedForeground: designTokens.colors.neutral[600],
     border: designTokens.colors.neutral[200],
+    borderHover: designTokens.colors.neutral[300],
     ring: designTokens.colors.primary[500],
+
+    // Gradients
+    gradientPrimary: designTokens.colors.gradients.primary,
+    gradientSecondary: designTokens.colors.gradients.secondary,
+    gradientSurface: designTokens.colors.gradients.surface,
+
+    // Shadows
+    shadow: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
+    shadowHover: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
   },
+
   dark: {
-    background: designTokens.colors.neutral[900],
+    // Base colors
+    background: designTokens.colors.neutral[950],
     foreground: designTokens.colors.neutral[50],
+    surface: designTokens.colors.neutral[900],
+    surfaceHover: designTokens.colors.neutral[800],
+
+    // Brand colors
     primary: designTokens.colors.primary[400],
+    primaryHover: designTokens.colors.primary[300],
+    primaryAlpha: designTokens.colors.primaryAlpha[20],
     secondary: designTokens.colors.secondary[400],
+    secondaryHover: designTokens.colors.secondary[300],
     accent: designTokens.colors.accent[400],
+    accentHover: designTokens.colors.accent[300],
+
+    // Semantic colors
+    success: designTokens.colors.success[400],
+    warning: designTokens.colors.warning[400],
+    error: designTokens.colors.error[400],
+    info: designTokens.colors.info[400],
+
+    // Neutral variations
     muted: designTokens.colors.neutral[800],
+    mutedForeground: designTokens.colors.neutral[400],
     border: designTokens.colors.neutral[700],
+    borderHover: designTokens.colors.neutral[600],
     ring: designTokens.colors.primary[400],
+
+    // Gradients
+    gradientPrimary: designTokens.colors.gradients.primary,
+    gradientSecondary: designTokens.colors.gradients.secondary,
+    gradientSurface: designTokens.colors.gradients.glass,
+
+    // Shadows
+    shadow: '0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3)',
+    shadowHover: '0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3)',
   },
+
   garlaws: {
+    // Base colors
     background: '#0b0c10',
     foreground: '#f4f4f4',
-    primary: '#2d3b2d',
+    surface: '#1f2833',
+    surfaceHover: '#2d3b2d',
+
+    // Brand colors
+    primary: '#2d7d2d',
+    primaryHover: '#256825',
+    primaryAlpha: designTokens.colors.primaryAlpha[20],
     secondary: '#c5a059',
+    secondaryHover: '#b89322',
     accent: '#45a29e',
+    accentHover: '#3a8b87',
+
+    // Semantic colors
+    success: '#22c55e',
+    warning: '#f59e0b',
+    error: '#ef4444',
+    info: '#3b82f6',
+
+    // Neutral variations
     muted: '#1f2833',
+    mutedForeground: '#a1a1aa',
     border: '#2d3b2d',
+    borderHover: '#45a29e',
     ring: '#c5a059',
+
+    // Gradients
+    gradientPrimary: designTokens.colors.gradients.primary,
+    gradientSecondary: designTokens.colors.gradients.gold,
+    gradientSurface: designTokens.colors.gradients.surface,
+
+    // Shadows
+    shadow: '0 4px 6px -1px rgba(45, 59, 45, 0.1), 0 2px 4px -2px rgba(45, 59, 45, 0.1)',
+    shadowHover: '0 10px 15px -3px rgba(197, 160, 89, 0.1), 0 4px 6px -4px rgba(197, 160, 89, 0.1)',
+  },
+
+  // Professional theme variants
+  'garlaws-professional': {
+    ...themes.garlaws,
+    background: '#ffffff',
+    foreground: '#0b0c10',
+    surface: '#f8fafc',
+    surfaceHover: '#f1f5f9',
+    border: '#e2e8f0',
+    borderHover: '#cbd5e1',
+    muted: '#f8fafc',
+    mutedForeground: '#64748b',
+  },
+
+  'garlaws-enterprise': {
+    ...themes.garlaws,
+    primary: '#1e40af',
+    secondary: '#7c3aed',
+    accent: '#059669',
+    gradientPrimary: 'linear-gradient(135deg, #1e40af 0%, #059669 100%)',
+    gradientSecondary: 'linear-gradient(135deg, #7c3aed 0%, #c5a059 100%)',
   },
 };
