@@ -1769,3 +1769,153 @@ export const project_analytics = sqliteTable("project_analytics", {
   category: text("category").$type<"productivity" | "quality" | "budget" | "timeline">(),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
+
+// Advanced Enterprise Resource Planning Integration Tables
+
+export const erp_connectors = sqliteTable("erp_connectors", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  provider: text("provider").$type<"sap" | "oracle" | "microsoft_dynamics" | "sage" | "netsuite" | "custom">().notNull(),
+  version: text("version"),
+  connectionType: text("connection_type").$type<"api" | "database" | "file" | "soap" | "odata">().default("api"),
+  endpoint: text("endpoint"),
+  authentication: text("authentication"), // JSON auth configuration
+  credentials: text("credentials"), // Encrypted credentials
+  status: text("status").$type<"connected" | "disconnected" | "error" | "configuring">().default("configuring"),
+  lastSync: integer("last_sync", { mode: "timestamp" }),
+  syncFrequency: text("sync_frequency").$type<"real_time" | "hourly" | "daily" | "weekly" | "manual">().default("daily"),
+  tenantId: text("tenant_id").notNull(),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const erp_modules = sqliteTable("erp_modules", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  code: text("code").notNull(), // GL, AP, AR, INV, HR, etc.
+  description: text("description"),
+  category: text("category").$type<"financial" | "supply_chain" | "hr" | "manufacturing" | "sales" | "project">().notNull(),
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const erp_workflows = sqliteTable("erp_workflows", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  workflowType: text("workflow_type").$type<"purchase_order" | "sales_order" | "invoice" | "payroll" | "inventory" | "custom">().notNull(),
+  trigger: text("trigger").$type<"manual" | "scheduled" | "event" | "api">().default("manual"),
+  triggerConfig: text("trigger_config"), // JSON trigger configuration
+  steps: text("steps"), // JSON workflow steps definition
+  conditions: text("conditions"), // JSON execution conditions
+  approvals: text("approvals"), // JSON approval workflow
+  notifications: text("notifications"), // JSON notification settings
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  tenantId: text("tenant_id").notNull(),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const erp_sync_logs = sqliteTable("erp_sync_logs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  connectorId: integer("connector_id").notNull().references(() => erp_connectors.id),
+  moduleId: integer("module_id").references(() => erp_modules.id),
+  syncType: text("sync_type").$type<"full" | "incremental" | "delta" | "real_time">().default("incremental"),
+  direction: text("direction").$type<"import" | "export" | "bidirectional">().default("bidirectional"),
+  status: text("status").$type<"running" | "completed" | "failed" | "partial">().default("running"),
+  recordsProcessed: integer("records_processed").default(0),
+  recordsCreated: integer("records_created").default(0),
+  recordsUpdated: integer("records_updated").default(0),
+  recordsFailed: integer("records_failed").default(0),
+  startTime: integer("start_time", { mode: "timestamp" }).notNull(),
+  endTime: integer("end_time", { mode: "timestamp" }),
+  duration: integer("duration"), // in seconds
+  errorMessage: text("error_message"),
+  metadata: text("metadata"), // JSON additional sync info
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const erp_transformations = sqliteTable("erp_transformations", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  sourceSystem: text("source_system"), // e.g., "sap", "oracle", "garlaws"
+  targetSystem: text("target_system"),
+  entityType: text("entity_type"), // e.g., "customer", "invoice", "product"
+  mappingRules: text("mapping_rules"), // JSON field mapping rules
+  transformationLogic: text("transformation_logic"), // JavaScript transformation code
+  validationRules: text("validation_rules"), // JSON validation rules
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  tenantId: text("tenant_id").notNull(),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const multi_company_config = sqliteTable("multi_company_config", {
+  id: text("id").primaryKey(),
+  companyName: text("company_name").notNull(),
+  legalEntity: text("legal_entity"),
+  taxId: text("tax_id"),
+  currency: text("currency").default("ZAR"),
+  timezone: text("timezone").default("Africa/Johannesburg"),
+  address: text("address"), // JSON address object
+  contactInfo: text("contact_info"), // JSON contact information
+  settings: text("settings"), // JSON company-specific settings
+  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  parentCompanyId: text("parent_company_id"),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const erp_transactions = sqliteTable("erp_transactions", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  transactionId: text("transaction_id").notNull(),
+  transactionType: text("transaction_type").$type<"sales_order" | "purchase_order" | "invoice" | "payment" | "inventory" | "payroll">().notNull(),
+  sourceModule: text("source_module"), // e.g., "sales", "procurement", "finance"
+  targetModule: text("target_module"),
+  status: text("status").$type<"pending" | "processing" | "completed" | "failed" | "cancelled">().default("pending"),
+  priority: text("priority").$type<"low" | "medium" | "high" | "critical">().default("medium"),
+  data: text("data"), // JSON transaction data
+  metadata: text("metadata"), // JSON additional metadata
+  companyId: text("company_id").references(() => multi_company_config.id),
+  createdBy: integer("created_by").references(() => users.id),
+  processedAt: integer("processed_at", { mode: "timestamp" }),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const erp_reports = sqliteTable("erp_reports", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  description: text("description"),
+  reportType: text("report_type").$type<"financial" | "operational" | "compliance" | "performance" | "custom">().notNull(),
+  category: text("category"),
+  parameters: text("parameters"), // JSON report parameters
+  queryDefinition: text("query_definition"), // SQL or JSON query definition
+  visualizationConfig: text("visualization_config"), // JSON chart/visualization config
+  schedule: text("schedule"), // cron expression for automated reports
+  recipients: text("recipients"), // JSON email recipients
+  isPublic: integer("is_public", { mode: "boolean" }).default(false),
+  tenantId: text("tenant_id").notNull(),
+  createdBy: integer("created_by").references(() => users.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+});
+
+export const erp_audit_trail = sqliteTable("erp_audit_trail", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  entityType: text("entity_type").notNull(), // e.g., "customer", "invoice", "product"
+  entityId: text("entity_id").notNull(),
+  action: text("action").$type<"create" | "update" | "delete" | "sync" | "export" | "import">().notNull(),
+  oldValues: text("old_values"), // JSON
+  newValues: text("new_values"), // JSON
+  source: text("source"), // "erp_sync", "manual", "api", "workflow"
+  sourceId: text("source_id"), // ID from source system
+  userId: integer("user_id").references(() => users.id),
+  companyId: text("company_id").references(() => multi_company_config.id),
+  timestamp: integer("timestamp", { mode: "timestamp" }).notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+});
