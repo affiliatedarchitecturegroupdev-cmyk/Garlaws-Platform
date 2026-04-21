@@ -66,7 +66,7 @@ export default function ProfessionalLandingPage() {
               Manage every aspect of your property lifecycle from acquisition through disposition.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/auth/signup"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-medium text-white rounded-lg"
@@ -122,47 +122,23 @@ export default function ProfessionalLandingPage() {
 
         <section className="py-20" style={{ backgroundColor: '#f9fafb' }}>
           <div className="max-w-6xl mx-auto px-6">
-            <div className="grid md:grid-cols-2 gap-12">
+            <h2 className="text-3xl font-bold mb-4" style={{ color: '#111827' }}>Enterprise Platform</h2>
+            <p className="text-base mb-6" style={{ color: '#6b7280' }}>
+              Manage every aspect of your property lifecycle with comprehensive tools for financial tracking,
+              operational excellence, and strategic insights.
+            </p>
+            <div className="space-y-6">
               <div>
-                <h2 className="text-3xl font-bold mb-4" style={{ color: '#111827' }}>Enterprise Platform</h2>
-                <p className="text-base mb-6" style={{ color: '#6b7280' }}>
-                  Manage every aspect of your property lifecycle with comprehensive tools for financial tracking,
-                  operational excellence, and strategic insights.
-                </p>
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="text-base font-medium mb-2" style={{ color: '#111827' }}>Security</h4>
-                    <p className="text-sm" style={{ color: '#6b7280' }}>Enterprise-grade encryption with compliance certifications</p>
-                  </div>
-                  <div>
-                    <h4 className="text-base font-medium mb-2" style={{ color: '#111827' }}>Analytics</h4>
-                    <p className="text-sm" style={{ color: '#6b7280' }}>Real-time dashboards with predictive insights</p>
-                  </div>
-                  <div>
-                    <h4 className="text-base font-medium mb-2" style={{ color: '#111827' }}>Scalability</h4>
-                    <p className="text-sm" style={{ color: '#6b7280' }}>Multi-tenant architecture for enterprise deployments</p>
-                  </div>
-                </div>
+                <h4 className="text-base font-medium mb-2" style={{ color: '#111827' }}>Security</h4>
+                <p className="text-sm" style={{ color: '#6b7280' }}>Enterprise-grade encryption with compliance certifications</p>
               </div>
-
               <div>
-                <div
-                  className="p-8 rounded-xl"
-                  style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb' }}
-                >
-                  <div className="mb-6">
-                    <div className="text-sm mb-2" style={{ color: '#6b7280' }}>Platform Uptime</div>
-                    <div className="text-4xl font-bold" style={{ color: '#111827' }}>99.9%</div>
-                  </div>
-                  <div className="mb-6">
-                    <div className="text-sm mb-2" style={{ color: '#6b7280' }}>Support</div>
-                    <div className="text-4xl font-bold" style={{ color: '#111827' }}>24/7</div>
-                  </div>
-                  <div>
-                    <div className="text-sm mb-2" style={{ color: '#6b7280' }}>Response Time</div>
-                    <div className="text-4xl font-bold" style={{ color: '#111827' }}>&lt;1s</div>
-                  </div>
-                </div>
+                <h4 className="text-base font-medium mb-2" style={{ color: '#111827' }}>Analytics</h4>
+                <p className="text-sm" style={{ color: '#6b7280' }}>Real-time dashboards with predictive insights</p>
+              </div>
+              <div>
+                <h4 className="text-base font-medium mb-2" style={{ color: '#111827' }}>Scalability</h4>
+                <p className="text-sm" style={{ color: '#6b7280' }}>Multi-tenant architecture for enterprise deployments</p>
               </div>
             </div>
           </div>
