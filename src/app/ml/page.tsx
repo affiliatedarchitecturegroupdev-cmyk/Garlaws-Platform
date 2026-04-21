@@ -6,8 +6,9 @@ import PredictiveMaintenance from '@/features/ml/predictive/PredictiveMaintenanc
 import RecommendationEngine from '@/features/ml/recommendations/RecommendationEngine';
 import WorkflowAutomation from '@/features/ml/automation/WorkflowAutomation';
 import DataMining from '@/features/data-science/data-mining/DataMining';
+import QuantumComputing from '@/features/quantum-computing/QuantumComputing';
 
-type TabType = 'chatbot' | 'predictive' | 'recommendations' | 'automation' | 'mining';
+type TabType = 'chatbot' | 'predictive' | 'recommendations' | 'automation' | 'mining' | 'quantum';
 
 export default function MLDashboard() {
   const [activeTab, setActiveTab] = useState<TabType>('chatbot');
@@ -73,6 +74,16 @@ export default function MLDashboard() {
             >
               Data Mining
             </button>
+            <button
+              onClick={() => setActiveTab('quantum')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'quantum'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Quantum Computing
+            </button>
           </nav>
         </div>
 
@@ -85,6 +96,12 @@ export default function MLDashboard() {
           <DataMining
             data={[]} // Would be populated with actual ML training data
             onPatternsFound={(patterns) => console.log('Data mining patterns found:', patterns)}
+          />
+        )}
+        {activeTab === 'quantum' && (
+          <QuantumComputing
+            onQuantumResult={(result) => console.log('Quantum computation result:', result)}
+            onOptimizationComplete={(solution) => console.log('Optimization solution:', solution)}
           />
         )}
       </div>
