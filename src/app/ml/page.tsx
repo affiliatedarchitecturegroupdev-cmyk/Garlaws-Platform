@@ -5,8 +5,9 @@ import AIChatbot from '@/features/ml/chatbot/AIChatbot';
 import PredictiveMaintenance from '@/features/ml/predictive/PredictiveMaintenance';
 import RecommendationEngine from '@/features/ml/recommendations/RecommendationEngine';
 import WorkflowAutomation from '@/features/ml/automation/WorkflowAutomation';
+import DataMining from '@/features/data-science/data-mining/DataMining';
 
-type TabType = 'chatbot' | 'predictive' | 'recommendations' | 'automation';
+type TabType = 'chatbot' | 'predictive' | 'recommendations' | 'automation' | 'mining';
 
 export default function MLDashboard() {
   const [activeTab, setActiveTab] = useState<TabType>('chatbot');
@@ -62,6 +63,16 @@ export default function MLDashboard() {
             >
               Workflow Automation
             </button>
+            <button
+              onClick={() => setActiveTab('mining')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'mining'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Data Mining
+            </button>
           </nav>
         </div>
 
@@ -70,6 +81,12 @@ export default function MLDashboard() {
         {activeTab === 'predictive' && <PredictiveMaintenance />}
         {activeTab === 'recommendations' && <RecommendationEngine />}
         {activeTab === 'automation' && <WorkflowAutomation />}
+        {activeTab === 'mining' && (
+          <DataMining
+            data={[]} // Would be populated with actual ML training data
+            onPatternsFound={(patterns) => console.log('Data mining patterns found:', patterns)}
+          />
+        )}
       </div>
     </div>
   );

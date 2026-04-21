@@ -5,6 +5,11 @@ import InteractiveChart from '@/features/bi/visualization/InteractiveChart';
 import CustomReportBuilder from '@/features/bi/reports/CustomReportBuilder';
 import KPIDashboard from '@/features/bi/kpi-dashboards/KPIDashboard';
 import AnalyticsEngine from '@/features/bi/analytics-engine/AnalyticsEngine';
+import StatisticalAnalysis from '@/features/data-science/statistical-modeling/StatisticalAnalysis';
+import MultiDimViz from '@/features/data-science/multi-dim-viz/MultiDimViz';
+import DataMining from '@/features/data-science/data-mining/DataMining';
+import ModelInterpretability from '@/features/data-science/model-interpretability/ModelInterpretability';
+import AdvancedForecasting from '@/features/data-science/advanced-forecasting/AdvancedForecasting';
 
 interface DashboardWidget {
   id: string;
@@ -17,7 +22,8 @@ export default function BIDashboard() {
   const [widgets, setWidgets] = useState<DashboardWidget[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDashboard, setSelectedDashboard] = useState<string>('default');
-  const [activeTab, setActiveTab] = useState<'overview' | 'visualization' | 'reports' | 'kpis' | 'analytics'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'visualization' | 'reports' | 'kpis' | 'analytics' | 'data-science'>('overview');
+  const [dataScienceTab, setDataScienceTab] = useState<'overview' | 'statistical' | 'multidim' | 'mining' | 'interpretability' | 'forecasting'>('overview');
 
   useEffect(() => {
     fetchDashboardData();
@@ -221,6 +227,16 @@ export default function BIDashboard() {
             >
               Analytics Engine
             </button>
+            <button
+              onClick={() => setActiveTab('data-science')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
+                activeTab === 'data-science'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Data Science
+            </button>
           </nav>
         </div>
 
@@ -342,6 +358,155 @@ export default function BIDashboard() {
           <KPIDashboard />
         ) : activeTab === 'analytics' ? (
           <AnalyticsEngine />
+        ) : activeTab === 'data-science' ? (
+          <div className="space-y-8">
+            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Advanced Data Science Platform</h2>
+              <p className="text-gray-600 mb-6">
+                Leverage statistical modeling, machine learning interpretability, and advanced analytics
+                to gain deeper insights from your business data.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
+                  <div className="flex items-center mb-4">
+                    <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">Statistical Analysis</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm mb-4">
+                    Hypothesis testing, regression analysis, and correlation studies
+                  </p>
+                  <button
+                    onClick={() => setDataScienceTab('statistical')}
+                    className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                  >
+                    Explore Statistics
+                  </button>
+                </div>
+
+                <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg border border-purple-200">
+                  <div className="flex items-center mb-4">
+                    <div className="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center mr-3">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">Multi-Dimensional Viz</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm mb-4">
+                    3D scatter plots, parallel coordinates, and advanced visualizations
+                  </p>
+                  <button
+                    onClick={() => setDataScienceTab('multidim')}
+                    className="w-full px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
+                  >
+                    Explore Visualizations
+                  </button>
+                </div>
+
+                <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg border border-green-200">
+                  <div className="flex items-center mb-4">
+                    <div className="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center mr-3">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">Data Mining</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm mb-4">
+                    Clustering algorithms, association rules, and anomaly detection
+                  </p>
+                  <button
+                    onClick={() => setDataScienceTab('mining')}
+                    className="w-full px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                  >
+                    Explore Mining
+                  </button>
+                </div>
+
+                <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-lg border border-orange-200">
+                  <div className="flex items-center mb-4">
+                    <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center mr-3">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">Model Interpretability</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm mb-4">
+                    Feature importance, SHAP values, and decision tree explanations
+                  </p>
+                  <button
+                    onClick={() => setDataScienceTab('interpretability')}
+                    className="w-full px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors"
+                  >
+                    Explore Interpretability
+                  </button>
+                </div>
+
+                <div className="bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-lg border border-red-200">
+                  <div className="flex items-center mb-4">
+                    <div className="w-10 h-10 bg-red-500 rounded-lg flex items-center justify-center mr-3">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900">Advanced Forecasting</h3>
+                  </div>
+                  <p className="text-gray-600 text-sm mb-4">
+                    Time series forecasting with seasonal decomposition and confidence intervals
+                  </p>
+                  <button
+                    onClick={() => setDataScienceTab('forecasting')}
+                    className="w-full px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                  >
+                    Explore Forecasting
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {dataScienceTab === 'statistical' && (
+              <StatisticalAnalysis
+                data={[]} // Would be populated with actual data
+                onAnalysisComplete={(results) => console.log('Statistical analysis complete:', results)}
+              />
+            )}
+
+            {dataScienceTab === 'multidim' && (
+              <MultiDimViz
+                data={[]} // Would be populated with actual data
+                onVisualizationChange={(config) => console.log('Visualization config changed:', config)}
+              />
+            )}
+
+            {dataScienceTab === 'mining' && (
+              <DataMining
+                data={[]} // Would be populated with actual data
+                onPatternsFound={(patterns) => console.log('Patterns found:', patterns)}
+              />
+            )}
+
+            {dataScienceTab === 'interpretability' && (
+              <ModelInterpretability
+                modelResults={{}} // Would be populated with actual model results
+                featureData={[]} // Would be populated with actual feature data
+                onInterpretationComplete={(interpretation) => console.log('Interpretation complete:', interpretation)}
+              />
+            )}
+
+            {dataScienceTab === 'forecasting' && (
+              <AdvancedForecasting
+                timeSeriesData={[]} // Would be populated with actual time series data
+                targetColumn="value" // Would be configured based on data
+                onForecastComplete={(forecast) => console.log('Forecast complete:', forecast)}
+              />
+            )}
+          </div>
         ) : null}
       </div>
     </div>
