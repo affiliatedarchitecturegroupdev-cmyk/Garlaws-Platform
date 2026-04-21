@@ -1,7 +1,7 @@
 'use client';
 
-import ProfessionalLandingPage from '@/features/landing/professional/ProfessionalLandingPage';
+import GlassLandingPage from '@/features/landing/glass/GlassLandingPage';
 
 export default function HomePage() {
-  return <ProfessionalLandingPage />;
+  return <GlassLandingPage />;
 }
