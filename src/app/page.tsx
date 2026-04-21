@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { designTokens } from '@/design-system/tokens';
-import EnhancedUIComponents from '@/features/landing/advanced-ui/EnhancedUIComponents';
+import FloatingElements from '@/features/landing/advanced-ui/FloatingElements';
+import MagneticButton from '@/features/landing/advanced-ui/MagneticButton';
 import UserOnboardingFlows from '@/features/landing/onboarding/UserOnboardingFlows';
 import AccessibilityImprovements from '@/features/landing/accessibility/AccessibilityImprovements';
 import LandingPageAnalytics from '@/features/landing/analytics/LandingPageAnalytics';
@@ -53,10 +54,8 @@ export default function ProfessionalLandingPage() {
         ></div>
       </div>
 
-      {/* Enhanced UI Components - Floating Elements */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <EnhancedUIComponents />
-      </div>
+      {/* Floating Elements Background */}
+      <FloatingElements />
       {/* Professional Glass Morphism Navigation */}
       <nav
         className="fixed top-0 w-full z-50 transition-all duration-300"
@@ -233,10 +232,10 @@ export default function ProfessionalLandingPage() {
 
             {/* Enhanced CTA Section */}
             <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16 animate-in fade-in duration-1000 delay-1000">
-              <Link
-                href="/auth/signup"
-                className="group px-10 py-5 rounded-2xl font-bold text-xl text-white shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 transition-all duration-300 animate-in zoom-in duration-1000 delay-1200"
-                style={{ background: designTokens.colors.gradients.primary }}
+              <MagneticButton
+                className="group px-10 py-5 font-bold text-xl animate-in zoom-in duration-1000 delay-1200"
+                variant="primary"
+                onClick={() => window.location.href = '/auth/signup'}
               >
                 <span className="flex items-center justify-center">
                   Start Free Trial
@@ -244,16 +243,11 @@ export default function ProfessionalLandingPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </span>
-              </Link>
-              <Link
-                href="/demo"
-                className="group px-10 py-5 rounded-2xl font-bold text-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 animate-in zoom-in duration-1000 delay-1400"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.9)',
-                  backdropFilter: 'blur(10px)',
-                  color: designTokens.colors.primary[700],
-                  border: `1px solid ${designTokens.colors.primary[200]}`
-                }}
+              </MagneticButton>
+              <MagneticButton
+                className="group px-10 py-5 font-bold text-xl animate-in zoom-in duration-1000 delay-1400"
+                variant="glass"
+                onClick={() => window.location.href = '/demo'}
               >
                 <span className="flex items-center justify-center">
                   Schedule Demo
@@ -261,7 +255,7 @@ export default function ProfessionalLandingPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                   </svg>
                 </span>
-              </Link>
+              </MagneticButton>
             </div>
 
             {/* Professional Stats Grid */}
@@ -760,10 +754,10 @@ export default function ProfessionalLandingPage() {
               Schedule a personalized enterprise consultation today.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center animate-in fade-in duration-1000 delay-1400">
-              <Link
-                href="/enterprise/demo"
-                className="group px-10 py-5 rounded-2xl font-bold text-white shadow-2xl hover:shadow-3xl transform hover:-translate-y-2 transition-all duration-300"
-                style={{ background: designTokens.colors.gradients.primary }}
+              <MagneticButton
+                className="group px-10 py-5 font-bold shadow-2xl animate-in zoom-in duration-1000 delay-800"
+                variant="primary"
+                onClick={() => window.location.href = '/enterprise/demo'}
               >
                 <span className="flex items-center justify-center">
                   Schedule Enterprise Demo
@@ -771,13 +765,14 @@ export default function ProfessionalLandingPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </span>
-              </Link>
-              <Link
-                href="/enterprise/contact"
-                className="group px-10 py-5 rounded-2xl font-bold border-2 border-white text-white hover:bg-white hover:text-gray-900 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+              </MagneticButton>
+              <MagneticButton
+                className="group px-10 py-5 font-bold shadow-xl animate-in zoom-in duration-1000 delay-1000"
+                variant="glass"
+                onClick={() => window.location.href = '/enterprise/contact'}
               >
                 Contact Enterprise Sales
-              </Link>
+              </MagneticButton>
             </div>
           </div>
         </div>
