@@ -1,11 +1,8 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 
 export default function ProfessionalLandingPage() {
-  const [activeTab, setActiveTab] = useState('overview');
-
   return (
     <div className="min-h-screen font-sans" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
       <nav className="sticky top-0 z-50 bg-white border-b" style={{ borderColor: '#e5e7eb' }}>
@@ -69,7 +66,7 @@ export default function ProfessionalLandingPage() {
               Manage every aspect of your property lifecycle from acquisition through disposition.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Link
                 href="/auth/signup"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 text-base font-medium text-white rounded-lg"
@@ -84,25 +81,6 @@ export default function ProfessionalLandingPage() {
               >
                 Contact Sales
               </Link>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 py-8" style={{ borderTop: '1px solid #e5e7eb' }}>
-              <div className="text-center">
-                <div className="text-3xl font-bold mb-1" style={{ color: '#111827' }}>386+</div>
-                <div className="text-sm" style={{ color: '#6b7280' }}>Source Files</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold mb-1" style={{ color: '#111827' }}>125K+</div>
-                <div className="text-sm" style={{ color: '#6b7280' }}>Lines of Code</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold mb-1" style={{ color: '#111827' }}>130+</div>
-                <div className="text-sm" style={{ color: '#6b7280' }}>Database Tables</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold mb-1" style={{ color: '#111827' }}>56+</div>
-                <div className="text-sm" style={{ color: '#6b7280' }}>Development Phases</div>
-              </div>
             </div>
           </div>
         </section>
