@@ -14,6 +14,8 @@ interface CollapsibleSectionProps {
   variant?: 'default' | 'bordered' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   className?: string;
+  onToggle?: () => void;
+  disabled?: boolean;
 }
 
 const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
@@ -24,6 +26,8 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
   variant = 'default',
   size = 'md',
   className,
+  onToggle,
+  disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
@@ -42,7 +46,11 @@ const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
   return (
     <div className={cn(variants[variant], className)}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        disabled={disabled}
+        onClick={() => {
+          setIsOpen(!isOpen);
+          onToggle?.();
+        }}
         className={cn(
           'w-full flex items-center justify-between text-left transition-colors',
           'hover:bg-accent/50 rounded-md -m-1 p-1',

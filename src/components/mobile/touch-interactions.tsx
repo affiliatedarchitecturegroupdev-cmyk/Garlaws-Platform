@@ -15,7 +15,7 @@ export type TouchGesture =
   | 'pinch'
   | 'pan';
 
-export interface TouchEvent {
+export interface GestureEvent {
   type: TouchGesture;
   startX: number;
   startY: number;
@@ -30,7 +30,7 @@ export interface TouchEvent {
 
 // Touch gesture hook
 export function useTouchGesture(
-  onGesture: (event: TouchEvent) => void,
+  onGesture: (event: GestureEvent) => void,
   options: {
     minSwipeDistance?: number;
     maxTapDuration?: number;
@@ -598,7 +598,4 @@ export {
   PullToRefresh,
   TouchFeedback,
   MobileButton,
-  useTouchGesture,
-  type TouchEvent,
-  type TouchGesture,
 };

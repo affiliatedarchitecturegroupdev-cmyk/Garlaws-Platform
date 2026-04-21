@@ -84,7 +84,7 @@ const microVariants = cva('', {
 export interface MicroProps extends VariantProps<typeof microVariants> {
   children: React.ReactNode;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
+  as?: keyof React.JSX.IntrinsicElements;
 }
 
 // Micro-interaction wrapper component
@@ -312,7 +312,9 @@ const Toast = ({ message, type = 'info', duration = 4000, onClose }: ToastProps)
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false);
-      setTimeout(onClose, 300); // Wait for exit animation
+      if (onClose) {
+        setTimeout(onClose, 300); // Wait for exit animation
+      }
     }, duration);
 
     return () => clearTimeout(timer);
@@ -341,7 +343,9 @@ const Toast = ({ message, type = 'info', duration = 4000, onClose }: ToastProps)
         <button
           onClick={() => {
             setVisible(false);
-            setTimeout(onClose, 300);
+            if (onClose) {
+              setTimeout(onClose, 300);
+            }
           }}
           className="ml-4 text-white/70 hover:text-white transition-colors"
         >

@@ -132,12 +132,11 @@ const GridLayout: React.FC<GridLayoutProps> = ({
     if (!draggedWidget) return;
 
     const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-    const gridRect = rect.getBoundingClientRect();
-    const cellWidth = gridRect.width / GRID_COLS;
-    const cellHeight = gridRect.height / GRID_ROWS;
+    const cellWidth = rect.width / GRID_COLS;
+    const cellHeight = rect.height / GRID_ROWS;
 
-    const x = Math.floor((event.clientX - gridRect.left) / cellWidth);
-    const y = Math.floor((event.clientY - gridRect.top) / cellHeight);
+    const x = Math.floor((event.clientX - rect.left) / cellWidth);
+    const y = Math.floor((event.clientY - rect.top) / cellHeight);
 
     const widget = widgets.find(w => w.id === draggedWidget);
     if (widget) {
@@ -224,7 +223,7 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({
     >
       <AnimatedCard
         variant="elevated"
-        hover={isEditing ? 'none' : 'lift'}
+        animation={isEditing ? 'none' : 'lift'}
         className={cn(
           'h-full flex flex-col',
           isExpanded && 'fixed inset-4 z-50'
@@ -248,9 +247,9 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({
 
             <AnimatedButton
               variant="ghost"
-              size="icon"
+              size="sm"
               onClick={handleRefresh}
-              animation="spin"
+              animation="bounce"
               disabled={widget.isLoading}
             >
               <RefreshCw size={16} className={widget.isLoading ? 'animate-spin' : ''} />
@@ -258,7 +257,7 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({
 
             <AnimatedButton
               variant="ghost"
-              size="icon"
+              size="sm"
               onClick={() => setIsExpanded(!isExpanded)}
               animation="scale"
             >
@@ -268,7 +267,7 @@ const WidgetRenderer: React.FC<WidgetRendererProps> = ({
             {isEditing && (
               <AnimatedButton
                 variant="ghost"
-                size="icon"
+                size="sm"
                 onClick={onRemove}
                 animation="scale"
                 className="text-destructive hover:text-destructive"
@@ -425,7 +424,7 @@ const ChartWidget: React.FC<{
               cx="50%"
               cy="50%"
               labelLine={false}
-              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+              label={({ name, percent }) => `${name} ${percent ? (percent * 100).toFixed(0) : 0}%`}
               outerRadius={80}
               fill="#8884d8"
               dataKey="value"
@@ -521,7 +520,4 @@ const AlertPanelWidget: React.FC<{ data?: any[]; config?: WidgetConfig }> = ({ d
 
 export {
   GridLayout,
-  type DashboardWidget,
-  type WidgetType,
-  type WidgetConfig,
 };

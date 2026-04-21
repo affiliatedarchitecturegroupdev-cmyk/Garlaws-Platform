@@ -467,10 +467,10 @@ const DeviceVariants: React.FC<DeviceVariantsProps> = ({ children }) => {
 };
 
 // Performance-aware image component
-interface ResponsiveImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+interface ResponsiveImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'sizes'> {
   src: string;
   alt: string;
-  sizes?: {
+  responsiveSizes?: {
     mobile: string;
     tablet: string;
     desktop: string;
@@ -486,7 +486,7 @@ interface ResponsiveImageProps extends React.ImgHTMLAttributes<HTMLImageElement>
 const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
   src,
   alt,
-  sizes = {
+  responsiveSizes = {
     mobile: '100vw',
     tablet: '50vw',
     desktop: '33vw',
@@ -519,7 +519,7 @@ const ResponsiveImage: React.FC<ResponsiveImageProps> = ({
     }).join(', ');
   };
 
-  const currentSize = sizes[deviceType];
+  const currentSize = responsiveSizes[deviceType];
 
   return (
     <img
@@ -544,7 +544,4 @@ export {
   SafeAreaProvider,
   DeviceVariants,
   ResponsiveImage,
-  deviceSpacing,
-  useDeviceType,
-  useOrientation,
 };

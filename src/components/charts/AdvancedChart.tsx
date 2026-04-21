@@ -82,6 +82,11 @@ const AdvancedChart: React.FC<AdvancedChartProps> = ({
   zoomable = true,
   filterable = true,
 }) => {
+  const colors = config.colors || [
+    '#3b82f6', '#ef4444', '#10b981', '#f59e0b',
+    '#8b5cf6', '#06b6d4', '#f97316', '#84cc16'
+  ];
+
   const [zoomed, setZoomed] = useState(false);
   const [visibleSeries, setVisibleSeries] = useState<Set<string>>(
     new Set(config.yAxis || [])
@@ -142,8 +147,8 @@ const AdvancedChart: React.FC<AdvancedChartProps> = ({
         const jsonBlob = new Blob([jsonContent], { type: 'application/json' });
         const jsonUrl = URL.createObjectURL(jsonBlob);
         const jsonA = document.createElement('a');
-        a.href = jsonUrl;
-        a.download = `${config.title || 'chart'}.json`;
+        jsonA.href = jsonUrl;
+        jsonA.download = `${config.title || 'chart'}.json`;
         document.body.appendChild(jsonA);
         jsonA.click();
         document.body.removeChild(jsonA);
@@ -157,11 +162,6 @@ const AdvancedChart: React.FC<AdvancedChartProps> = ({
       data: config.data,
       margin: { top: 20, right: 30, left: 20, bottom: 5 },
     };
-
-    const colors = config.colors || [
-      '#3b82f6', '#ef4444', '#10b981', '#f59e0b',
-      '#8b5cf6', '#06b6d4', '#f97316', '#84cc16'
-    ];
 
     switch (config.type) {
       case 'line':
@@ -244,7 +244,7 @@ const AdvancedChart: React.FC<AdvancedChartProps> = ({
               cx="50%"
               cy="50%"
               labelLine={false}
-              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+              label={({ name, percent }) => `${name} ${percent ? (percent * 100).toFixed(0) : 0}%`}
               outerRadius={120}
               fill="#8884d8"
               dataKey={config.yAxis?.[0] || 'value'}

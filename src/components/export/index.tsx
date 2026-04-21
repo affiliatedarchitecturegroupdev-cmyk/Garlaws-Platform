@@ -103,7 +103,7 @@ const ExportDialog: React.FC<ExportDialogProps> = ({
           <h2 className="text-lg font-semibold">Export Dashboard</h2>
           <AnimatedButton
             variant="ghost"
-            size="icon"
+            size="sm"
             onClick={onClose}
             animation="scale"
           >
@@ -267,7 +267,7 @@ const ShareDialog: React.FC<ShareDialogProps> = ({
       <div className="relative bg-background border border-border rounded-lg shadow-xl max-w-md w-full mx-4">
         <div className="flex items-center justify-between p-6 border-b border-border">
           <h2 className="text-lg font-semibold">Share Dashboard</h2>
-          <AnimatedButton variant="ghost" size="icon" onClick={onClose} animation="scale">
+          <AnimatedButton variant="ghost" size="sm" onClick={onClose} animation="scale">
             <X size={16} />
           </AnimatedButton>
         </div>
@@ -576,7 +576,4 @@ export {
   ExportDialog,
   ShareDialog,
   ReportGenerator,
-  DashboardExporter,
-  type ExportOptions,
-  type ReportTemplate,
 };
