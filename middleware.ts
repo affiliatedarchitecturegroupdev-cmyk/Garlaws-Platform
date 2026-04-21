@@ -1,7 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { securityMiddleware } from '@/lib/security-middleware';
+import createMiddleware from 'next-intl/middleware';
+
+const i18nMiddleware = createMiddleware({
+  // A list of all locales that are supported
+  locales: ['en', 'es', 'fr', 'de', 'zh', 'ja', 'ar', 'pt', 'ru', 'hi'],
+
+  // Used when no locale matches
+  defaultLocale: 'en',
+
+  // Locale detection strategy
+  localeDetection: true
+});
 
 export function middleware(request: NextRequest) {
+  // Apply i18n middleware first for locale routing
+  const i18nResponse = i18nMiddleware(request);
+
   // Apply security middleware to all requests
   const securityResponse = securityMiddleware(request);
 
@@ -10,8 +25,8 @@ export function middleware(request: NextRequest) {
     return securityResponse;
   }
 
-  // Continue with the request
-  return NextResponse.next();
+  // Return the i18n middleware response (which may redirect or continue)
+  return i18nResponse;
 }
 
 export const config = {

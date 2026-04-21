@@ -1,0 +1,72 @@
+{
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "financial": "Financial",
+    "supplyChain": "Supply Chain",
+    "businessIntelligence": "Business Intelligence",
+    "crm": "CRM",
+    "security": "Security",
+    "projects": "Projects",
+    "ai": "AI/ML",
+    "integrations": "Integrations",
+    "qa": "QA",
+    "erp": "ERP",
+    "mobile": "Mobile/PWA",
+    "landing": "Landing",
+    "help": "Help",
+    "contact": "Contact",
+    "status": "Status",
+    "careers": "Careers",
+    "demo": "Demo"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "export": "Export",
+    "import": "Import",
+    "settings": "Settings",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
+  },
+  "dashboard": {
+    "welcome": "Welcome to Garlaws Platform",
+    "overview": "Platform Overview",
+    "analytics": "Analytics",
+    "reports": "Reports",
+    "notifications": "Notifications",
+    "recentActivity": "Recent Activity"
+  },
+  "landing": {
+    "hero": {
+      "title": "Property Lifecycle Management Platform",
+      "subtitle": "Comprehensive orchestration of property maintenance, financial management, and operational excellence",
+      "cta": "Get Started"
+    },
+    "features": {
+      "title": "Enterprise Features",
+      "financial": "Advanced Financial Management",
+      "supply": "Supply Chain Optimization",
+      "bi": "Business Intelligence",
+      "crm": "Customer Relationship Management",
+      "security": "Enterprise Security",
+      "ai": "AI & Machine Learning"
+    }
+  }
+}

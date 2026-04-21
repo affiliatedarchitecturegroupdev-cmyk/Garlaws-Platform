@@ -1,0 +1,72 @@
+{
+  "navigation": {
+    "home": "Startseite",
+    "dashboard": "Dashboard",
+    "financial": "Finanzen",
+    "supplyChain": "Lieferkette",
+    "businessIntelligence": "Business Intelligence",
+    "crm": "CRM",
+    "security": "Sicherheit",
+    "projects": "Projekte",
+    "ai": "KI/ML",
+    "integrations": "Integrationen",
+    "qa": "QA",
+    "erp": "ERP",
+    "mobile": "Mobil/PWA",
+    "landing": "Landingpage",
+    "help": "Hilfe",
+    "contact": "Kontakt",
+    "status": "Status",
+    "careers": "Karriere",
+    "demo": "Demo"
+  },
+  "common": {
+    "loading": "Lädt...",
+    "error": "Ein Fehler ist aufgetreten",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "view": "Ansehen",
+    "close": "Schließen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "sort": "Sortieren",
+    "export": "Exportieren",
+    "import": "Importieren",
+    "settings": "Einstellungen",
+    "profile": "Profil",
+    "logout": "Abmelden",
+    "login": "Anmelden",
+    "register": "Registrieren"
+  },
+  "dashboard": {
+    "welcome": "Willkommen bei der Garlaws Plattform",
+    "overview": "Plattform Übersicht",
+    "analytics": "Analysen",
+    "reports": "Berichte",
+    "notifications": "Benachrichtigungen",
+    "recentActivity": "Kürzliche Aktivität"
+  },
+  "landing": {
+    "hero": {
+      "title": "Immobilien-Lebenszyklus-Management-Plattform",
+      "subtitle": "Umfassende Orchestrierung von Immobilienwartung, Finanzmanagement und operativer Exzellenz",
+      "cta": "Jetzt Starten"
+    },
+    "features": {
+      "title": "Unternehmensfunktionen",
+      "financial": "Erweiterte Finanzverwaltung",
+      "supply": "Lieferkettenoptimierung",
+      "bi": "Business Intelligence",
+      "crm": "Kundenbeziehungsmanagement",
+      "security": "Unternehmenssicherheit",
+      "ai": "KI und maschinelles Lernen"
+    }
+  }
+}

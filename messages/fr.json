@@ -1,0 +1,72 @@
+{
+  "navigation": {
+    "home": "Accueil",
+    "dashboard": "Tableau de Bord",
+    "financial": "Financier",
+    "supplyChain": "Chaîne d'Approvisionnement",
+    "businessIntelligence": "Intelligence d'Affaires",
+    "crm": "CRM",
+    "security": "Sécurité",
+    "projects": "Projets",
+    "ai": "IA/ML",
+    "integrations": "Intégrations",
+    "qa": "AQ",
+    "erp": "ERP",
+    "mobile": "Mobile/PWA",
+    "landing": "Page d'Accueil",
+    "help": "Aide",
+    "contact": "Contact",
+    "status": "Statut",
+    "careers": "Carrières",
+    "demo": "Démo"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "success": "Succès",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "view": "Voir",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "export": "Exporter",
+    "import": "Importer",
+    "settings": "Paramètres",
+    "profile": "Profil",
+    "logout": "Se Déconnecter",
+    "login": "Se Connecter",
+    "register": "S'inscrire"
+  },
+  "dashboard": {
+    "welcome": "Bienvenue sur la Plateforme Garlaws",
+    "overview": "Aperçu de la Plateforme",
+    "analytics": "Analyses",
+    "reports": "Rapports",
+    "notifications": "Notifications",
+    "recentActivity": "Activité Récente"
+  },
+  "landing": {
+    "hero": {
+      "title": "Plateforme de Gestion du Cycle de Vie Immobilier",
+      "subtitle": "Orchestration complète de la maintenance immobilière, gestion financière et excellence opérationnelle",
+      "cta": "Commencer"
+    },
+    "features": {
+      "title": "Fonctionnalités Entreprise",
+      "financial": "Gestion Financière Avancée",
+      "supply": "Optimisation de la Chaîne d'Approvisionnement",
+      "bi": "Intelligence d'Affaires",
+      "crm": "Gestion de la Relation Client",
+      "security": "Sécurité Entreprise",
+      "ai": "IA et Apprentissage Automatique"
+    }
+  }
+}

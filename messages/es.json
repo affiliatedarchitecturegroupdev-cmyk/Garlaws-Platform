@@ -1,0 +1,72 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "dashboard": "Panel de Control",
+    "financial": "Financiero",
+    "supplyChain": "Cadena de Suministro",
+    "businessIntelligence": "Inteligencia Empresarial",
+    "crm": "CRM",
+    "security": "Seguridad",
+    "projects": "Proyectos",
+    "ai": "IA/ML",
+    "integrations": "Integraciones",
+    "qa": "QA",
+    "erp": "ERP",
+    "mobile": "Móvil/PWA",
+    "landing": "Landing",
+    "help": "Ayuda",
+    "contact": "Contacto",
+    "status": "Estado",
+    "careers": "Carreras",
+    "demo": "Demo"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ocurrió un error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "view": "Ver",
+    "close": "Cerrar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "export": "Exportar",
+    "import": "Importar",
+    "settings": "Configuración",
+    "profile": "Perfil",
+    "logout": "Cerrar Sesión",
+    "login": "Iniciar Sesión",
+    "register": "Registrarse"
+  },
+  "dashboard": {
+    "welcome": "Bienvenido a la Plataforma Garlaws",
+    "overview": "Vista General de la Plataforma",
+    "analytics": "Análisis",
+    "reports": "Reportes",
+    "notifications": "Notificaciones",
+    "recentActivity": "Actividad Reciente"
+  },
+  "landing": {
+    "hero": {
+      "title": "Plataforma de Gestión del Ciclo de Vida de Propiedades",
+      "subtitle": "Orquestación integral del mantenimiento de propiedades, gestión financiera y excelencia operativa",
+      "cta": "Comenzar"
+    },
+    "features": {
+      "title": "Características Empresariales",
+      "financial": "Gestión Financiera Avanzada",
+      "supply": "Optimización de la Cadena de Suministro",
+      "bi": "Inteligencia Empresarial",
+      "crm": "Gestión de Relaciones con Clientes",
+      "security": "Seguridad Empresarial",
+      "ai": "IA y Aprendizaje Automático"
+    }
+  }
+}
