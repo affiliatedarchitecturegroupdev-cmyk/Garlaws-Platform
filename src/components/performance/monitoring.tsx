@@ -600,6 +600,4 @@ export function usePerformanceBudget() {
 export {
   BundleAnalyzer,
   PerformanceDashboard,
-  useMemoryLeakDetector,
-  usePerformanceBudget,
 };

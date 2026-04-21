@@ -17,7 +17,7 @@ interface MemoryUsage {
 export function useMemoryManagement() {
   const [memoryInfo, setMemoryInfo] = useState<MemoryUsage | null>(null);
   const [isLowMemory, setIsLowMemory] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout>();
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const getMemoryUsage = useCallback((): MemoryUsage | null => {
     if (typeof window === 'undefined') return null;
@@ -66,7 +66,7 @@ export function useMemoryManagement() {
   const stopMonitoring = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
-      intervalRef.current = undefined;
+      intervalRef.current = null;
     }
   }, []);
 

@@ -338,17 +338,17 @@ export const lazyComponents = {
   Dashboard: () => import('@/components/dashboard/RealtimeDashboard'),
   DataVisualization: () => import('@/components/charts/AdvancedChart'),
 
-  // Form components
-  AdvancedForm: () => import('@/components/forms/AdvancedForm'),
-  FileUpload: () => import('@/components/forms/FileUpload'),
+  // Form components - TODO: Create when needed
+  // AdvancedForm: () => import('@/components/forms/AdvancedForm'),
+  // FileUpload: () => import('@/components/forms/FileUpload'),
 
-  // Modal components
-  ConfirmDialog: () => import('@/components/modals/ConfirmDialog'),
-  ImageGallery: () => import('@/components/modals/ImageGallery'),
+  // Modal components - TODO: Create when needed
+  // ConfirmDialog: () => import('@/components/modals/ConfirmDialog'),
+  // ImageGallery: () => import('@/components/modals/ImageGallery'),
 
-  // Feature components
-  VideoPlayer: () => import('@/components/media/VideoPlayer'),
-  CodeEditor: () => import('@/components/editors/CodeEditor'),
+  // Feature components - TODO: Create when needed
+  // VideoPlayer: () => import('@/components/media/VideoPlayer'),
+  // CodeEditor: () => import('@/components/editors/CodeEditor'),
 };
 
 // Bundle splitting hook

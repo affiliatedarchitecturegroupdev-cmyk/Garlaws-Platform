@@ -40,7 +40,7 @@ export function OptimizedImage({
   const [hasError, setHasError] = useState(false);
   const [isInView, setIsInView] = useState(priority);
   const imgRef = useRef<HTMLImageElement>(null);
-  const observerRef = useRef<IntersectionObserver>();
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Generate responsive image sources
   const generateSrcSet = (baseSrc: string) => {
@@ -93,7 +93,6 @@ export function OptimizedImage({
   };
 
   const commonProps = {
-    ref: imgRef,
     alt,
     onLoad: handleLoad,
     onError: handleError,
@@ -107,7 +106,7 @@ export function OptimizedImage({
     ),
     style: {
       ...style,
-      ...(fill && { position: 'absolute', height: '100%', width: '100%', inset: 0 }),
+      ...(fill && { position: 'absolute' as const, height: '100%', width: '100%', inset: 0 }),
     },
   };
 
@@ -118,7 +117,7 @@ export function OptimizedImage({
     sizes: sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
     srcSet: isInView ? generateSrcSet(src) : undefined,
     src: isInView ? `${src}?quality=${quality}` : undefined,
-    loading: priority ? 'eager' : 'lazy',
+    loading: priority ? 'eager' : 'lazy' as 'eager' | 'lazy',
   };
 
   if (hasError) {
@@ -156,7 +155,7 @@ export function OptimizedImage({
             <source srcSet={`${src}?format=webp&quality=${quality}`} type="image/webp" />
           </>
         )}
-        <img {...imgProps} />
+        <img {...imgProps} ref={imgRef} />
       </picture>
     </>
   );

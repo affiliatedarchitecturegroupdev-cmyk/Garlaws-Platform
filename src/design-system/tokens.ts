@@ -190,55 +190,8 @@ export const designTokens = {
       20: 'rgba(59, 130, 246, 0.2)',
     },
 
-    // Semantic Colors
-    success: {
-      50: '#f0fdf4',
-      100: '#dcfce7',
-      200: '#bbf7d0',
-      300: '#86efac',
-      400: '#4ade80',
-      500: '#22c55e',
-      600: '#16a34a',
-      700: '#15803d',
-      800: '#166534',
-      900: '#14532d',
-    },
-    warning: {
-      50: '#fffbeb',
-      100: '#fef3c7',
-      200: '#fde68a',
-      300: '#fcd34d',
-      400: '#fbbf24',
-      500: '#f59e0b',
-      600: '#d97706',
-      700: '#b45309',
-      800: '#92400e',
-      900: '#78350f',
-    },
-    error: {
-      50: '#fef2f2',
-      100: '#fee2e2',
-      200: '#fecaca',
-      300: '#fca5a5',
-      400: '#f87171',
-      500: '#ef4444',
-      600: '#dc2626',
-      700: '#b91c1c',
-      800: '#991b1b',
-      900: '#7f1d1d',
-    },
-    info: {
-      50: '#eff6ff',
-      100: '#dbeafe',
-      200: '#bfdbfe',
-      300: '#93c5fd',
-      400: '#60a5fa',
-      500: '#3b82f6',
-      600: '#2563eb',
-      700: '#1d4ed8',
-      800: '#1e40af',
-      900: '#1e3a8a',
-    },
+
+
   },
 
   // Enhanced Typography System
@@ -581,23 +534,80 @@ export const themes = {
 
   // Professional theme variants
   'garlaws-professional': {
-    ...themes.garlaws,
+    // Base colors
     background: '#ffffff',
     foreground: '#0b0c10',
     surface: '#f8fafc',
     surfaceHover: '#f1f5f9',
-    border: '#e2e8f0',
-    borderHover: '#cbd5e1',
+
+    // Brand colors
+    primary: '#2d7d2d',
+    primaryHover: '#256825',
+    primaryAlpha: designTokens.colors.primaryAlpha[20],
+    secondary: '#c5a059',
+    secondaryHover: '#b89322',
+    accent: '#45a29e',
+    accentHover: '#3a8b87',
+
+    // Semantic colors
+    success: '#22c55e',
+    warning: '#f59e0b',
+    error: '#ef4444',
+    info: '#3b82f6',
+
+    // Neutral variations
     muted: '#f8fafc',
     mutedForeground: '#64748b',
+    border: '#e2e8f0',
+    borderHover: '#cbd5e1',
+    ring: '#c5a059',
+
+    // Gradients
+    gradientPrimary: designTokens.colors.gradients.primary,
+    gradientSecondary: designTokens.colors.gradients.gold,
+    gradientSurface: designTokens.colors.gradients.surface,
+
+    // Shadows
+    shadow: '0 4px 6px -1px rgba(45, 59, 45, 0.1), 0 2px 4px -2px rgba(45, 59, 45, 0.1)',
+    shadowHover: '0 10px 15px -3px rgba(197, 160, 89, 0.1), 0 4px 6px -4px rgba(197, 160, 89, 0.1)',
   },
 
   'garlaws-enterprise': {
-    ...themes.garlaws,
+    // Base colors
+    background: '#0b0c10',
+    foreground: '#f4f4f4',
+    surface: '#1f2833',
+    surfaceHover: '#2d3b2d',
+
+    // Brand colors
     primary: '#1e40af',
+    primaryHover: '#256825',
+    primaryAlpha: designTokens.colors.primaryAlpha[20],
     secondary: '#7c3aed',
+    secondaryHover: '#b89322',
     accent: '#059669',
+    accentHover: '#3a8b87',
+
+    // Semantic colors
+    success: '#22c55e',
+    warning: '#f59e0b',
+    error: '#ef4444',
+    info: '#3b82f6',
+
+    // Neutral variations
+    muted: '#1f2833',
+    mutedForeground: '#a1a1aa',
+    border: '#2d3b2d',
+    borderHover: '#45a29e',
+    ring: '#c5a059',
+
+    // Gradients
     gradientPrimary: 'linear-gradient(135deg, #1e40af 0%, #059669 100%)',
     gradientSecondary: 'linear-gradient(135deg, #7c3aed 0%, #c5a059 100%)',
+    gradientSurface: designTokens.colors.gradients.surface,
+
+    // Shadows
+    shadow: '0 4px 6px -1px rgba(45, 59, 45, 0.1), 0 2px 4px -2px rgba(45, 59, 45, 0.1)',
+    shadowHover: '0 10px 15px -3px rgba(197, 160, 89, 0.1), 0 4px 6px -4px rgba(197, 160, 89, 0.1)',
   },
 };

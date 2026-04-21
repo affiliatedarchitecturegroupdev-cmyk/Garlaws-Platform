@@ -144,8 +144,8 @@ const StatusIndicator: React.FC<StatusIndicatorProps> = ({
 
   return (
     <AnimatedCard
-      variant="outlined"
-      hover={interactive ? 'lift' : 'none'}
+      variant="bordered"
+      animation={interactive ? 'lift' : 'none'}
       className={cn(
         'transition-all duration-200 cursor-pointer',
         interactive && 'hover:shadow-md',
@@ -227,7 +227,7 @@ const StatusIndicator: React.FC<StatusIndicatorProps> = ({
                 {item.actions.map((action, index) => (
                   <AnimatedButton
                     key={index}
-                    variant={action.variant === 'danger' ? 'destructive' : action.variant || 'default'}
+                    variant={action.variant === 'danger' ? 'secondary' : action.variant || 'outline'}
                     size="sm"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -555,11 +555,6 @@ const StatusSummary: React.FC<StatusSummaryProps> = ({ items, className }) => {
 import { ChevronDown } from 'lucide-react';
 
 export {
-  StatusIndicator,
-  StatusGrid,
   AlertPanel,
   StatusSummary,
-  type StatusItem,
-  type AlertItem,
-  type StatusAction,
 };

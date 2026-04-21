@@ -130,7 +130,7 @@ export function useAnimationController() {
         pause: () => {},
         cancel: () => {},
         finish: Promise.resolve(),
-      } as Animation;
+      } as any;
     }
 
     return animationController.animate(element, keyframes, options);
@@ -252,7 +252,7 @@ const StaggeredAnimation: React.FC<StaggeredAnimationProps> = ({
       options: {
         duration,
         delay: index * staggerDelay,
-        fill: 'both',
+        fill: 'both' as const,
       },
     }));
 
@@ -460,6 +460,4 @@ export {
   MorphingShape,
   ContainedElement,
   gpuTransformAnimations,
-  animationPresets,
-  timing,
 };

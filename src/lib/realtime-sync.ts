@@ -46,7 +46,7 @@ export function useRealtimeSync() {
       }, 30000);
 
       // Clean up interval on disconnect
-      wsRef.current.addEventListener('close', () => {
+      wsRef.current?.addEventListener('close', () => {
         clearInterval(interval);
       });
 

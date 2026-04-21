@@ -575,7 +575,7 @@ export const datasets = sqliteTable("datasets", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
-export const dataset_versions = sqliteTable("dataset_versions", {
+export const dataset_versions: any = sqliteTable("dataset_versions", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   datasetId: integer("dataset_id").notNull().references(() => datasets.id),
   version: text("version").notNull(),
@@ -616,7 +616,7 @@ export const experiment_runs = sqliteTable("experiment_runs", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
-export const ml_pipelines = sqliteTable("ml_pipelines", {
+export const ml_pipelines: any = sqliteTable("ml_pipelines", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   description: text("description"),
@@ -632,7 +632,7 @@ export const ml_pipelines = sqliteTable("ml_pipelines", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
-export const pipeline_runs = sqliteTable("pipeline_runs", {
+export const pipeline_runs: any = sqliteTable("pipeline_runs", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   pipelineId: integer("pipeline_id").notNull().references(() => ml_pipelines.id),
   runNumber: integer("run_number").notNull(),
@@ -845,7 +845,7 @@ export const code_quality_reports = sqliteTable("code_quality_reports", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
-export const performance_tests = sqliteTable("performance_tests", {
+export const performance_tests: any = sqliteTable("performance_tests", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   description: text("description"),
@@ -862,7 +862,7 @@ export const performance_tests = sqliteTable("performance_tests", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
-export const performance_test_runs = sqliteTable("performance_test_runs", {
+export const performance_test_runs: any = sqliteTable("performance_test_runs", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   performanceTestId: integer("performance_test_id").notNull().references(() => performance_tests.id),
   status: text("status").$type<"running" | "completed" | "failed">().default("running"),
@@ -876,7 +876,7 @@ export const performance_test_runs = sqliteTable("performance_test_runs", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
-export const security_scans = sqliteTable("security_scans", {
+export const security_scans: any = sqliteTable("security_scans", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   description: text("description"),
@@ -893,7 +893,7 @@ export const security_scans = sqliteTable("security_scans", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
-export const security_scan_runs = sqliteTable("security_scan_runs", {
+export const security_scan_runs: any = sqliteTable("security_scan_runs", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   securityScanId: integer("security_scan_id").notNull().references(() => security_scans.id),
   status: text("status").$type<"running" | "completed" | "failed">().default("running"),
@@ -909,7 +909,7 @@ export const security_scan_runs = sqliteTable("security_scan_runs", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
-export const ci_cd_pipelines = sqliteTable("ci_cd_pipelines", {
+export const ci_cd_pipelines: any = sqliteTable("ci_cd_pipelines", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   description: text("description"),
@@ -925,7 +925,7 @@ export const ci_cd_pipelines = sqliteTable("ci_cd_pipelines", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
-export const pipeline_builds = sqliteTable("pipeline_builds", {
+export const pipeline_builds: any = sqliteTable("pipeline_builds", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   pipelineId: integer("pipeline_id").notNull().references(() => ci_cd_pipelines.id),
   buildNumber: integer("build_number").notNull(),
@@ -1579,7 +1579,7 @@ export const access_tokens = sqliteTable("access_tokens", {
 
 // Advanced Project Management & Collaboration Platform Tables
 
-export const teams = sqliteTable("teams", {
+export const teams: any = sqliteTable("teams", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   description: text("description"),
@@ -1600,7 +1600,7 @@ export const team_members = sqliteTable("team_members", {
   isActive: integer("is_active", { mode: "boolean" }).default(true),
 });
 
-export const projects = sqliteTable("projects", {
+export const projects: any = sqliteTable("projects", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   description: text("description"),
@@ -1631,7 +1631,7 @@ export const project_members = sqliteTable("project_members", {
   isActive: integer("is_active", { mode: "boolean" }).default(true),
 });
 
-export const tasks = sqliteTable("tasks", {
+export const tasks: any = sqliteTable("tasks", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   projectId: integer("project_id").notNull().references(() => projects.id),
   parentTaskId: integer("parent_task_id").references(() => tasks.id),
@@ -1661,7 +1661,7 @@ export const task_dependencies = sqliteTable("task_dependencies", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
-export const task_comments = sqliteTable("task_comments", {
+export const task_comments: any = sqliteTable("task_comments", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   taskId: integer("task_id").notNull().references(() => tasks.id),
   userId: integer("user_id").notNull().references(() => users.id),
@@ -1735,7 +1735,7 @@ export const document_versions = sqliteTable("document_versions", {
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 
-export const document_folders = sqliteTable("document_folders", {
+export const document_folders: any = sqliteTable("document_folders", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
   description: text("description"),

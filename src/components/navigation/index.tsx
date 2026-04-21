@@ -332,7 +332,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
           <h2 className="text-lg font-semibold">Menu</h2>
           <AnimatedButton
             variant="ghost"
-            size="icon"
+            size="sm"
             onClick={onClose}
             animation="scale"
           >
@@ -427,7 +427,7 @@ const NavBar: React.FC<NavBarProps> = ({
               {/* Mobile menu button */}
               <AnimatedButton
                 variant="ghost"
-                size="icon"
+                size="sm"
                 className="md:hidden"
                 onClick={() => setMobileMenuOpen(true)}
                 animation="scale"

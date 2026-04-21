@@ -278,8 +278,7 @@ const SwipeableContainer: React.FC<SwipeableContainerProps> = ({
   className,
   ...props
 }) => {
-  const handleGesture = useCallback((event: TouchEvent) => {
-    if (preventDefault) event.preventDefault();
+  const handleGesture = useCallback((event: GestureEvent) => {
 
     switch (event.type) {
       case 'swipe-left':
