@@ -1,7 +1,7 @@
 'use client';
 
-import CleanLandingPage from '@/features/landing/clean/CleanLandingPage';
+import ProfessionalLandingPage from '@/features/landing/professional/ProfessionalLandingPage';
 
 export default function HomePage() {
-  return <CleanLandingPage />;
+  return <ProfessionalLandingPage />;
 }
