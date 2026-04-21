@@ -1,7 +1,7 @@
 'use client';
 
-import CorporateHero from '@/features/landing/corporate-redesign/CorporateHero';
+import CleanLandingPage from '@/features/landing/clean/CleanLandingPage';
 
-export default function ProfessionalLandingPage() {
-  return <CorporateHero />;
+export default function HomePage() {
+  return <CleanLandingPage />;
 }
