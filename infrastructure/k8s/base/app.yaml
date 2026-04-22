@@ -1,0 +1,165 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: garlaws-app
+  namespace: garlaws
+  labels:
+    app: garlaws-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: garlaws-app
+  template:
+    metadata:
+      labels:
+        app: garlaws-app
+    spec:
+      containers:
+      - name: garlaws-app
+        image: garlaws/garlaws-platform:latest
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: garlaws-config
+        - secretRef:
+            name: garlaws-secrets
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: garlaws-secrets
+              key: database-url
+        - name: NEXTAUTH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: garlaws-secrets
+              key: nextauth-secret
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: garlaws-secrets
+              key: redis-url
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: garlaws-secrets
+              key: encryption-key
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /api/health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: garlaws-app
+  namespace: garlaws
+  labels:
+    app: garlaws-app
+spec:
+  selector:
+    app: garlaws-app
+  ports:
+  - port: 80
+    targetPort: 3000
+    name: http
+  - port: 443
+    targetPort: 3000
+    name: https
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: garlaws-ingress
+  namespace: garlaws
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  tls:
+  - hosts:
+    - garlaws.com
+    - www.garlaws.com
+    secretName: garlaws-tls
+  rules:
+  - host: garlaws.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: garlaws-app
+            port:
+              number: 80
+  - host: www.garlaws.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: garlaws-app
+            port:
+              number: 80
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: garlaws-app-hpa
+  namespace: garlaws
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: garlaws-app
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

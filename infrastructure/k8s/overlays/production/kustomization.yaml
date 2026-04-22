@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: garlaws-prod
+
+resources:
+  - ../base
+
+patchesStrategicMerge:
+  - replica-patch.yaml
+  - ingress-patch.yaml
+
+images:
+  - name: garlaws/garlaws-platform
+    newTag: v1.0.0
+
+commonLabels:
+  environment: production
+  region: us-east-1
