@@ -1,13 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/Card';
-import { Button } from '../../../components/ui/Button';
-import { Badge } from '../../../components/ui/badge';
-import { Progress } from '../../../components/ui/progress';
-import { Alert, AlertDescription } from '../../../components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Atom, Zap, Target, Brain, Cpu, Calculator, Play, Square } from 'lucide-react';
+import { QuantumMLDashboard } from './quantum-ml/QuantumML';
+import { QuantumCryptographyDashboard } from './quantum-cryptography/QuantumCryptography';
+import { QuantumSimulationDashboard } from './quantum-simulation/QuantumSimulation';
+import { Phase87Integration } from './phase87-integration/Phase87Integration';
 
 interface QuantumCircuit {
   id: string;
@@ -50,7 +54,7 @@ const QuantumComputing: React.FC<QuantumComputingProps> = ({
   onOptimizationComplete
 }) => {
   const [circuits, setCircuits] = useState<QuantumCircuit[]>([]);
-  const [activeTab, setActiveTab] = useState<'circuits' | 'optimization' | 'ml' | 'simulation'>('circuits');
+  const [activeTab, setActiveTab] = useState<'circuits' | 'optimization' | 'ml' | 'cryptography' | 'simulation' | 'phase87'>('circuits');
   const [selectedCircuit, setSelectedCircuit] = useState<QuantumCircuit | null>(null);
   const [isExecuting, setIsExecuting] = useState<string | null>(null);
   const [optimizationProblems, setOptimizationProblems] = useState<OptimizationProblem[]>([]);
@@ -299,10 +303,10 @@ const QuantumComputing: React.FC<QuantumComputingProps> = ({
       </div>
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="circuits" className="flex items-center gap-2">
             <Cpu className="h-4 w-4" />
-            Quantum Circuits
+            Circuits
           </TabsTrigger>
           <TabsTrigger value="optimization" className="flex items-center gap-2">
             <Target className="h-4 w-4" />
@@ -310,11 +314,19 @@ const QuantumComputing: React.FC<QuantumComputingProps> = ({
           </TabsTrigger>
           <TabsTrigger value="ml" className="flex items-center gap-2">
             <Brain className="h-4 w-4" />
-            Quantum ML
+            ML
+          </TabsTrigger>
+          <TabsTrigger value="cryptography" className="flex items-center gap-2">
+            <Zap className="h-4 w-4" />
+            Crypto
           </TabsTrigger>
           <TabsTrigger value="simulation" className="flex items-center gap-2">
             <Calculator className="h-4 w-4" />
             Simulation
+          </TabsTrigger>
+          <TabsTrigger value="phase87" className="flex items-center gap-2 bg-gradient-to-r from-purple-500 to-cyan-500 text-white">
+            <Atom className="h-4 w-4" />
+            Phase 87
           </TabsTrigger>
         </TabsList>
 
@@ -483,31 +495,19 @@ const QuantumComputing: React.FC<QuantumComputingProps> = ({
         </TabsContent>
 
         <TabsContent value="ml" className="space-y-6">
-          <Card>
-            <CardContent className="p-8 text-center">
-              <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Quantum Machine Learning</h3>
-              <p className="text-gray-600 mb-4">
-                Quantum-enhanced machine learning algorithms including quantum neural networks,
-                quantum support vector machines, and quantum principal component analysis.
-              </p>
-              <Button>Explore Quantum ML Models</Button>
-            </CardContent>
-          </Card>
+          <QuantumMLDashboard />
+        </TabsContent>
+
+        <TabsContent value="cryptography" className="space-y-6">
+          <QuantumCryptographyDashboard />
         </TabsContent>
 
         <TabsContent value="simulation" className="space-y-6">
-          <Card>
-            <CardContent className="p-8 text-center">
-              <Calculator className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Quantum Simulation</h3>
-              <p className="text-gray-600 mb-4">
-                Simulate quantum systems and molecular dynamics using quantum algorithms
-                for computational chemistry and materials science.
-              </p>
-              <Button>Start Quantum Simulation</Button>
-            </CardContent>
-          </Card>
+          <QuantumSimulationDashboard />
+        </TabsContent>
+
+        <TabsContent value="phase87" className="space-y-6">
+          <Phase87Integration />
         </TabsContent>
       </Tabs>
 
