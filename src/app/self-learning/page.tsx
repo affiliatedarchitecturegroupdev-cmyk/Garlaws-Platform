@@ -1,7 +1,7 @@
 'use client';
 
-import SelfLearningSystems from '@/features/phase66/self-learning/SelfLearningSystems';
+import SelfLearning from '@/features/self-learning';
 
 export default function SelfLearningPage() {
-  return <SelfLearningSystems />;
+  return <SelfLearning />;
 }

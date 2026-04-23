@@ -1,6 +1,6 @@
 'use client';
 
-import QuantumAI from '@/features/phase66/quantum-ai/QuantumAI';
+import QuantumAI from '@/features/quantum-ai';
 
 export default function QuantumAIPage() {
   return <QuantumAI />;

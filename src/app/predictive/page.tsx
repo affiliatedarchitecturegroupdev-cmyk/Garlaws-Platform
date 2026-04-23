@@ -1,6 +1,6 @@
 'use client';
 
-import PredictiveModeling from '@/features/phase66/predictive-modeling/PredictiveModeling';
+import PredictiveModeling from '@/features/predictive-modeling';
 
 export default function PredictiveModelingPage() {
   return <PredictiveModeling />;

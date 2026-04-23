@@ -2,11 +2,16 @@
 
 import { useState } from 'react';
 import NFTMarketplace from '@/features/nft-marketplace/NFTMarketplace';
+import { AdvancedProductDiscovery } from '@/features/advanced-product-discovery';
+import { DynamicPricingEngine } from '@/features/dynamic-pricing-engine';
+import { MarketplaceAnalytics } from '@/features/marketplace-analytics';
+import { AdvancedFulfillment } from '@/features/advanced-fulfillment';
+import { GlobalPayments } from '@/features/global-payments';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/Card';
 import { Button } from '../../../components/ui/Button';
 import { Badge } from '../../../components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
-import { ShoppingCart, Coins, Store, TrendingUp } from 'lucide-react';
+import { ShoppingCart, Coins, Store, TrendingUp, DollarSign, BarChart3, Package, CreditCard } from 'lucide-react';
 
 const products = [
   { id: 1, name: 'Indigenous Fern Bundle', category: 'Plants', price: 450, image: '/api/placeholder/200/150' },
@@ -22,7 +27,7 @@ const products = [
 const categories = ['All', 'Plants', 'Pottery', 'Equipment', 'Tools', 'Irrigation'];
 
 export default function MarketplacePage() {
-  const [activeTab, setActiveTab] = useState<'ecommerce' | 'nft'>('ecommerce');
+  const [activeTab, setActiveTab] = useState<'ecommerce' | 'pricing' | 'analytics' | 'fulfillment' | 'payments' | 'nft'>('ecommerce');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [cart, setCart] = useState<any[]>([]);
 
@@ -80,10 +85,26 @@ export default function MarketplacePage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
-          <TabsList className="grid w-full grid-cols-2 mb-8">
+          <TabsList className="grid w-full grid-cols-6 mb-8">
             <TabsTrigger value="ecommerce" className="flex items-center gap-2">
               <ShoppingCart className="h-4 w-4" />
-              E-commerce Store
+              Product Discovery
+            </TabsTrigger>
+            <TabsTrigger value="pricing" className="flex items-center gap-2">
+              <DollarSign className="h-4 w-4" />
+              Dynamic Pricing
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <BarChart3 className="h-4 w-4" />
+              Analytics
+            </TabsTrigger>
+            <TabsTrigger value="fulfillment" className="flex items-center gap-2">
+              <Package className="h-4 w-4" />
+              Fulfillment
+            </TabsTrigger>
+            <TabsTrigger value="payments" className="flex items-center gap-2">
+              <CreditCard className="h-4 w-4" />
+              Global Payments
             </TabsTrigger>
             <TabsTrigger value="nft" className="flex items-center gap-2">
               <Coins className="h-4 w-4" />
@@ -92,92 +113,23 @@ export default function MarketplacePage() {
           </TabsList>
 
           <TabsContent value="ecommerce" className="space-y-8">
-            {/* Categories */}
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
-                <Button
-                  key={category}
-                  variant={selectedCategory === category ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedCategory(category)}
-                >
-                  {category}
-                </Button>
-              ))}
-            </div>
+            <AdvancedProductDiscovery />
+          </TabsContent>
 
-            {/* Products Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {filteredProducts.map((product) => {
-                const cartItem = cart.find(item => item.id === product.id);
-                return (
-                  <Card key={product.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                    <div className="aspect-w-4 aspect-h-3 bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-500 text-sm">{product.category}</span>
-                    </div>
-                    <CardContent className="p-4">
-                      <div className="mb-3">
-                        <h3 className="font-semibold text-lg text-gray-900">{product.name}</h3>
-                        <Badge variant="outline" className="mt-1">
-                          {product.category}
-                        </Badge>
-                      </div>
+          <TabsContent value="pricing" className="space-y-6">
+            <DynamicPricingEngine />
+          </TabsContent>
 
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-2xl font-bold text-green-600">
-                          R{product.price.toLocaleString()}
-                        </span>
-                        {cartItem && (
-                          <Badge variant="secondary">
-                            {cartItem.quantity} in cart
-                          </Badge>
-                        )}
-                      </div>
+          <TabsContent value="analytics" className="space-y-6">
+            <MarketplaceAnalytics />
+          </TabsContent>
 
-                      <Button
-                        onClick={() => addToCart(product)}
-                        className="w-full"
-                        variant={cartItem ? "secondary" : "default"}
-                      >
-                        {cartItem ? `Add Another (${cartItem.quantity})` : 'Add to Cart'}
-                      </Button>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
+          <TabsContent value="fulfillment" className="space-y-6">
+            <AdvancedFulfillment />
+          </TabsContent>
 
-            {/* Featured Categories */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5" />
-                  Featured Categories
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  {[
-                    { name: 'Plants', count: 3, color: 'bg-green-100 text-green-800' },
-                    { name: 'Equipment', count: 2, color: 'bg-blue-100 text-blue-800' },
-                    { name: 'Tools', count: 1, color: 'bg-orange-100 text-orange-800' },
-                    { name: 'Irrigation', count: 1, color: 'bg-cyan-100 text-cyan-800' }
-                  ].map((category) => (
-                    <div
-                      key={category.name}
-                      className="p-4 border rounded-lg hover:shadow-md transition-shadow cursor-pointer"
-                      onClick={() => setSelectedCategory(category.name)}
-                    >
-                      <div className={`inline-block px-2 py-1 rounded text-xs font-medium ${category.color} mb-2`}>
-                        {category.name}
-                      </div>
-                      <p className="text-2xl font-bold text-gray-900">{category.count}</p>
-                      <p className="text-sm text-gray-600">products</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+          <TabsContent value="payments" className="space-y-6">
+            <GlobalPayments />
           </TabsContent>
 
           <TabsContent value="nft" className="space-y-6">

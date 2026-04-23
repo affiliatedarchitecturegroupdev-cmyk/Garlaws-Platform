@@ -1,7 +1,7 @@
 'use client';
 
-import NeuralArchitectureSearch from '@/features/phase66/neural-search/NeuralArchitectureSearch';
+import NeuralSearch from '@/features/neural-search';
 
 export default function NeuralSearchPage() {
-  return <NeuralArchitectureSearch />;
+  return <NeuralSearch />;
 }
