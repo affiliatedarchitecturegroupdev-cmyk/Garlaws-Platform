@@ -1,0 +1,1 @@
+export { default as AutomatedReporting } from './AutomatedReporting'
