@@ -1,0 +1,1 @@
+export { default as AIGovernance } from './AIGovernance'
